@@ -1,0 +1,23 @@
+__pycache__/
+*.pyc
+.DS_Store
+
+# Secrets — never commit
+.env
+.env.*
+*.key
+*.pem
+
+# Personal data — never commit
+data/
+
+# Logs and local state
+*.log
+.claude/worktrees/
+
+# SvelteKit / Node
+node_modules/
+.svelte-kit/
+build/
+dist/
+.vercel/
