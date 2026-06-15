@@ -27,6 +27,14 @@
 		</div>
 		<span class="tool-arrow" aria-hidden="true">→</span>
 	</a>
+
+	<a href="/tools/myth-quiz" class="tool-card">
+		<div class="tool-card-content">
+			<h3>Benefits Myth-Check Quiz</h3>
+			<p>Five things most people believe about benefits programs — and what the data actually shows.</p>
+		</div>
+		<span class="tool-arrow" aria-hidden="true">→</span>
+	</a>
 </section>
 
 <section class="coming-soon">
