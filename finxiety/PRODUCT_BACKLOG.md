@@ -136,8 +136,29 @@ hours_worked_per_period   (number — for time-reframing tools like HOURS-1)
 A short interactive quiz (8-12 questions) that surfaces and corrects widespread false beliefs about public benefits programs. True/false or multiple-choice format; each question followed by an immediate explanation and citation. Doubles as content marketing — high shareability, no state-specific complexity.
 
 **The user experience:**
-> "True or false: most SNAP recipients don't work."
-> → False. [Explanation with data.] [Link to Benefits Cliff Calculator for the real story →]
+> "What percentage of SNAP recipients do you think are employed?"
+> → User commits to an estimate (slider or short input) before seeing the answer.
+> → "68% — here's why that surprises most people." [Explanation with data.] [Link to Benefits Cliff Calculator →]
+
+The quiz does not use True/False or multiple-choice recognition format. Users commit to a belief before the reveal — this is the mechanism that makes belief revision possible (vs. just information reception). See Quiz Design Methodology below.
+
+**Quiz Design Methodology (required — must pass Matuschak enabling environment lens):**
+
+The quiz uses **estimate-before-reveal** as its core interaction pattern, not True/False or multiple-choice recognition. This is a behavioral requirement, not a UX preference — it determines whether the quiz actually changes beliefs.
+
+*Why this matters:* Recognition-format quizzes (True/False, MCQ) allow the user to evaluate each option against the correct answer without committing to a belief. This produces the feeling of learning without the mechanism for belief revision. Estimate-before-reveal forces the user to externalize a belief before seeing any answer, creating cognitive dissonance when the actual value differs — which is the condition under which beliefs actually update.
+
+**Each question follows this sequence:**
+1. **Estimate prompt** — a quantitative question ("What percentage...?" "How many months...?") with a slider or short numeric input. Not "true or false" or "which of the following."
+2. **Commitment** — user submits their estimate before the answer is revealed.
+3. **Reveal** — actual figure with source citation, framed around the gap from their estimate.
+4. **Elaboration** — 2-3 sentences on why the gap exists (structural, not moral — "the program was designed to..." not "many people don't realize...").
+5. *(Optional)* **Elaborative interrogation** — "What made you think that?" as a soft follow-up before the reveal, surfacing the reasoning chain. This deepens the dissonance. Implement if technically feasible; deprioritize if it slows the flow.
+
+**End-of-quiz synthesis questions:**
+After all questions, ask 1-2 questions that connect earlier estimates: "Earlier you thought X% of SNAP recipients work. Knowing now it's 68%, what does that change about how you'd describe the program to someone else?" This is the moment most likely to consolidate learning — the quiz ends with the user generating language, not just receiving it.
+
+**Behavioral review requirement:** This tool must pass the Matuschak enabling environment lens in behavioral review. The sign-off question is: "After Dani closes this tab, will anything be *different* tomorrow?" If the answer is "she now knows the number" rather than "she now understands something that changes a future conversation or decision," it has not passed.
 
 **Why first:**
 - National scope — no state-specific data required

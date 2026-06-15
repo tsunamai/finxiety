@@ -18,7 +18,27 @@ No formatting required. The pm agent handles the rest.
 
 ## Intake Queue
 
-*(Empty — add ideas here as they come up)*
+---
+
+### ARCH-RETURN — The Return / Spaced Repetition Problem [Forward-Looking Architecture Note]
+
+**Problem:** Matuschak's enabling environment framework identifies spaced repetition — returning to material across time — as the mechanism that converts a moment of clarity into durable understanding. A single visit to a quiz or calculator rarely changes long-term behavior. Return visits do. This applies directly to MYTH-1, EMG-1, and any quiz or educational format Finxiety ships.
+
+**Why Finxiety can't solve this now:** Finxiety's core constraints are "free always," stateless, and no login. A return mechanism requires either (a) server-side state (login) or (b) persistent client-side state (localStorage). Login is off the table: it creates trust friction for the ALICE user — the moment a civic financial tool asks for an email, it starts to look like every other financial service that has extracted value from this user rather than delivering it. It also increases infrastructure risk, compliance surface, and operational cost in ways that conflict with the 501(c)(3) / fiscal-sponsorship structure. Naomi's verbatim framing: "I probably don't wanna take money, but there is something about maintaining a login that increases risk."
+
+**What "return will be part of the program" means:** Return is a product-layer concern, not a tool-layer concern. It cannot live in Finxiety itself. The most likely paths:
+
+1. **localStorage (device-bound, no PII, no server):** Saves a user's prior estimates, scores, or results locally. No account required. No data leaves the device. Survives across sessions on the same device — not across devices or after clearing browser data. This is fully consistent with the stateless / no-PII constraint and could be added to Finxiety proper if the behavioral science case is strong enough. Research needed: how ALICE users interpret "your progress was saved" without an account — trust risk or trust gain?
+
+2. **Separate companion product:** A lightweight stateful layer (a "return app") that has accounts but is architecturally isolated from Finxiety. Users who want spaced repetition opt into the companion; Finxiety itself stays stateless. The companion links to Finxiety tools but doesn't host them.
+
+3. **Partnership with existing authenticated users:** A nonprofit, employer benefit program, CDFI, or benefits navigator that already has authenticated users integrates Finxiety tools into their platform. Return visits happen in their system. Finxiety provides the tools; the partner provides continuity.
+
+**Architectural principle for anything we build:** Any stateful return mechanism must not compromise the no-login / free always / no-PII constraints of Finxiety proper. If we build a companion product, it is a separate entity — different repo, different legal container if needed, different trust architecture.
+
+**Not a near-term ticket.** This note exists to prevent the problem from being re-derived from scratch in a future session. When Finxiety has 3+ tools live and is seeing return traffic, revisit this note and groom it into a formal architecture decision.
+
+---
 
 ---
 
