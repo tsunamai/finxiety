@@ -7,15 +7,17 @@ Full idea portfolio lives in `IDEAS.md`. This backlog covers defined, scoped ite
 
 ---
 
-## TWO TRACKS
+## THREE TRACKS
+
+**Track 0 — Architecture Prerequisites:** Foundational infrastructure that every tool depends on for embeddability and white-label distribution. ARCH-1 and ARCH-2. Must complete before any tool is distributed to institutional partners.
 
 **Track 1 — Financial Inclusion:** Tools for people navigating poverty, benefits, and government systems. MYTH-1 through CLIFF-1.
 
 **Track 2 — Personal Finance Myth-Busting:** Tools targeting widely-believed financial myths that distort everyday decisions — sourced from behavioral economics research. EMG-1 through MYTH-2.
 
-Both tracks: stateless, no accounts, no PII, shared input model where applicable, related-tools footer linking across both tracks.
+All tracks: stateless, no accounts, no PII, shared input model where applicable, related-tools footer linking across tracks.
 
-**Interleaving option:** Rather than completing Track 1 before starting Track 2, consider alternating tracks release-to-release (e.g., MYTH-1 → EMG-1 → BEN-1 → TIP-1 → DOC-1...) to build both audiences in parallel and give Track 2 tools (pure calculation, zero state data) fast early wins. PM agent owns sequencing decisions.
+**Interleaving option (Tracks 1 & 2):** Rather than completing Track 1 before starting Track 2, consider alternating tracks release-to-release (e.g., MYTH-1 → EMG-1 → BEN-1 → TIP-1 → DOC-1...) to build both audiences in parallel and give Track 2 tools (pure calculation, zero state data) fast early wins. PM agent owns sequencing decisions.
 
 ---
 
@@ -24,6 +26,21 @@ Both tracks: stateless, no accounts, no PII, shared input model where applicable
 Eleven tools across two tracks. Each independently deployable. Track 1 sequence is fixed by dependencies (CLIFF-1 depends on BEN-1). Track 2 sequence is by complexity (EMG-1 is zero-data; HOURS-1 is most complex). Interleaving between tracks is a scheduling option, not an architectural constraint.
 
 ```
+TRACK 0 — Architecture Prerequisites (complete before partner distribution)
+
+  ARCH-1: Extract Shared UI Components
+  Prerequisite for ARCH-2 and the embed-ready validation gate.
+  Extract Button, InputField, ResultBox, WatchoutBox, BridgeBox
+  from EMG-1 into src/lib/components/. Verify all color references
+  use CSS variables. Update EMG-1 and MYTH-1 to import from there.
+
+  ARCH-2: iFrame Embed Shell + URL-Param Theming
+  Bootstrap script: reads URL params at mount, injects CSS variable
+  overrides. PostMessage API: finxiety:resize + finxiety:complete
+  + finxiety:error. Deliverable: plain HTML test harness that embeds
+  emergency-fund tool with partner theming applied.
+  Depends on: ARCH-1.
+
 TRACK 1 — Financial Inclusion Core
 
   SHIP T1-1 — Establish Brand Voice
@@ -79,6 +96,7 @@ TRACK 2 — Personal Finance Myth-Busting
 
 ## PRIORITY TIERS
 
+- **P0-ARCH — Prerequisites**: ARCH-1 (component extraction), ARCH-2 (embed shell) — before any partner distribution
 - **P0 — First ship (Track 1)**: MYTH-1 — establishes brand voice
 - **P0-B — Core utility**: BEN-1 — foundational screener
 - **P0-T2 — First ship (Track 2)**: EMG-1 — fastest calculator across both tracks
@@ -125,6 +143,60 @@ hours_worked_per_period   (number — for time-reframing tools like HOURS-1)
 - State-specific data lives in versioned JSON files in `finxiety/data/` (e.g., `snap-eligibility-2026.json`) with a `last_updated` field — staleness is trackable and refreshable without code changes
 - No user accounts, no databases, no PII storage in any tool
 - All calculation is client-side; no user data hits a server
+
+---
+
+## SECTION 0 — ARCHITECTURE PREREQUISITES (Track 0)
+
+### ARCH-1 — Extract Shared UI Components [P0-ARCH]
+
+**What it is:**
+Prerequisite for the embed shell and for all future tools. Extracts reusable UI primitives from EMG-1 into `src/lib/components/` so theming changes propagate everywhere and components can be instrumented once.
+
+**Components to extract:**
+
+| Component | Current location | Target |
+|---|---|---|
+| `Button` | Inline in EMG-1 | `src/lib/components/Button.svelte` |
+| `InputField` | Inline in EMG-1 | `src/lib/components/InputField.svelte` |
+| `ResultBox` | Inline in EMG-1 | `src/lib/components/ResultBox.svelte` |
+| `WatchoutBox` | Inline in EMG-1 | `src/lib/components/WatchoutBox.svelte` |
+| `BridgeBox` | Inline in EMG-1 | `src/lib/components/BridgeBox.svelte` |
+
+**Acceptance criteria:**
+- All color references in extracted components use CSS variables from `app.css` — no hard-coded hex values
+- EMG-1 and MYTH-1 updated to import from `src/lib/components/` with identical visual output
+- `npm run build` passes with no type errors
+
+**Depends on:** Nothing
+**Blocks:** ARCH-2, all future tool builds
+
+---
+
+### ARCH-2 — iFrame Embed Shell + URL-Param Theming [P0-ARCH]
+
+**What it is:**
+The infrastructure that makes institutional embedding possible. A bootstrap script runs on page mount in embedded contexts, reads URL params, and injects partner brand tokens as CSS variable overrides. PostMessage API enables the parent page to resize the iframe and react to tool completion.
+
+**Deliverables:**
+1. Bootstrap script in `src/lib/embed/bootstrap.ts` — reads URL params, validates values, injects CSS variable overrides at `document.documentElement`
+2. PostMessage emitter utility in `src/lib/embed/postmessage.ts` — typed events (`finxiety:complete`, `finxiety:resize`, `finxiety:error`)
+3. Height observer wired into `+layout.svelte` — emits `finxiety:resize` on DOM height change
+4. Plain HTML test harness at `finxiety/embed-test.html` — embeds EMG-1 with partner theming applied via URL params; confirms PostMessage events fire correctly
+
+**Supported URL params:** See ADR-002 (`finxiety/docs/adr/ADR-002-embeddability.md`) for full param table.
+
+**PostMessage payload spec:** See ADR-002. No PII in any payload.
+
+**Acceptance criteria:**
+- `embed-test.html` opened in a browser embeds EMG-1 with a custom `primaryColor` and `partnerName` applied correctly
+- `finxiety:complete` fires when the user reaches the result screen
+- `finxiety:resize` fires on step transitions (height changes)
+- Default Finxiety brand renders normally when no URL params are present (direct traffic)
+- No console errors in embedded or direct-traffic context
+
+**Depends on:** ARCH-1
+**Enables:** Embed-ready validation gate for all tools; institutional partner distribution
 
 ---
 
@@ -665,7 +737,7 @@ From research session 2026-06-14. Full list of 12 myths. Tools 6-10 above cover 
 
 ## OPEN QUESTIONS
 
-1. **Stack decision for web-native tools:** Streamlit is desktop-oriented; the target population is phone-first. Recommendation: web-native (SvelteKit or equivalent lightweight framework). Needs an ADR from architect agent before build of BEN-1 starts.
+1. ~~**Stack decision for web-native tools:**~~ **Resolved — see ADR-001.** SvelteKit + adapter-static + Vercel. Decision was made inline in Week 1 and is now documented.
 
 2. **California-only vs. national from day one:** CA-first is the right call — state programs (CalFresh, Medi-Cal) are where the complexity lives. Federal programs (SNAP federal rules, Lifeline) are the same everywhere. CA-first with federal programs baked in gives ~12% of US population and a natural expansion template.
 
@@ -675,8 +747,8 @@ From research session 2026-06-14. Full list of 12 myths. Tools 6-10 above cover 
 
 5. **Legal structure:** 501(c)(3) from scratch vs. fiscal sponsorship (Tides, Open Collective) — fiscal sponsorship is faster and lower-admin. Research before launch.
 
-6. **Distribution:** Direct (SEO, social), via nonprofits (B2B — BEN-4 path), or embedded/white-label. Nonprofit path may be the most reliable channel for reaching the actual target population.
+6. **Distribution:** Direct (SEO, social), via nonprofits (B2B — BEN-4 path), or embedded/white-label. **Embeddability architecture decided — see ADR-002.** iFrame + URL-param theming enables institutional embedding (credit unions, CDFIs, municipalities) without server infrastructure. Nonprofit/direct paths remain open in parallel.
 
-7. **Revenue model:** Grant-funded? Freemium (consumer free, nonprofit tier paid)? Sponsored by government agencies? Social impact product — different model from Mortalia. Decision deferred to post-launch.
+7. **Revenue model:** Institutional licensing (credit unions, CDFIs, banks under CRA pressure, municipal benefits portals pay to embed; end users stay free always). Mortalia cross-subsidizes during early growth. Grant funding viable for Track 1 civic tools. Formal pricing model deferred to pre-launch.
 
 8. **Relationship visibility:** Does Finxiety publicly credit Tsunam.ai/Naomi? Depends on BlackRock departure timeline.

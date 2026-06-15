@@ -122,7 +122,7 @@ export const questions: Question[] = [
 		revealBody:
 			'One documented case: a $1/hour raise added $160/month in earnings but triggered $800/month in benefit reductions — a net loss of $640. In another, a $0.10/hour raise cost a family $9,000/year in childcare subsidies.',
 		structuralExplanation:
-			'Each program has its own income cutoff. When SNAP, Medicaid, housing assistance, and childcare subsidies all hit their limits near each other, accepting a raise can be financially irrational. That's a design flaw — not a reflection of how hard someone is working.',
+			"Each program has its own income cutoff. When SNAP, Medicaid, housing assistance, and childcare subsidies all hit their limits near each other, accepting a raise can be financially irrational. That's a design flaw — not a reflection of how hard someone is working.",
 		signpost:
 			"A Benefits Cliff Calculator is coming — it'll tell you whether a specific raise would leave you ahead or behind once benefits are factored in.",
 		sources: [
