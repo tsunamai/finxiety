@@ -72,6 +72,7 @@ This overrides every other design decision. Every agent must know it.
 - **No PII.** No user data stored, transmitted, or logged anywhere. Calculation is client-side only. Any deviation requires an ADR.
 - **Shared input model first.** `household_size`, `state`, `zip_code`, `gross_monthly_income`, `current_benefits` are defined exactly once in `finxiety/lib/input-model/`. Import; never redefine.
 - **Data in JSON, not code.** Eligibility thresholds, certification periods, ALICE budgets live in `finxiety/data/*.json` with `last_updated` fields. Rule logic reads from data. Updating thresholds is a data change, not a code change.
+- **Build must pass before push.** Before any `git push` that includes changes under `finxiety/src/`, run `npm run build` from `finxiety/` and confirm it exits 0. Do not push a failing build. The `.githooks/pre-push` hook enforces this automatically — do not bypass it.
 - **Official source URLs in every result.** No output tells a user they qualify or don't qualify without linking to where they can verify.
 
 ---

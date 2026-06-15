@@ -1,0 +1,15 @@
+#!/bin/sh
+# Runs the finxiety build before any push that includes source changes.
+# Blocks the push if the build fails — catches syntax errors before Vercel does.
+
+if git diff --name-only HEAD @{u} 2>/dev/null | grep -q '^finxiety/src/'; then
+  echo "finxiety source files changed — running build check..."
+  cd finxiety && npm run build
+  if [ $? -ne 0 ]; then
+    echo ""
+    echo "BUILD FAILED. Push aborted. Fix the build error and try again."
+    exit 1
+  fi
+  echo "Build passed."
+fi
+exit 0
