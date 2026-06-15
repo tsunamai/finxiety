@@ -10,9 +10,54 @@
 	let results = $state<ProgramResult[]>([]);
 	let error = $state('');
 
-	// Element refs for focus management on step transitions
-	let toolHeadingEl: HTMLHeadingElement | null = null;
-	let resultsHeadingEl: HTMLHeadingElement | null = null;
+	// Focus management
+	let toolHeadingEl: HTMLHeadingElement | null = $state(null);
+	let resultsHeadingEl: HTMLHeadingElement | null = $state(null);
+
+	// Paycheck calculator
+	let showPaycheckCalc = $state(false);
+	let paycheckFrequency = $state<'biweekly' | 'weekly' | 'semimonthly' | 'monthly'>('biweekly');
+	let paycheckAmount = $state('');
+	let paycheckCalcTriggerEl: HTMLButtonElement | null = $state(null);
+	let paycheckAmountInputEl: HTMLInputElement | null = $state(null);
+
+	const MULTIPLIERS: Record<string, number> = {
+		biweekly: 26 / 12,
+		weekly: 52 / 12,
+		semimonthly: 2,
+		monthly: 1
+	};
+
+	const monthlyFromPaycheck = $derived.by(() => {
+		const amount = Number(paycheckAmount);
+		if (!paycheckAmount || isNaN(amount) || amount <= 0) return null;
+		return Math.round(amount * MULTIPLIERS[paycheckFrequency]);
+	});
+
+	async function togglePaycheckCalc() {
+		showPaycheckCalc = !showPaycheckCalc;
+		if (showPaycheckCalc) {
+			await tick();
+			paycheckAmountInputEl?.focus();
+		} else {
+			paycheckCalcTriggerEl?.focus();
+		}
+	}
+
+	function usePaycheckAmount() {
+		if (monthlyFromPaycheck !== null) {
+			grossMonthlyIncome = String(monthlyFromPaycheck);
+			showPaycheckCalc = false;
+			paycheckAmount = '';
+			paycheckCalcTriggerEl?.focus();
+		}
+	}
+
+	function cancelPaycheckCalc() {
+		showPaycheckCalc = false;
+		paycheckAmount = '';
+		paycheckCalcTriggerEl?.focus();
+	}
 
 	async function calculate(e: Event) {
 		e.preventDefault();
@@ -60,6 +105,8 @@
 		grossMonthlyIncome = '';
 		hasChildUnder5OrPregnant = false;
 		hasSchoolAgeChild = false;
+		showPaycheckCalc = false;
+		paycheckAmount = '';
 		await tick();
 		toolHeadingEl?.focus();
 	}
@@ -73,7 +120,7 @@
 	/>
 </svelte:head>
 
-<!-- Persistent live region outside {#key} so VoiceOver/Safari announces results reliably -->
+<!-- Persistent live region outside {#key} for reliable VoiceOver/Safari announcements -->
 <div class="sr-only" aria-live="polite" aria-atomic="true">
 	{#if step === 2 && results.length > 0}
 		{results.filter((r) => r.status === 'likely').length} programs may apply to your household.
@@ -129,12 +176,75 @@
 						required
 					/>
 				</div>
-				<p class="paycheck-hint" id="income-hint">
-					Not sure of your monthly total? Use the gross amount on one paycheck (before taxes):<br />
-					Paid every 2 weeks: multiply by 2.17 &nbsp;&middot;&nbsp; Weekly: multiply by 4.3
-					&nbsp;&middot;&nbsp; Twice a month: multiply by 2.<br />
-					Enter $0 if you have no income right now.
-				</p>
+				<div class="income-field-footer">
+					<span class="field-hint" id="income-hint">Enter $0 if you have no income right now.</span>
+					<button
+						class="paycheck-calc-trigger"
+						type="button"
+						bind:this={paycheckCalcTriggerEl}
+						aria-expanded={showPaycheckCalc}
+						aria-controls="paycheck-calc-panel"
+						onclick={togglePaycheckCalc}
+					>
+						{showPaycheckCalc ? 'Hide calculator' : 'Calculate from paycheck'}
+						<span aria-hidden="true">{showPaycheckCalc ? ' ▲' : ' ▼'}</span>
+					</button>
+				</div>
+
+				{#if showPaycheckCalc}
+					<div
+						id="paycheck-calc-panel"
+						class="paycheck-calc-panel"
+						role="group"
+						aria-label="Paycheck to monthly income calculator"
+					>
+						<div class="calc-field">
+							<label for="paycheck-frequency">How often are you paid?</label>
+							<select id="paycheck-frequency" bind:value={paycheckFrequency}>
+								<option value="biweekly">Every 2 weeks</option>
+								<option value="weekly">Every week</option>
+								<option value="semimonthly">Twice a month</option>
+								<option value="monthly">Once a month</option>
+							</select>
+						</div>
+
+						<div class="calc-field">
+							<label for="paycheck-amount">Gross pay per paycheck (before taxes)</label>
+							<div class="input-prefix-wrap">
+								<span class="input-prefix" aria-hidden="true">$</span>
+								<input
+									id="paycheck-amount"
+									type="number"
+									inputmode="decimal"
+									min="0"
+									placeholder="e.g. 1015"
+									bind:value={paycheckAmount}
+									bind:this={paycheckAmountInputEl}
+								/>
+							</div>
+						</div>
+
+						{#if monthlyFromPaycheck !== null}
+							<div class="calc-result" aria-live="polite">
+								<span class="calc-result-label">Estimated monthly gross income</span>
+								<span class="calc-result-amount"
+									>${monthlyFromPaycheck.toLocaleString('en-US')}</span
+								>
+							</div>
+						{/if}
+
+						<div class="calc-actions">
+							{#if monthlyFromPaycheck !== null}
+								<button class="btn btn-primary" type="button" onclick={usePaycheckAmount}>
+									Use ${monthlyFromPaycheck.toLocaleString('en-US')}
+								</button>
+							{/if}
+							<button class="btn btn-ghost calc-cancel" type="button" onclick={cancelPaycheckCalc}>
+								Cancel
+							</button>
+						</div>
+					</div>
+				{/if}
 			</div>
 
 			<fieldset class="checkbox-group">
@@ -291,7 +401,6 @@
 		max-width: 52ch;
 	}
 
-	/* Focusable heading (receives programmatic focus on step change) */
 	h1:focus-visible,
 	h2:focus-visible {
 		outline: 3px solid var(--terracotta);
@@ -299,7 +408,7 @@
 		border-radius: 2px;
 	}
 
-	/* Dollar prefix on income input */
+	/* Dollar prefix */
 	.input-prefix-wrap {
 		position: relative;
 		display: flex;
@@ -323,11 +432,126 @@
 		color: var(--terracotta);
 	}
 
-	.paycheck-hint {
+	/* Income field footer: hint + calculator trigger on one line */
+	.income-field-footer {
+		display: flex;
+		align-items: baseline;
+		justify-content: space-between;
+		gap: var(--space-md);
+		flex-wrap: wrap;
 		margin-top: var(--space-xs);
-		font-size: 0.8125rem;
+	}
+
+	.income-field-footer .field-hint {
+		margin-top: 0;
+	}
+
+	/* Paycheck calculator trigger button */
+	.paycheck-calc-trigger {
+		background: none;
+		border: none;
+		color: var(--terracotta);
+		font-size: 0.875rem;
+		font-family: var(--font);
+		font-weight: 600;
+		cursor: pointer;
+		padding: 0;
+		text-decoration: underline;
+		text-underline-offset: 3px;
+		white-space: nowrap;
+		flex-shrink: 0;
+	}
+
+	.paycheck-calc-trigger:hover {
+		color: var(--copper);
+	}
+
+	.paycheck-calc-trigger:focus-visible {
+		outline: 3px solid var(--terracotta);
+		outline-offset: 3px;
+		border-radius: 2px;
+	}
+
+	/* Paycheck calculator panel */
+	.paycheck-calc-panel {
+		margin-top: var(--space-sm);
+		background: var(--surface);
+		border: 1px solid var(--border);
+		border-radius: var(--radius);
+		padding: var(--space-md);
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-md);
+	}
+
+	/* Internal fields in the calculator */
+	.calc-field {
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-xs);
+	}
+
+	.calc-field label {
+		font-weight: 600;
+		font-size: 0.875rem;
+		color: var(--text);
+	}
+
+	.calc-field select {
+		font-family: var(--font);
+		font-size: 1rem;
+		padding: 0.75rem 1rem;
+		border: 2px solid var(--border);
+		border-radius: var(--radius);
+		background: white;
+		color: var(--dark);
+		width: 100%;
+		cursor: pointer;
+	}
+
+	.calc-field select:focus-visible {
+		outline: 3px solid var(--terracotta);
+		outline-offset: 2px;
+		border-color: var(--terracotta);
+	}
+
+	/* Result display */
+	.calc-result {
+		background: white;
+		border: 1px solid var(--border);
+		border-radius: var(--radius);
+		padding: var(--space-sm) var(--space-md);
+		display: flex;
+		flex-direction: column;
+		gap: 0.25rem;
+	}
+
+	.calc-result-label {
+		font-size: 0.75rem;
 		color: var(--muted);
-		line-height: 1.6;
+		font-weight: 400;
+	}
+
+	.calc-result-amount {
+		font-size: 1.375rem;
+		font-weight: 700;
+		color: var(--dark);
+	}
+
+	/* Actions row */
+	.calc-actions {
+		display: flex;
+		gap: var(--space-sm);
+		align-items: center;
+	}
+
+	.calc-actions .btn-primary {
+		flex: 1;
+	}
+
+	.calc-cancel {
+		min-height: 44px;
+		padding: var(--space-xs) var(--space-sm);
 	}
 
 	/* Checkbox group */
@@ -446,7 +670,7 @@
 		color: white;
 	}
 
-	/* Use --text (not --muted) on --border background: passes 4.5:1 WCAG AA */
+	/* Use --text on --border background: passes WCAG 2.1 AA 4.5:1 */
 	.eligibility-tag--unlikely {
 		background: var(--border);
 		color: var(--text);
