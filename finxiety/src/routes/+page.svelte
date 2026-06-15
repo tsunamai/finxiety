@@ -35,14 +35,21 @@
 		</div>
 		<span class="tool-arrow" aria-hidden="true">→</span>
 	</a>
+
+	<a href="/tools/screener" class="tool-card">
+		<div class="tool-card-content">
+			<h3>Benefits Screener</h3>
+			<p>Check which California programs you may qualify for: CalFresh, Medi-Cal, WIC, Lifeline, HEAP, school meals, and CalEITC.</p>
+		</div>
+		<span class="tool-arrow" aria-hidden="true">→</span>
+	</a>
 </section>
 
 <section class="coming-soon">
 	<h2>Coming soon</h2>
 	<ul>
-		<li>SNAP Screener: see if you may qualify for food assistance in California</li>
 		<li>Benefits Cliff Calculator: understand what happens to your benefits if your income rises</li>
-		<li>Earnings Calculator know exactly what you're earning after deductions</li>
+		<li>Earnings Calculator: know exactly what you're earning after deductions</li>
 	</ul>
 </section>
 
