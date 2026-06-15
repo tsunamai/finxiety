@@ -78,7 +78,7 @@ export const questions: Question[] = [
 	{
 		id: 'savings',
 		prompt:
-			'If a SNAP household managed to put away $2,000 in savings, how many U.S. states do you think would count that against their eligibility?',
+			'If a SNAP household saved $2,000, how many states would count that against their eligibility?',
 		inputType: 'number',
 		inputMin: 0,
 		inputMax: 50,
@@ -89,9 +89,9 @@ export const questions: Question[] = [
 		revealHeadline:
 			"Fewer than 10. In 41 states, that savings doesn't affect eligibility at all.",
 		revealBody:
-			'41 states have completely eliminated the SNAP asset test. Only 9 still use the federal default savings limit. The fear of "saving costs you benefits" is based on a rule that most states have quietly retired — without much public notice.',
+			'41 states have eliminated the SNAP asset test. Only 9 still cap it. The fear that saving costs you benefits is based on a rule most states quietly retired — without telling anyone.',
 		structuralExplanation:
-			'The change happened through a policy option called Broad-Based Categorical Eligibility (BBCE), which states can adopt without a federal announcement. Most applicants have never heard of it. The fear was rational given the rule\'s history — the map just changed without anyone updating the signs.',
+			'It happened through a policy option called Broad-Based Categorical Eligibility (BBCE) — something states can adopt without any public announcement. Most applicants have never heard of it. The fear was rational given the rule\'s history. The map just changed without anyone updating the signs.',
 		signpost:
 			"A tool that checks your state's current rules alongside SNAP and other benefits is coming soon.",
 		sources: [
@@ -108,7 +108,7 @@ export const questions: Question[] = [
 	{
 		id: 'cliff',
 		prompt:
-			'Researchers have documented cases where a $1/hour raise left a low-income parent with less money at the end of the month because of benefits they lost. Roughly how many families with children do you think could face this situation?',
+			'A $1/hour raise can sometimes leave a parent worse off — because of the benefits it triggers them to lose. How many families with children do you think face this?',
 		inputType: 'range',
 		inputMin: 0,
 		inputMax: 100,
@@ -120,11 +120,11 @@ export const questions: Question[] = [
 		realAnswerDisplay: 'Millions',
 		revealHeadline: "Millions — and it's a design flaw, not a personal failure.",
 		revealBody:
-			'In one documented case, a $1/hour raise added $160/month in wages but triggered immediate benefit reductions of $800/month — a net loss of $640. In another, a $0.10/hour raise caused a family to lose $9,000/year in childcare subsidies.',
+			'One documented case: a $1/hour raise added $160/month in earnings but triggered $800/month in benefit reductions — a net loss of $640. In another, a $0.10/hour raise cost a family $9,000/year in childcare subsidies.',
 		structuralExplanation:
-			'Benefits programs have separate eligibility cutoffs at different income thresholds. When SNAP, Medicaid, housing assistance, and childcare subsidies all have hard cutoffs stacked near each other, the combination can make it economically irrational to accept a raise. This is a design flaw in how programs interact — not a reflection of how hard someone is working.',
+			'Each program has its own income cutoff. When SNAP, Medicaid, housing assistance, and childcare subsidies all hit their limits near each other, accepting a raise can be financially irrational. That's a design flaw — not a reflection of how hard someone is working.',
 		signpost:
-			"There's a tool being built that calculates whether a specific raise would help or hurt your total resources, taking into account your current benefits. It's called the Benefits Cliff Calculator — coming soon.",
+			"A Benefits Cliff Calculator is coming — it'll tell you whether a specific raise would leave you ahead or behind once benefits are factored in.",
 		sources: [
 			{
 				label: 'Atlanta Fed — What are benefits cliffs?',
@@ -143,7 +143,7 @@ export const questions: Question[] = [
 	{
 		id: 'daily-amount',
 		prompt:
-			'On average, SNAP gives each person roughly how much money per day to spend on food?',
+			'On average, SNAP gives each person how much money per day to spend on food?',
 		inputType: 'dollar',
 		inputMin: 1,
 		inputMax: 30,
@@ -153,9 +153,9 @@ export const questions: Question[] = [
 		realAnswerLabel: 'per day',
 		revealHeadline: '$6.16 — less than the cost of a minimum adequate diet.',
 		revealBody:
-			"The average SNAP benefit works out to $6.16 per person per day. That's below what the USDA's own Thrifty Food Plan — its estimate of the minimum cost to eat adequately — runs in most markets. Running short at the end of the month is a structural consequence of that gap.",
+			"The average SNAP benefit works out to $6.16 per person per day — below what the USDA's own Thrifty Food Plan estimates it costs to eat adequately. Running short at the end of the month is a structural consequence of that gap.",
 		structuralExplanation:
-			'Benefit levels are set by Congress and haven\'t kept pace with actual food costs. Families often spend quickly at the start of the month to stock up on shelf-stable foods, then run short when perishables run out. The pattern is a structural consequence of inadequate benefit levels — not impulsive spending.',
+			'Benefit levels are set by Congress and haven\'t kept pace with food costs. Families often front-load spending early in the month on shelf-stable staples, then run short when fresh food runs out. That pattern is structural — not impulsive spending.',
 		signpost:
 			'SNAP, Medicaid, and other programs are covered in the benefits screener coming soon.',
 		sources: [
@@ -172,7 +172,7 @@ export const questions: Question[] = [
 	{
 		id: 'paperwork',
 		prompt:
-			'In a Massachusetts study, what percentage of SNAP participants with young children temporarily lost their benefits — not because they became financially ineligible, but for administrative reasons like a missed deadline or incomplete paperwork?',
+			'In a Massachusetts study, what share of SNAP families with young children lost benefits — not because they became ineligible, but over a missed deadline or paperwork?',
 		inputType: 'percentage',
 		inputMin: 0,
 		inputMax: 100,
@@ -182,9 +182,9 @@ export const questions: Question[] = [
 		realAnswerLabel: '%',
 		revealHeadline: 'Nearly 41% — eligible families, lost benefits over paperwork.',
 		revealBody:
-			'In that study, 40.9% of SNAP families with young children experienced a benefits interruption for purely administrative reasons: a missed recertification deadline, incomplete paperwork, or a missed phone interview. Researchers call these "procedural denials" — benefits lost despite full financial eligibility.',
+			'In that study, 40.9% of SNAP families with young children lost benefits for purely administrative reasons: a missed recertification deadline, incomplete paperwork, or a missed phone interview. Researchers call these "procedural denials" — benefits lost despite full financial eligibility.',
 		structuralExplanation:
-			'Recertification requires submitting new documents, completing a new interview, and meeting a deadline set by the agency — on a schedule that doesn\'t account for work shifts, no paid leave, or limited English. These are access barriers built into the process. The research is explicit: these are administrative failures, not personal ones.',
+			'Recertification means new documents, a new interview, and a deadline set by the agency — on a schedule that doesn\'t account for your work shifts, available time, or English fluency. These are access barriers built into the process. The research is explicit: these are administrative failures, not personal ones.',
 		signpost:
 			'Missing a recertification deadline is the most common reason eligible families lose benefits. A tool that tracks your deadline and prep list is coming soon — knowing yours in advance is the fix.',
 		sources: [
@@ -201,7 +201,7 @@ export const questions: Question[] = [
 	{
 		id: 'wic',
 		prompt:
-			'If a family is already enrolled in SNAP and has a child under 5, what percentage do you think are also enrolled in WIC — the nutrition program for young children?',
+			'If a family is on SNAP with a child under 5, what percentage are also enrolled in WIC — the nutrition program for kids that age?',
 		inputType: 'percentage',
 		inputMin: 0,
 		inputMax: 100,
@@ -211,11 +211,11 @@ export const questions: Question[] = [
 		realAnswerLabel: '%',
 		realAnswerDisplay: 'About half',
 		revealHeadline:
-			'About half — meaning nearly half of eligible families are missing it, even with SNAP.',
+			'About half — and nearly half are missing it, even with SNAP.',
 		revealBody:
-			"Nearly half of WIC-eligible people who are already enrolled in SNAP or Medicaid don't access WIC — even though SNAP enrollment can serve as a fast path to WIC eligibility. Overall, only 56% of eligible people participated in 2023.",
+			"Nearly half of WIC-eligible people on SNAP or Medicaid don't enroll in WIC — even though SNAP enrollment can fast-track WIC eligibility. Overall, only 56% of eligible people were enrolled in 2023.",
 		structuralExplanation:
-			"WIC requires a separate application from SNAP and Medicaid, an in-person visit for nutritional screening, and a nearby WIC clinic. Being on SNAP with a young child and still not being enrolled in WIC is common — not a sign of not trying. The programs don't automatically connect, and no one is required to tell you.",
+			"WIC requires a separate application, an in-person visit for nutritional screening, and a nearby WIC clinic — all separate from SNAP and Medicaid. Being on SNAP with a young child and not having WIC is common. The programs don't connect automatically, and no one is required to tell you.",
 		signpost:
 			'The benefits screener coming soon will check WIC eligibility alongside SNAP and Medicaid in one pass.',
 		sources: [

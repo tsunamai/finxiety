@@ -135,10 +135,9 @@
 {#if phase === 'welcome'}
 	<section class="step" aria-label="Welcome">
 		<p class="tool-description">
-			Five quick questions about how benefits programs actually work. For each one, you'll make a
-			quick guess — then see the real number. The gap between them is the point.
+			Five questions about how benefits programs work. Guess first — then see the real number.
 		</p>
-		<p class="estimate-note">No grades, no right answers to memorize. Just a clearer picture.</p>
+		<p class="estimate-note">No grades, no right answers.</p>
 		<button class="btn btn-primary" type="button" onclick={startQuiz}>Start the quiz</button>
 	</section>
 
@@ -326,7 +325,7 @@
 {:else if phase === 'synthesis'}
 	<section class="step" aria-label="Reflection">
 		<p class="tool-description">
-			One last thing — entirely optional. There are no right answers here.
+			One more thing — optional, no right answers.
 		</p>
 
 		<fieldset class="synthesis-block">
@@ -371,16 +370,14 @@
 			<p class="score-label">reveals seen</p>
 		</div>
 
-		<h2 class="reveal-headline">You've seen the real numbers behind five common beliefs.</h2>
+		<h2 class="reveal-headline">The real numbers behind five things most people believe.</h2>
 		<p class="reveal-body">
 			Most of these gaps aren't about what any one person did — they're about how the systems are
-			built, and how rarely anyone explains them. Knowing where the gap is is the first step to
-			working around it.
+			built, and how rarely anyone explains them. Knowing that changes how you move.
 		</p>
 
 		<p class="estimate-note">
-			Every figure here is an estimate drawn from public research, linked on each reveal. Programs
-			and numbers change — the official sources are the place to confirm what applies to you.
+			These figures come from public research, linked on each reveal. Programs change — the official sources are the place to confirm what applies to you.
 		</p>
 
 		<div class="step-actions score-actions">
