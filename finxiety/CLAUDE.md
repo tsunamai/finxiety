@@ -16,6 +16,37 @@ Finxiety is the civic arm of Tsunam.ai: free financial clarity tools for communi
 
 ---
 
+## Socioeconomic Accessibility — The Primary Lens
+
+Finxiety tools are built for the ALICE user (Asset Limited, Income Constrained, Employed): someone working, managing month-to-month, with near-zero savings and constrained cognitive bandwidth. This is not an edge case — it's the core user.
+
+**Persona:** `finxiety/research-findings/persona-alice-primary-user.md` — read before any copy or design decision.
+
+**Framework:** `finxiety/docs/socioeconomic-accessibility-framework.md` — the reusable checklist applied at every validation gate.
+
+Key behavioral science foundations every agent must internalize:
+- **Scarcity mindset (Mullainathan & Shafir):** Financial stress consumes cognitive bandwidth. The tool must complete in one cognitive step.
+- **Financial shame:** A result that reads as a verdict can cause more harm than no result at all. Design for information, not grade.
+- **Trust deficit:** This user has been failed by financial institutions. Trust is earned in the first 30 seconds, by design.
+- **No path forward = a verdict:** When the result is near-zero, the tool must signal what else exists — not as a recommendation, but as a signpost.
+
+---
+
+## Validation Gate (Four Agents, Run Before Distribution)
+
+Every tool that ships runs through all four in sequence. Findings go to `finxiety/status-updates/[tool-id]-validation-[date].md`.
+
+| Agent | What it checks | Sign-off |
+|---|---|---|
+| `brand` | Voice, Non-Advice Rule, Do No Harm copy flags | ⟦BRAND-REVIEWED⟧ |
+| `design-ux` | Usability at 375px and 1440px — Norman, Nielsen, Ive, Simon | ⟦UX-REVIEWED⟧ |
+| `qa` | Functional correctness, edge cases, WCAG 2.1 AA, mobile | ⟦QA-VERIFIED⟧ |
+| `behavioral-science` | Scarcity, shame, trust, locus of control, cross-tool bridge — through ALICE persona | ⟦BEHAVIORAL-REVIEWED⟧ |
+
+Run after every tool ships. Run again after any copy, flow, or UX change. Run before any public distribution push.
+
+---
+
 ## Do No Harm — The Hardest Constraint
 
 This overrides every other design decision. Every agent must know it.

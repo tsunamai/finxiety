@@ -483,6 +483,25 @@ Pure calculation, no state/program data required. Fastest tool across both track
 
 **No storage required.** Single-session calculation, all client-side.
 
+**Status: LIVE** — https://finxiety.vercel.app/tools/emergency-fund  
+**Validated:** 2026-06-14 — see `status-updates/emg-1-validation-2026-06-14.md`
+
+#### EMG-1 v1.1 — Post-Ship Refinements
+
+_Address before high-volume distribution. Behavioral analysis: `research-findings/emg-1-behavioral-analysis.md`._
+
+| # | Item | Severity | From |
+|---|---|---|---|
+| 1 | **Near-zero cross-tool signpost.** When runway ≈ 0, show an informational bridge (not advice) — framed as "tools that check X exist" — pointing toward a benefits-eligibility check. Copy locates the cause in structural slack/income, not willpower. Coordinate with shared input model so BEN-1 can pick up `gross_monthly_income`/`current_benefits` without re-entry when it ships. | High | Behavioral |
+| 2 | **De-emphasize zero-case result typography.** Reduce font-weight/scale on the primary number in the near-zero result state and/or give the contextual reframe shared visual weight so the eye doesn't land on a bold "0" in isolation. Design-ux + brand review. | High | Behavioral |
+| 3 | **Rewrite contextual note's third sentence.** Keep sentences 1–2 verbatim ("Checking balances tend to cover the next irregular expense..."). Replace "Designating a separate savings account is what changes that" with copy that names why designating is structurally hard under tight margins — drops the implied prescription. Brand review. | Medium | Behavioral |
+| 4 | **Replace "runway" throughout.** Button ("Calculate my runway") and results h2 ("Your runway") → "months covered" or equivalent plain unit. Brand review. | Medium | Behavioral |
+| 5 | Recalculate resets all inputs — should return to form with prior values preserved so users can tweak one number without re-entering all three | Medium | UX |
+| 6 | Soften entry-question hypothetical ("without income" → present-tense conditional framing). Low effort; reduces future-simulation burden under scarcity. | Low | Behavioral |
+| 7 | Investigate console 404 on page load (`/tools/emergency-fund:0`) — likely missing favicon | Low | QA |
+| 8 | Decide: add quiet "this is a guide, not financial advice" line, or document intentional omission | Low | Brand/PM |
+| 9 | Remove or replace "Based on the numbers you entered." — filler text that does no useful work | Low | UX |
+
 ---
 
 ### TIP-1 — Tip Calculator with Hidden History [P1]

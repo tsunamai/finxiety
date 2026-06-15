@@ -71,5 +71,10 @@
   },
   "worktree": {
     "bgIsolation": "worktree"
+  },
+  "permissions": {
+    "allow": [
+      "mcp__playwright__*"
+    ]
   }
 }
