@@ -8,8 +8,10 @@ __pycache__/
 *.key
 *.pem
 
-# Personal data — never commit
-data/
+# Personal data — never commit (threshold JSON tables, updated annually)
+/finxiety/data/
+# but DO track committed TS source data modules under the app's lib
+!/finxiety/src/lib/data/
 
 # Logs and local state
 *.log
