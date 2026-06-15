@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { tick } from 'svelte';
 	import { checkAllPrograms, type ProgramResult, type ScreenerInputs } from '$lib/eligibility';
 
 	let householdSize = $state(1);
@@ -9,7 +10,11 @@
 	let results = $state<ProgramResult[]>([]);
 	let error = $state('');
 
-	function calculate(e: Event) {
+	// Element refs for focus management on step transitions
+	let toolHeadingEl: HTMLHeadingElement | null = null;
+	let resultsHeadingEl: HTMLHeadingElement | null = null;
+
+	async function calculate(e: Event) {
 		e.preventDefault();
 		error = '';
 
@@ -33,6 +38,8 @@
 
 		results = checkAllPrograms(inputs);
 		step = 2;
+		await tick();
+		resultsHeadingEl?.focus();
 
 		if (typeof window !== 'undefined' && window.parent !== window) {
 			const hasPrograms = results.some((r) => r.status === 'likely');
@@ -47,12 +54,14 @@
 		}
 	}
 
-	function startOver() {
+	async function startOver() {
 		step = 1;
 		results = [];
 		grossMonthlyIncome = '';
 		hasChildUnder5OrPregnant = false;
 		hasSchoolAgeChild = false;
+		await tick();
+		toolHeadingEl?.focus();
 	}
 </script>
 
@@ -64,11 +73,18 @@
 	/>
 </svelte:head>
 
+<!-- Persistent live region outside {#key} so VoiceOver/Safari announces results reliably -->
+<div class="sr-only" aria-live="polite" aria-atomic="true">
+	{#if step === 2 && results.length > 0}
+		{results.filter((r) => r.status === 'likely').length} programs may apply to your household.
+	{/if}
+</div>
+
 <nav class="breadcrumb" aria-label="Breadcrumb">
 	<a href="/">← Finxiety</a>
 </nav>
 
-<h1>Benefits Screener</h1>
+<h1 bind:this={toolHeadingEl} tabindex="-1">Benefits Screener</h1>
 <p class="tool-description">
 	Check which California benefits programs you may qualify for. Enter your household size and income
 	and we will show you which programs to look into and where to apply.
@@ -144,14 +160,16 @@
 	{:else if step === 2}
 		{@const likelyCount = results.filter((r) => r.status === 'likely').length}
 		{@const visibleResults = results.filter((r) => r.status !== 'not_applicable')}
-		<section class="step" aria-live="polite" aria-label="Eligibility results">
+		<section class="step" aria-label="Eligibility results">
 			<div class="results-header">
 				{#if likelyCount > 0}
-					<h2>
+					<h2 bind:this={resultsHeadingEl} tabindex="-1">
 						You may qualify for {likelyCount} program{likelyCount === 1 ? '' : 's'}.
 					</h2>
 				{:else}
-					<h2>These programs may not match your situation right now.</h2>
+					<h2 bind:this={resultsHeadingEl} tabindex="-1">
+						These programs may not match your situation right now.
+					</h2>
 				{/if}
 				<p class="results-note">
 					These are estimates based on income only. Actual eligibility is determined by the
@@ -185,6 +203,7 @@
 								target="_blank"
 								rel="noopener noreferrer"
 								class="btn btn-primary program-link"
+								aria-label="{program.applicationLabel}, opens in new tab"
 							>
 								{program.applicationLabel} <span aria-hidden="true">→</span>
 							</a>
@@ -195,6 +214,11 @@
 								Worth checking again if your income or household changes.
 							</p>
 							<p class="income-vs-limit">{program.incomeVsLimit}</p>
+						{:else}
+							<p class="above-limit-note">
+								Income limits for this program are set by Congress and state agencies. They update
+								annually each October.
+							</p>
 						{/if}
 					</li>
 				{/each}
@@ -224,7 +248,7 @@
 				<a href="/tools/myth-quiz">Benefits Myth-Check Quiz →</a>
 			</div>
 
-			<button class="btn btn-ghost" onclick={startOver} type="button">
+			<button class="btn btn-ghost start-over-btn" onclick={startOver} type="button">
 				Check another household
 			</button>
 		</section>
@@ -265,6 +289,14 @@
 		margin-top: var(--space-sm);
 		color: var(--muted);
 		max-width: 52ch;
+	}
+
+	/* Focusable heading (receives programmatic focus on step change) */
+	h1:focus-visible,
+	h2:focus-visible {
+		outline: 3px solid var(--terracotta);
+		outline-offset: 3px;
+		border-radius: 2px;
 	}
 
 	/* Dollar prefix on income input */
@@ -414,9 +446,10 @@
 		color: white;
 	}
 
+	/* Use --text (not --muted) on --border background: passes 4.5:1 WCAG AA */
 	.eligibility-tag--unlikely {
 		background: var(--border);
-		color: var(--muted);
+		color: var(--text);
 	}
 
 	.program-description {
@@ -452,6 +485,13 @@
 		line-height: 1.6;
 		font-style: italic;
 		margin-bottom: var(--space-sm);
+	}
+
+	.above-limit-note {
+		font-size: 0.875rem;
+		color: var(--muted);
+		line-height: 1.6;
+		margin-bottom: 0;
 	}
 
 	/* Bridge, footer, cross-tool link */
@@ -493,5 +533,11 @@
 
 	.cross-tool-link a:hover {
 		text-decoration: underline;
+	}
+
+	/* Minimum touch target for the ghost reset button */
+	.start-over-btn {
+		min-height: 44px;
+		padding: var(--space-xs) 0;
 	}
 </style>
