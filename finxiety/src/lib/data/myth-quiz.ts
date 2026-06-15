@@ -1,9 +1,9 @@
-// MYTH-1 — Benefits Myth-Check Quiz content
+// MYTH-1: Benefits Myth-Check Quiz content
 //
 // Source content spec: finxiety/research-findings/myth-1-quiz-content.md
 // (last_updated 2026-06-14). On-screen copy below is taken verbatim from that
 // spec. Research-only framing (the "myth label" lines, unverified aggregate
-// figures, fear/urgency stats) is intentionally NOT included here — it must
+// figures, fear/urgency stats) is intentionally NOT included here. It must
 // never render on screen.
 //
 // Data freshness: SNAP characteristics, WIC eligibility rates, and the figures
@@ -36,7 +36,7 @@ export interface Question {
 	/** Anchor labels for range/slider controls: [low end, high end]. */
 	anchorLabels?: [string, string];
 	/**
-	 * The real figure, used for the "You guessed: X — The real number: Y" line.
+	 * The real figure, used for the "You guessed: X. The real number: Y." line.
 	 * For questions whose honest answer is qualitative (Q2), realAnswer is the
 	 * numeric midpoint used only for slider positioning; realAnswerDisplay
 	 * carries the text actually shown.
@@ -50,11 +50,11 @@ export interface Question {
 	 * of `realAnswer + realAnswerLabel`.
 	 */
 	realAnswerDisplay?: string;
-	/** Reveal headline — blames the system or information gap, never the guesser. */
+	/** Reveal headline: blames the system or information gap, never the guesser. */
 	revealHeadline: string;
 	/** Reveal body paragraph. */
 	revealBody: string;
-	/** Structural explanation paragraph — locates the gap in system design. */
+	/** Structural explanation paragraph: locates the gap in system design. */
 	structuralExplanation: string;
 	/** Warm, informational cross-tool signpost. Never imperative. */
 	signpost: string;
@@ -89,18 +89,18 @@ export const questions: Question[] = [
 		revealHeadline:
 			"Fewer than 10. In 41 states, that savings doesn't affect eligibility at all.",
 		revealBody:
-			'41 states have eliminated the SNAP asset test. Only 9 still cap it. The fear that saving costs you benefits is based on a rule most states quietly retired — without telling anyone.',
+			'41 states have eliminated the SNAP asset test. Only 9 still cap it. The fear that saving costs you benefits is based on a rule most states quietly retired, without telling anyone.',
 		structuralExplanation:
-			'It happened through a policy option called Broad-Based Categorical Eligibility (BBCE) — something states can adopt without any public announcement. Most applicants have never heard of it. The fear was rational given the rule\'s history. The map just changed without anyone updating the signs.',
+			"It happened through a policy option called Broad-Based Categorical Eligibility (BBCE), which states can adopt without any public announcement. Most applicants have never heard of it. The fear was rational given the rule's history. The map just changed without anyone updating the signs.",
 		signpost:
 			"A tool that checks your state's current rules alongside SNAP and other benefits is coming soon.",
 		sources: [
 			{
-				label: 'CBPP — SNAP Broad-Based Categorical Eligibility (March 2026)',
+				label: 'CBPP: SNAP Broad-Based Categorical Eligibility (March 2026)',
 				url: 'https://www.cbpp.org/research/food-assistance/snaps-broad-based-categorical-eligibility-supports-working-families-and-0'
 			},
 			{
-				label: 'Propel — SNAP asset limits by state',
+				label: 'Propel: SNAP asset limits by state',
 				url: 'https://www.propel.app/snap/asset-limits-states/'
 			}
 		]
@@ -108,7 +108,7 @@ export const questions: Question[] = [
 	{
 		id: 'cliff',
 		prompt:
-			'A $1/hour raise can sometimes leave a parent worse off — because of the benefits it triggers them to lose. How many families with children do you think face this?',
+			'A $1/hour raise can sometimes leave a parent worse off, because of the benefits it triggers them to lose. How many families with children do you think face this?',
 		inputType: 'range',
 		inputMin: 0,
 		inputMax: 100,
@@ -118,24 +118,24 @@ export const questions: Question[] = [
 		realAnswer: 100,
 		realAnswerLabel: '',
 		realAnswerDisplay: 'Millions',
-		revealHeadline: "Millions — and it's a design flaw, not a personal failure.",
+		revealHeadline: "Millions. And it's a design flaw, not a personal failure.",
 		revealBody:
-			'One documented case: a $1/hour raise added $160/month in earnings but triggered $800/month in benefit reductions — a net loss of $640. In another, a $0.10/hour raise cost a family $9,000/year in childcare subsidies.',
+			'One documented case: a $1/hour raise added $160/month in earnings but triggered $800/month in benefit reductions (a net loss of $640). In another, a $0.10/hour raise cost a family $9,000/year in childcare subsidies.',
 		structuralExplanation:
-			"Each program has its own income cutoff. When SNAP, Medicaid, housing assistance, and childcare subsidies all hit their limits near each other, accepting a raise can be financially irrational. That's a design flaw — not a reflection of how hard someone is working.",
+			"Each program has its own income cutoff. When SNAP, Medicaid, housing assistance, and childcare subsidies all hit their limits near each other, accepting a raise can be financially irrational. That's a design flaw, not a reflection of how hard someone is working.",
 		signpost:
-			"A Benefits Cliff Calculator is coming — it'll tell you whether a specific raise would leave you ahead or behind once benefits are factored in.",
+			"A Benefits Cliff Calculator is coming. It will tell you whether a specific raise would leave you ahead or behind once benefits are factored in.",
 		sources: [
 			{
-				label: 'Atlanta Fed — What are benefits cliffs?',
+				label: 'Atlanta Fed: What are benefits cliffs?',
 				url: 'https://www.atlantafed.org/what-we-study/workforce-development/advancing-careers-for-low-income-families/what-are-benefits-cliffs'
 			},
 			{
-				label: 'Federal Reserve Communities — The benefits cliff explained',
+				label: 'Federal Reserve Communities: The benefits cliff explained',
 				url: 'https://fedcommunities.org/the-benefits-cliff-explained/'
 			},
 			{
-				label: 'CBPP — Block-granting not a solution to benefit cliffs',
+				label: 'CBPP: Block-granting not a solution to benefit cliffs',
 				url: 'https://www.cbpp.org/research/poverty-and-inequality/block-granting-not-a-solution-to-benefit-cliffs'
 			}
 		]
@@ -151,20 +151,20 @@ export const questions: Question[] = [
 		inputStep: 1,
 		realAnswer: 6.16,
 		realAnswerLabel: 'per day',
-		revealHeadline: '$6.16 — less than the cost of a minimum adequate diet.',
+		revealHeadline: '$6.16, less than the cost of a minimum adequate diet.',
 		revealBody:
-			"The average SNAP benefit works out to $6.16 per person per day — below what the USDA's own Thrifty Food Plan estimates it costs to eat adequately. Running short at the end of the month is a structural consequence of that gap.",
+			"The average SNAP benefit works out to $6.16 per person per day, below what the USDA's own Thrifty Food Plan estimates it costs to eat adequately. Running short at the end of the month is a structural consequence of that gap.",
 		structuralExplanation:
-			'Benefit levels are set by Congress and haven\'t kept pace with food costs. Families often front-load spending early in the month on shelf-stable staples, then run short when fresh food runs out. That pattern is structural — not impulsive spending.',
+			"Benefit levels are set by Congress and haven't kept pace with food costs. Families often front-load spending early in the month on shelf-stable staples, then run short when fresh food runs out. That pattern is structural, not impulsive spending.",
 		signpost:
 			'SNAP, Medicaid, and other programs are covered in the benefits screener coming soon.',
 		sources: [
 			{
-				label: 'CBPP — The Supplemental Nutrition Assistance Program (SNAP)',
+				label: 'CBPP: The Supplemental Nutrition Assistance Program (SNAP)',
 				url: 'https://www.cbpp.org/research/food-assistance/the-supplemental-nutrition-assistance-program-snap'
 			},
 			{
-				label: 'USDA ERS — Monthly timing of SNAP spending',
+				label: 'USDA ERS: Monthly timing of SNAP spending',
 				url: 'https://www.ers.usda.gov/amber-waves/2018/december/monthly-timing-of-snap-spending-less-smooth-for-some-households'
 			}
 		]
@@ -172,7 +172,7 @@ export const questions: Question[] = [
 	{
 		id: 'paperwork',
 		prompt:
-			'In a Massachusetts study, what share of SNAP families with young children lost benefits — not because they became ineligible, but over a missed deadline or paperwork?',
+			'In a Massachusetts study, what share of SNAP families with young children lost benefits, not because they became ineligible but because of a missed deadline or paperwork?',
 		inputType: 'percentage',
 		inputMin: 0,
 		inputMax: 100,
@@ -180,20 +180,20 @@ export const questions: Question[] = [
 		inputStep: 1,
 		realAnswer: 41,
 		realAnswerLabel: '%',
-		revealHeadline: 'Nearly 41% — eligible families, lost benefits over paperwork.',
+		revealHeadline: 'Nearly 41%: eligible families who lost benefits over paperwork.',
 		revealBody:
-			'In that study, 40.9% of SNAP families with young children lost benefits for purely administrative reasons: a missed recertification deadline, incomplete paperwork, or a missed phone interview. Researchers call these "procedural denials" — benefits lost despite full financial eligibility.',
+			'In that study, 40.9% of SNAP families with young children lost benefits for purely administrative reasons: a missed recertification deadline, incomplete paperwork, or a missed phone interview. Researchers call these "procedural denials": benefits lost despite full financial eligibility.',
 		structuralExplanation:
-			'Recertification means new documents, a new interview, and a deadline set by the agency — on a schedule that doesn\'t account for your work shifts, available time, or English fluency. These are access barriers built into the process. The research is explicit: these are administrative failures, not personal ones.',
+			"Recertification means new documents, a new interview, and a deadline set by the agency, on a schedule that doesn't account for your work shifts, available time, or English fluency. These are access barriers built into the process. The research is explicit: these are administrative failures, not personal ones.",
 		signpost:
-			'Missing a recertification deadline is the most common reason eligible families lose benefits. A tool that tracks your deadline and prep list is coming soon — knowing yours in advance is the fix.',
+			'Missing a recertification deadline is the most common reason eligible families lose benefits. A tool that tracks your deadline and prep list is coming soon. Knowing yours in advance is the fix.',
 		sources: [
 			{
-				label: 'PMC / AJPH — Procedural denials among SNAP families',
+				label: 'PMC / AJPH: Procedural denials among SNAP families',
 				url: 'https://pmc.ncbi.nlm.nih.gov/articles/PMC9449793/'
 			},
 			{
-				label: 'CBPP — Improving SNAP and Medicaid access: SNAP renewals',
+				label: 'CBPP, Improving SNAP and Medicaid access: SNAP renewals',
 				url: 'https://www.cbpp.org/research/food-assistance/improving-snap-and-medicaid-access-snap-renewals'
 			}
 		]
@@ -201,7 +201,7 @@ export const questions: Question[] = [
 	{
 		id: 'wic',
 		prompt:
-			'If a family is on SNAP with a child under 5, what percentage are also enrolled in WIC — the nutrition program for kids that age?',
+			'If a family is on SNAP with a child under 5, what percentage are also enrolled in WIC, the nutrition program for kids that age?',
 		inputType: 'percentage',
 		inputMin: 0,
 		inputMax: 100,
@@ -211,20 +211,20 @@ export const questions: Question[] = [
 		realAnswerLabel: '%',
 		realAnswerDisplay: 'About half',
 		revealHeadline:
-			'About half — and nearly half are missing it, even with SNAP.',
+			'About half. And nearly half are missing it, even with SNAP.',
 		revealBody:
-			"Nearly half of WIC-eligible people on SNAP or Medicaid don't enroll in WIC — even though SNAP enrollment can fast-track WIC eligibility. Overall, only 56% of eligible people were enrolled in 2023.",
+			"Nearly half of WIC-eligible people on SNAP or Medicaid don't enroll in WIC, even though SNAP enrollment can fast-track WIC eligibility. Overall, only 56% of eligible people were enrolled in 2023.",
 		structuralExplanation:
-			"WIC requires a separate application, an in-person visit for nutritional screening, and a nearby WIC clinic — all separate from SNAP and Medicaid. Being on SNAP with a young child and not having WIC is common. The programs don't connect automatically, and no one is required to tell you.",
+			"WIC requires a separate application, an in-person visit for nutritional screening, and a nearby WIC clinic, all separate from SNAP and Medicaid. Being on SNAP with a young child and not having WIC is common. The programs don't connect automatically, and no one is required to tell you.",
 		signpost:
 			'The benefits screener coming soon will check WIC eligibility alongside SNAP and Medicaid in one pass.',
 		sources: [
 			{
-				label: 'USDA FNS — WIC Eligibility and Coverage Rates 2023',
+				label: 'USDA FNS: WIC Eligibility and Coverage Rates 2023',
 				url: 'https://www.fns.usda.gov/research/wic/eer/2023'
 			},
 			{
-				label: 'CBPP — WIC’s critical benefits reach more of those eligible',
+				label: "CBPP: WIC's critical benefits reach more of those eligible",
 				url: 'https://www.cbpp.org/research/food-assistance/wics-critical-benefits-reach-more-of-those-eligible-than-in-recent-years'
 			}
 		]
@@ -241,7 +241,7 @@ export const synthesisPrompts: SynthesisPrompt[] = [
 			{ id: 'cliff', label: 'That a raise can sometimes leave you with less' },
 			{
 				id: 'paperwork',
-				label: 'That paperwork — not eligibility — is why most people lose benefits'
+				label: 'That paperwork, not eligibility, is why most people lose benefits'
 			},
 			{ id: 'wic', label: 'That missing WIC while on SNAP is common' },
 			{
@@ -254,7 +254,7 @@ export const synthesisPrompts: SynthesisPrompt[] = [
 		id: 'assume-cause',
 		prompt:
 			"If someone told you they'd lost their SNAP benefits last year, what would you assume happened?",
-		helper: "A few words is fine — there's no right answer.",
+		helper: "A few words is fine. No right answer.",
 		kind: 'text'
 	}
 ];

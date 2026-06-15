@@ -13,7 +13,7 @@
 	let qIndex = $state(0);
 
 	// The user's committed estimate per question, by question id. Locked once
-	// submitted — back navigation re-shows the reveal, never re-opens the input.
+	// submitted; back navigation re-shows the reveal, never re-opens the input.
 	let estimates = $state<Record<string, number>>({});
 	// The live value of the current control before it's committed.
 	let currentValue = $state<number>(questions[0].inputDefault);
@@ -119,10 +119,10 @@
 </script>
 
 <svelte:head>
-	<title>Benefits Myth-Check Quiz — Finxiety</title>
+	<title>Benefits Myth-Check Quiz | Finxiety</title>
 	<meta
 		name="description"
-		content="Five things most people believe about benefits programs — and what the data actually shows. Guess first, then see the real number."
+		content="Five things most people believe about benefits programs, and what the data actually shows. Guess first, then see the real number."
 	/>
 </svelte:head>
 
@@ -135,7 +135,7 @@
 {#if phase === 'welcome'}
 	<section class="step" aria-label="Welcome">
 		<p class="tool-description">
-			Five questions about how benefits programs work. Guess first — then see the real number.
+			Five questions about how benefits programs work. Guess first, then see the real number.
 		</p>
 		<p class="estimate-note">No grades, no right answers.</p>
 		<button class="btn btn-primary" type="button" onclick={startQuiz}>Start the quiz</button>
@@ -325,7 +325,7 @@
 {:else if phase === 'synthesis'}
 	<section class="step" aria-label="Reflection">
 		<p class="tool-description">
-			One more thing — optional, no right answers.
+			One more thing (optional, no right answers).
 		</p>
 
 		<fieldset class="synthesis-block">
@@ -372,12 +372,12 @@
 
 		<h2 class="reveal-headline">The real numbers behind five things most people believe.</h2>
 		<p class="reveal-body">
-			Most of these gaps aren't about what any one person did — they're about how the systems are
+			Most of these gaps aren't about what any one person did. They're about how the systems are
 			built, and how rarely anyone explains them. Knowing that changes how you move.
 		</p>
 
 		<p class="estimate-note">
-			These figures come from public research, linked on each reveal. Programs change — the official sources are the place to confirm what applies to you.
+			These figures come from public research, linked on each reveal. Programs change. The official sources are the place to confirm what applies to you.
 		</p>
 
 		<div class="step-actions score-actions">
@@ -548,7 +548,7 @@
 		margin-top: var(--space-md);
 	}
 
-	/* Reveal — guess vs. real comparison */
+	/* Reveal: guess vs. real comparison */
 	.compare {
 		background: var(--surface);
 		border-radius: var(--radius);
