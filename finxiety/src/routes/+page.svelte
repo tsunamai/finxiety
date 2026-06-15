@@ -23,7 +23,7 @@
 	<a href="/tools/emergency-fund" class="tool-card">
 		<div class="tool-card-content">
 			<h3>Emergency Fund Checker</h3>
-			<p>Enter three numbers. Find out how many months of runway you actually have — and what's really counted as an emergency fund versus what just lives in checking.</p>
+			<p>Find out how many months of runway you actually have.</p>
 		</div>
 		<span class="tool-arrow" aria-hidden="true">→</span>
 	</a>
@@ -34,7 +34,7 @@
 	<ul>
 		<li>SNAP Screener — see if you may qualify for food assistance in California</li>
 		<li>Benefits Cliff Calculator — understand what happens to your benefits if your income rises</li>
-		<li>Tip Calculator — know exactly what you're earning after deductions</li>
+		<li>Earnings Calculator — know exactly what you're earning after deductions</li>
 	</ul>
 </section>
 
