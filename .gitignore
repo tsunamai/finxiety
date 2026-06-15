@@ -17,6 +17,9 @@ __pycache__/
 *.log
 .claude/worktrees/
 
+# Playwright MCP session snapshots — generated artifacts, not source
+.playwright-mcp/
+
 # SvelteKit / Node
 node_modules/
 .svelte-kit/

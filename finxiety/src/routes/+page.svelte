@@ -31,7 +31,7 @@
 	<a href="/tools/myth-quiz" class="tool-card">
 		<div class="tool-card-content">
 			<h3>Benefits Myth-Check Quiz</h3>
-			<p>Five things most people believe about benefits programs — and what the data actually shows.</p>
+			<p>Five things most people believe about benefits programs and what the data actually shows.</p>
 		</div>
 		<span class="tool-arrow" aria-hidden="true">→</span>
 	</a>
@@ -40,9 +40,9 @@
 <section class="coming-soon">
 	<h2>Coming soon</h2>
 	<ul>
-		<li>SNAP Screener — see if you may qualify for food assistance in California</li>
-		<li>Benefits Cliff Calculator — understand what happens to your benefits if your income rises</li>
-		<li>Earnings Calculator — know exactly what you're earning after deductions</li>
+		<li>SNAP Screener: see if you may qualify for food assistance in California</li>
+		<li>Benefits Cliff Calculator: understand what happens to your benefits if your income rises</li>
+		<li>Earnings Calculator know exactly what you're earning after deductions</li>
 	</ul>
 </section>
 
