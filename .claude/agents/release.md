@@ -23,6 +23,18 @@ Use **Conventional Commits** as the source of truth for what went into a release
 
 ---
 
+## Link Integrity Check (Run Before Every Release)
+
+This is mandatory. Run the `link-checker` agent before generating the release package. Wait for its report in `finxiety/status-updates/link-check-[date].md` before proceeding.
+
+- If the link-checker auto-fixed any URLs, include those fixes in the release notes under "Data corrections."
+- If the link-checker flagged any links as "needs manual research," block the release until Naomi resolves them or explicitly accepts the risk in writing.
+- If the link-checker found everything live, note it as confirmed in the release checklist.
+
+Do not skip this step even for PATCH releases. A broken application URL is a user-facing failure regardless of release size.
+
+---
+
 ## Data Freshness Audit (Run Before Every Release)
 
 This is mandatory. Finxiety's correctness depends on annual data updates. Before any release, audit every file in `finxiety/data/`:
@@ -47,6 +59,7 @@ Flag files where `last_updated` is more than 14 months ago as **STALE — DATA R
 - [ ] No open Critical or High QA findings
 - [ ] Brand review complete: ⟦BRAND-REVIEWED⟧ on all new user-facing copy
 - [ ] UX review complete: ⟦UX-REVIEWED⟧ on all new screens
+- [ ] Link integrity check complete: link-checker report at `finxiety/status-updates/link-check-[date].md` -- no unresolved broken links
 
 ### Data Freshness Audit
 [Output of freshness audit — list all data files, last_updated, next update date, status]
