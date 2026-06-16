@@ -145,7 +145,7 @@ export const HEAP = {
 		8: 7400
 	} as Record<number, number>,
 	grossMonthlyAdditional: 400,
-	applicationUrl: 'https://www.csd.ca.gov/Pages/HEAP.aspx',
+	applicationUrl: 'https://www.csd.ca.gov/pages/liheapprogram.aspx',
 	applicationLabel: 'Find a HEAP provider near you'
 } as const;
 
