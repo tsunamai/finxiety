@@ -32,9 +32,9 @@ Key behavioral science foundations every agent must internalize:
 
 ---
 
-## Validation Gate (Four Agents, Run Before Distribution)
+## Validation Gate (Five Agents, Run Before Distribution)
 
-Every tool that ships runs through all four in sequence. Findings go to `finxiety/status-updates/[tool-id]-validation-[date].md`.
+Every tool that ships runs through all five in sequence. Findings go to `finxiety/status-updates/[tool-id]-validation-[date].md`.
 
 | Agent | What it checks | Sign-off |
 |---|---|---|
@@ -42,6 +42,7 @@ Every tool that ships runs through all four in sequence. Findings go to `finxiet
 | `design-ux` | Usability at 375px and 1440px — Norman, Nielsen, Ive, Simon | ⟦UX-REVIEWED⟧ |
 | `qa` | Functional correctness, edge cases, WCAG 2.1 AA, mobile | ⟦QA-VERIFIED⟧ |
 | `behavioral-science` | Scarcity, shame, trust, locus of control, cross-tool bridge — through ALICE persona | ⟦BEHAVIORAL-REVIEWED⟧ |
+| `disability-accessibility` | Cognitive fatigue, disclosure shame, disability benefit cliffs, double vulnerability — through the Renee persona | ⟦DISABILITY-REVIEWED⟧ |
 
 Run after every tool ships. Run again after any copy, flow, or UX change. Run before any public distribution push.
 

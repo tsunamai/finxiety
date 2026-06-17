@@ -40,6 +40,12 @@ No formatting required. The pm agent handles the rest.
 
 ---
 
+### Disability-Specific Benefit Programs (SSI, SSDI, IHSS, CalABLE, Regional Center) [Breadcrumb]
+
+**Problem:** BEN-1 currently screens for SNAP, Medi-Cal, WIC, Lifeline, HEAP, school meals, and CalEITC, all income-threshold programs. None of the disability-specific programs (SSI, SSDI, IHSS, CalABLE, Regional Center) are in scope anywhere in the data layer or backlog, despite the disability-accessibility lens (`finxiety/research-findings/persona-renee-disability-user.md`, `finxiety/docs/disability-accessibility-framework.md`) identifying this as a real gap for a population where disability and poverty are deeply correlated.
+
+**Why now:** Flagged while building the disability-accessibility review lens (infrastructure only; no programs were added in that build). Ready for the pm agent to groom into a ticket now that a review framework exists to check the eligibility design against, particularly the asset-limit and benefit-cliff complexity these programs carry that BEN-1's existing FPL-threshold model doesn't handle.
+
 ---
 
 ## Groomed (Archived)

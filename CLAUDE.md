@@ -43,9 +43,11 @@ Agents live in `.claude/agents/`. Each has a defined role; invoke by name via th
 | `engineer` | `.claude/agents/engineer.md` | Full-stack implementation in worktree isolation |
 | `qa` | `.claude/agents/qa.md` | Test plans, quality gates, WCAG spot-checks |
 | `behavioral-science` | `.claude/agents/behavioral-science.md` | Poverty psychology, scarcity mindset, financial shame — reviews tools against the ALICE user persona |
+| `disability-accessibility` | `.claude/agents/disability-accessibility.md` | Disability and chronic illness accessibility: cognitive fatigue, disclosure shame, disability benefit cliffs. Reviews tools against the Renee persona |
 | `release` | `.claude/agents/release.md` | Release notes, versioning, deploy checklist |
 | `system-analyst` | `.claude/agents/system-analyst.md` | Read-only behavioral trace; signs verified claims |
 | `code-reviewer` | `.claude/agents/code-reviewer.md` | PR review; three-layer methodology |
+| `link-checker` | `.claude/agents/link-checker.md` | Checks and auto-fixes broken application URLs in Finxiety data files |
 
 ---
 
@@ -70,5 +72,6 @@ Architecture → architect agent → ADR
 Build → engineer agent (worktree isolation)
 QA → qa agent → ⟦QA-VERIFIED⟧
 Behavioral Review → behavioral-science agent → ⟦BEHAVIORAL-REVIEWED⟧
+Disability Review → disability-accessibility agent → ⟦DISABILITY-REVIEWED⟧
 Release → release agent → Naomi sign-off
 ```
