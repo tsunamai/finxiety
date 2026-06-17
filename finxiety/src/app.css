@@ -209,6 +209,11 @@ input:focus-visible {
 	min-height: 48px;
 }
 
+.btn:focus-visible {
+	outline: 3px solid var(--terracotta);
+	outline-offset: 2px;
+}
+
 .btn:active {
 	transform: translateY(1px);
 }

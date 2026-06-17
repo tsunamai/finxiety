@@ -29,10 +29,3 @@ export function calculateTip(inputs: TipInputs): TipResult {
 	return { tipAmount, total, perPerson };
 }
 
-// True when the total does not divide evenly to the cent across the party.
-// Used to decide whether the per-person figure is exact or approximate.
-export function splitsEvenly(total: number, partySize: number): boolean {
-	if (partySize <= 1) return true;
-	const totalCents = Math.round(total * 100);
-	return totalCents % partySize === 0;
-}

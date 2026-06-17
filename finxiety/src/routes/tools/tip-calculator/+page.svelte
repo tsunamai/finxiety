@@ -340,6 +340,10 @@
 	</div>
 </form>
 
+<div class="signpost-footer" role="note">
+	<p>More on how financial systems work differently than most people assume: <a href="/tools/myth-quiz">Benefits Myth-Check Quiz</a> applies the same format to benefits programs.</p>
+</div>
+
 <style>
 	.breadcrumb {
 		margin-bottom: var(--space-lg);
@@ -640,5 +644,15 @@
 		font-size: 0.875rem;
 		color: var(--muted);
 		line-height: 1.6;
+	}
+
+	.signpost-footer {
+		margin-top: var(--space-lg);
+		padding: var(--space-md);
+		background: var(--surface);
+		border-radius: var(--radius);
+		font-size: 0.9375rem;
+		line-height: 1.6;
+		color: var(--muted);
 	}
 </style>
