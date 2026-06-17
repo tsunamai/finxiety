@@ -107,6 +107,83 @@
 	function increaseParty() {
 		if (partySize < MAX_PARTY) partySize += 1;
 	}
+
+	// Inline calculator
+	let showCalc = $state(false);
+	let calcDisplay = $state('0');
+	let calcPrev = $state<number | null>(null);
+	let calcOp = $state<string | null>(null);
+	let calcFresh = $state(false);
+
+	function calcFormatResult(n: number): string {
+		if (!Number.isFinite(n)) return 'Error';
+		return parseFloat(n.toPrecision(10)).toString();
+	}
+
+	function calcDigit(d: string) {
+		if (calcFresh || calcDisplay === 'Error') {
+			calcDisplay = d;
+			calcFresh = false;
+		} else if (calcDisplay === '0' && d !== '0') {
+			calcDisplay = d;
+		} else if (calcDisplay.length < 12) {
+			calcDisplay += d;
+		}
+	}
+
+	function calcDot() {
+		if (calcFresh || calcDisplay === 'Error') { calcDisplay = '0.'; calcFresh = false; return; }
+		if (!calcDisplay.includes('.')) calcDisplay += '.';
+	}
+
+	function calcCompute(a: number, b: number, op: string): number {
+		if (op === '+') return a + b;
+		if (op === '-') return a - b;
+		if (op === '×') return a * b;
+		if (op === '÷') return b !== 0 ? a / b : NaN;
+		return b;
+	}
+
+	function calcOperator(op: string) {
+		if (calcDisplay === 'Error') return;
+		const cur = parseFloat(calcDisplay);
+		if (calcPrev !== null && !calcFresh) {
+			const res = calcCompute(calcPrev, cur, calcOp!);
+			calcDisplay = calcFormatResult(res);
+			calcPrev = Number.isFinite(res) ? res : null;
+		} else {
+			calcPrev = cur;
+		}
+		if (calcPrev !== null) calcOp = op;
+		calcFresh = true;
+	}
+
+	function calcEquals() {
+		if (calcPrev === null || calcOp === null) return;
+		const res = calcCompute(calcPrev, parseFloat(calcDisplay), calcOp);
+		calcDisplay = calcFormatResult(res);
+		calcPrev = null;
+		calcOp = null;
+		calcFresh = true;
+	}
+
+	function calcClear() {
+		calcDisplay = '0';
+		calcPrev = null;
+		calcOp = null;
+		calcFresh = false;
+	}
+
+	function calcNegate() {
+		if (calcDisplay === 'Error' || calcDisplay === '0') return;
+		calcDisplay = calcFormatResult(-parseFloat(calcDisplay));
+	}
+
+	function calcPercent() {
+		if (calcDisplay === 'Error') return;
+		calcDisplay = calcFormatResult(parseFloat(calcDisplay) / 100);
+		calcFresh = true;
+	}
 </script>
 
 <svelte:head>
@@ -346,6 +423,48 @@
 		</details>
 	</div>
 </form>
+
+<!-- Optional inline calculator -->
+<div class="calc-wrapper">
+	<button
+		type="button"
+		class="calc-toggle"
+		onclick={() => showCalc = !showCalc}
+		aria-expanded={showCalc}
+		aria-controls="inline-calc"
+	>
+		{showCalc ? 'Hide calculator' : 'Calculator'}
+	</button>
+
+	{#if showCalc}
+		<div class="calc" id="inline-calc" role="region" aria-label="Calculator">
+			<div class="calc-display" aria-live="polite" aria-atomic="true">
+				<span class="calc-display-value">{calcDisplay}</span>
+			</div>
+			<div class="calc-grid" role="group" aria-label="Calculator buttons">
+				<button type="button" class="calc-btn calc-fn" onclick={calcClear}>AC</button>
+				<button type="button" class="calc-btn calc-fn" onclick={calcNegate} aria-label="Toggle sign">+/−</button>
+				<button type="button" class="calc-btn calc-fn" onclick={calcPercent} aria-label="Percent">%</button>
+				<button type="button" class="calc-btn calc-op" onclick={() => calcOperator('÷')} aria-label="Divide">÷</button>
+				<button type="button" class="calc-btn" onclick={() => calcDigit('7')}>7</button>
+				<button type="button" class="calc-btn" onclick={() => calcDigit('8')}>8</button>
+				<button type="button" class="calc-btn" onclick={() => calcDigit('9')}>9</button>
+				<button type="button" class="calc-btn calc-op" onclick={() => calcOperator('×')} aria-label="Multiply">×</button>
+				<button type="button" class="calc-btn" onclick={() => calcDigit('4')}>4</button>
+				<button type="button" class="calc-btn" onclick={() => calcDigit('5')}>5</button>
+				<button type="button" class="calc-btn" onclick={() => calcDigit('6')}>6</button>
+				<button type="button" class="calc-btn calc-op" onclick={() => calcOperator('-')} aria-label="Subtract">−</button>
+				<button type="button" class="calc-btn" onclick={() => calcDigit('1')}>1</button>
+				<button type="button" class="calc-btn" onclick={() => calcDigit('2')}>2</button>
+				<button type="button" class="calc-btn" onclick={() => calcDigit('3')}>3</button>
+				<button type="button" class="calc-btn calc-op" onclick={() => calcOperator('+')} aria-label="Add">+</button>
+				<button type="button" class="calc-btn calc-zero" onclick={() => calcDigit('0')}>0</button>
+				<button type="button" class="calc-btn" onclick={calcDot} aria-label="Decimal point">.</button>
+				<button type="button" class="calc-btn calc-op" onclick={calcEquals} aria-label="Equals">=</button>
+			</div>
+		</div>
+	{/if}
+</div>
 
 <div class="signpost-footer" role="note">
 	<p>More on how financial systems work differently than most people assume: <a href="/tools/myth-quiz">Benefits Myth-Check Quiz</a> applies the same format to benefits programs.</p>
@@ -661,5 +780,116 @@
 		font-size: 0.9375rem;
 		line-height: 1.6;
 		color: var(--muted);
+	}
+
+	/* Inline calculator */
+	.calc-wrapper {
+		margin-top: var(--space-lg);
+	}
+
+	.calc-toggle {
+		background: none;
+		border: none;
+		cursor: pointer;
+		font-family: var(--font);
+		font-size: 0.875rem;
+		color: var(--muted);
+		text-decoration: underline;
+		text-underline-offset: 3px;
+		padding: 0;
+		min-height: 44px;
+		display: flex;
+		align-items: center;
+	}
+
+	.calc-toggle:hover {
+		color: var(--terracotta);
+	}
+
+	.calc-toggle:focus-visible {
+		outline: 3px solid var(--terracotta);
+		outline-offset: 2px;
+		border-radius: var(--radius);
+	}
+
+	.calc {
+		margin-top: var(--space-md);
+		border-radius: var(--radius);
+		overflow: hidden;
+		border: 1px solid var(--border);
+		max-width: 340px;
+	}
+
+	.calc-display {
+		background: var(--dark);
+		padding: var(--space-md);
+		text-align: right;
+		min-height: 72px;
+		display: flex;
+		align-items: flex-end;
+		justify-content: flex-end;
+	}
+
+	.calc-display-value {
+		font-size: 2.25rem;
+		font-weight: 300;
+		color: var(--cream);
+		letter-spacing: -0.02em;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+		max-width: 100%;
+	}
+
+	.calc-grid {
+		display: grid;
+		grid-template-columns: repeat(4, 1fr);
+		gap: 1px;
+		background: var(--border);
+	}
+
+	.calc-btn {
+		background: var(--surface);
+		color: var(--dark);
+		border: none;
+		font-family: var(--font);
+		font-size: 1.25rem;
+		font-weight: 400;
+		min-height: 64px;
+		cursor: pointer;
+		transition: background 0.1s;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		padding: 0;
+	}
+
+	.calc-btn:hover {
+		filter: brightness(0.93);
+	}
+
+	.calc-btn:active {
+		filter: brightness(0.82);
+	}
+
+	.calc-btn:focus-visible {
+		outline: 3px solid var(--terracotta);
+		outline-offset: -3px;
+	}
+
+	.calc-fn {
+		background: var(--border);
+	}
+
+	.calc-op {
+		background: var(--terracotta);
+		color: white;
+		font-weight: 600;
+	}
+
+	.calc-zero {
+		grid-column: span 2;
+		justify-content: flex-start;
+		padding-left: 1.5rem;
 	}
 </style>
