@@ -296,6 +296,9 @@
 
 			<div class="signpost-box" role="note">
 				<p>{current.signpost}</p>
+				{#if current.signpostUrl}
+					<a href={current.signpostUrl} class="signpost-link">Open the Benefits Screener →</a>
+				{/if}
 			</div>
 
 			<details class="sources">
@@ -620,6 +623,16 @@
 		font-size: 0.9375rem;
 		line-height: 1.6;
 		color: var(--text);
+	}
+
+	.signpost-link {
+		display: inline-block;
+		margin-top: var(--space-sm);
+		font-size: 0.875rem;
+		font-weight: 600;
+		color: var(--terracotta);
+		text-decoration: underline;
+		text-underline-offset: 2px;
 	}
 
 	.box-label {

@@ -58,6 +58,8 @@ export interface Question {
 	structuralExplanation: string;
 	/** Warm, informational cross-tool signpost. Never imperative. */
 	signpost: string;
+	/** Optional path to a live tool the signpost references. Renders as a link button. */
+	signpostUrl?: string;
 	/** Official sources for the figures in this reveal. */
 	sources: Source[];
 }
@@ -93,7 +95,8 @@ export const questions: Question[] = [
 		structuralExplanation:
 			"It happened through a policy option called Broad-Based Categorical Eligibility (BBCE), which states can adopt without any public announcement. Most applicants have never heard of it. The fear was rational given the rule's history. The map just changed without anyone updating the signs.",
 		signpost:
-			"A tool that checks your state's current rules alongside SNAP and other benefits is coming soon.",
+			'In California, the Benefits Screener checks eligibility for CalFresh, Medi-Cal, WIC, and more in one pass.',
+		signpostUrl: '/tools/screener',
 		sources: [
 			{
 				label: 'CBPP: SNAP Broad-Based Categorical Eligibility (March 2026)',
@@ -157,7 +160,8 @@ export const questions: Question[] = [
 		structuralExplanation:
 			"Benefit levels are set by Congress and haven't kept pace with food costs. Families often front-load spending early in the month on shelf-stable staples, then run short when fresh food runs out. That pattern is structural, not impulsive spending.",
 		signpost:
-			'SNAP, Medicaid, and other programs are covered in the benefits screener coming soon.',
+			'In California, CalFresh, Medi-Cal, and other programs are covered in the Benefits Screener.',
+		signpostUrl: '/tools/screener',
 		sources: [
 			{
 				label: 'CBPP: The Supplemental Nutrition Assistance Program (SNAP)',
@@ -186,7 +190,7 @@ export const questions: Question[] = [
 		structuralExplanation:
 			"Recertification means new documents, a new interview, and a deadline set by the agency, on a schedule that doesn't account for your work shifts, available time, or English fluency. These are access barriers built into the process. The research is explicit: these are administrative failures, not personal ones.",
 		signpost:
-			'Missing a recertification deadline is the most common reason eligible families lose benefits. A tool that tracks your deadline and prep list is coming soon. Knowing yours in advance is the fix.',
+			'Missing a recertification deadline is the most common reason eligible families lose benefits they still qualify for. Knowing your deadline in advance is the fix.',
 		sources: [
 			{
 				label: 'PMC / AJPH: Procedural denials among SNAP families',
@@ -217,7 +221,8 @@ export const questions: Question[] = [
 		structuralExplanation:
 			"WIC requires a separate application, an in-person visit for nutritional screening, and a nearby WIC clinic, all separate from SNAP and Medicaid. Being on SNAP with a young child and not having WIC is common. The programs don't connect automatically, and no one is required to tell you.",
 		signpost:
-			'The benefits screener coming soon will check WIC eligibility alongside SNAP and Medicaid in one pass.',
+			'In California, the Benefits Screener checks WIC eligibility alongside CalFresh and Medi-Cal in one pass.',
+		signpostUrl: '/tools/screener',
 		sources: [
 			{
 				label: 'USDA FNS: WIC Eligibility and Coverage Rates 2023',
