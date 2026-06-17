@@ -239,7 +239,11 @@
 			</div>
 			{#if partySize > 1 && result.perPerson !== null}
 				<div class="result-row result-per-person">
-					<span class="result-label">Per person</span>
+					<span class="result-label">Tip per person</span>
+					<span class="result-value">{money(result.tipPerPerson!)} each</span>
+				</div>
+				<div class="result-row result-per-person">
+					<span class="result-label">Total per person</span>
 					<span class="result-value">{money(result.perPerson)} each (approximately)</span>
 				</div>
 			{/if}

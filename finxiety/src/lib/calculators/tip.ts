@@ -10,6 +10,7 @@ export interface TipResult {
 	tipAmount: number;
 	total: number;
 	perPerson: number | null; // null when partySize === 1
+	tipPerPerson: number | null; // null when partySize === 1
 }
 
 // Standard half-up rounding to 2 decimal places.
@@ -25,7 +26,8 @@ export function calculateTip(inputs: TipInputs): TipResult {
 	const tipAmount = round2(bill * (percent / 100));
 	const total = round2(bill + tipAmount);
 	const perPerson = party > 1 ? round2(total / party) : null;
+	const tipPerPerson = party > 1 ? round2(tipAmount / party) : null;
 
-	return { tipAmount, total, perPerson };
+	return { tipAmount, total, perPerson, tipPerPerson };
 }
 
