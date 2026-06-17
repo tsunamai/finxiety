@@ -600,24 +600,90 @@ _Address before high-volume distribution. Behavioral analysis: `research-finding
 ### TIP-1 — Tip Calculator with Hidden History [P1]
 
 **What it is:**
-A functional tip calculator that surfaces the hidden labor-economics context at the point of decision. State-aware: shows whether the server is working under a subminimum tipped wage or a "one fair wage" state standard.
+A functional tip calculator that surfaces the hidden labor-economics context at the point of decision. The arithmetic (tip, total, per-person split) is the front door. The clarity engine is a state-aware contextual note that tells the user whether the server they are tipping works under a subminimum federal tipped wage or under a One Fair Wage standard. Calculator first, context second — the math is never blocked or gated by the note.
+
+**Target user:**
+Anyone splitting a restaurant check on their phone at the table. Specifically, the diner who reaches for a tip percentage on autopilot and has never been told that in most states the tip is not a bonus on top of a real wage, it largely is the wage. Also the person who notices their POS screen now suggests 25% and wants to understand what they are actually paying for.
 
 **Inputs:**
-- Bill amount
-- Desired tip percentage (slider or presets)
-- State (to determine tipped minimum wage vs. one-fair-wage states)
+- **Bill amount** — number, required. Currency input, two decimals.
+- **Tip percentage** — slider, required. Preset stops at 15 / 18 / 20 / 25%. Default 18%. Slider must be operable by keyboard (arrow keys) and the preset values reachable as discrete buttons.
+- **Party size for split** — integer, optional, defaults to 1. When 1, no per-person line renders.
+- **State** — 2-letter selector, required for the wage-context note. Uses the shared input model `state` field (`finxiety/src/lib/input-model/types.ts`); do not redefine.
+- **Pre-tax / post-tax toggle** — which base the tip percentage applies to. Default: pre-tax subtotal (etiquette-standard base; see note copy below). When post-tax is selected, the user supplies (or the tool reuses) the bill as the post-tax total.
 
-**Outputs:**
-- Standard tip calculation (tip amount, total, per-person split if applicable)
-- Contextual note varying by state: in subminimum-wage states, note that the server's base wage may be as low as $2.13/hr federally and the tip functions as their primary wage; in one-fair-wage states, note that servers receive full minimum wage regardless of tips
-- Optional one-line historical note on tipping's origins (brief — this is a calculator first)
+Note on the pre-tax/post-tax base: v1 treats the entered "Bill amount" as the base the toggle labels. The toggle does not require a separate tax field in v1 — it changes the label and the explanatory note, and the percentage applies to the single entered bill amount. A future v2 may add a discrete tax field to compute the dollar delta precisely. See Open Questions.
 
-**V1 scope:**
-- Federal tipped minimum wage ($2.13/hr) + one-fair-wage state list (CA, WA, NV, MN, OR, AK, MT — verify at build time; state laws change)
+**Outputs (render after calculation):**
+- **Tip amount** in dollars.
+- **Total bill** (base + tip).
+- **Per-person amount** — only if party size > 1. Equals total / party size.
+- **Contextual wage note**, varying by state (both variants below). Renders as informational context, not advice.
+- **Pre-tax / post-tax note** — one line explaining the difference in dollar terms (copy below).
+- All numeric outputs labeled as estimates where rounding applies; the contextual note carries the official source URL (DOL Fact Sheet 15).
 
-**Data sources:** DOL tipped minimum wage table, One Fair Wage state list.
+**Contextual note copy (both variants, ready for the engineer — engineer fills [STATE] dynamically from the state selector):**
 
-**No storage required.** Lightweight and shareable — good content-marketing companion.
+Tipped-wage state variant:
+> "In [STATE], servers may be paid as little as $2.13/hr by their employer. Tips aren't a bonus here, they're most of their wage."
+
+One Fair Wage state variant:
+> "In [STATE], servers receive the full state minimum wage regardless of tips. A tip here is additional income, not a wage substitute."
+
+**Optional historical one-liner (renders below the contextual note, not inline):**
+> "The $2.13 federal tipped wage has been unchanged since 1991."
+
+**Pre-tax / post-tax note copy (one line, shown beside the toggle / in output):**
+> "Etiquette tips on the pre-tax subtotal; most card screens default to the post-tax total. On a $50 bill in an 8% tax area, that's roughly a $0.80 difference at 20%."
+
+**One Fair Wage state list (current as of 2026-06 research; MUST be re-verified at build time — state tipped-wage laws change):**
+Alaska (AK), California (CA), Minnesota (MN), Montana (MT), Nevada (NV), Oregon (OR), Washington (WA), plus District of Columbia (DC). All other states fall to the tipped-wage variant for v1.
+
+Note: the federal $2.13 tipped minimum applies in all other states, though many states set a higher state-level tipped minimum above $2.13. The v1 data layer only needs the One Fair Wage **binary** (full minimum wage vs. subminimum tipped wage). Exact per-state tipped minimums are v2 scope.
+
+Michigan (MI), Chicago (IL), and Flagstaff (AZ) are additional One Fair Wage jurisdictions per research. MI is a full-state override and may be added to the v1 binary list if trivial. **Chicago and Flagstaff require city-level lookup and are out of scope for v1** unless the data layer cheaply supports a city override (it does not today). See V1 scope boundary.
+
+**Data sources:**
+- DOL Wage and Hour Division, Fact Sheet 15 (tipped employees / FLSA): https://www.dol.gov/agencies/whd/fact-sheets/15-tipped-employees-flsa
+- One Fair Wage (state list — verify at build time): https://onefairwage.site/
+- EPI, "Rooted in Racism and Economic Exploitation" (history; backs the 1991 one-liner): https://www.epi.org/publication/rooted-racism-tipping/
+- Full research backing this ticket: `finxiety/research-findings/tip-1-tipping-research.md`
+
+Data layer: the One Fair Wage binary is a tiny static map (8 entries + default). Per `finxiety/CLAUDE.md`, thresholds and reference tables live in `finxiety/data/*.json` with a `last_updated` field, not hardcoded in logic. Create `finxiety/data/tip-one-fair-wage-2026.json` keyed by 2-letter state with a `last_updated` of the build date and a comment pointing to onefairwage.site for re-verification. Research effort: minimal (list already compiled above); build-time task is verification, ~30 minutes.
+
+**Technical approach:**
+New route `finxiety/src/routes/tools/tip-calculator/+page.svelte`. Pure calculation function in `finxiety/src/lib/calculators/tip.ts` (bill, percentage, party size, base → tip / total / per-person). The One Fair Wage lookup reads `finxiety/data/tip-one-fair-wage-2026.json` and returns the binary plus the resolved state name for interpolation into the note copy. Uses the shared `state` input field. No server, no storage — prerendered like every other route. Add a homepage card per the standard new-tool steps.
+
+**Dependencies:**
+- Shared input model `state` field (`finxiety/src/lib/input-model/types.ts`) — already exists.
+- ARCH-1 shared UI components (slider, number input, result card) if landed by build time; otherwise build local and flag for later extraction. Not a hard blocker.
+
+**Acceptance criteria:**
+- [ ] Bill amount + tip percentage produces correct tip amount, total, and per-person split. Example: bill=$50.00, tip=20%, party_size=4, base=pre-tax → tip $10.00, total $60.00, per-person $15.00.
+- [ ] Per-person line does not render when party_size = 1 (the default).
+- [ ] Pre-tax/post-tax toggle changes the calculation base label and shows the one-line note explaining the dollar difference; switching the toggle updates the note copy.
+- [ ] State selector drives the correct note variant. Example: state=CA → One Fair Wage variant ("In California, servers receive the full state minimum wage…"); state=TX → tipped-wage variant ("In Texas, servers may be paid as little as $2.13/hr…").
+- [ ] Optional historical one-liner ("The $2.13 federal tipped wage has been unchanged since 1991.") renders below the contextual note, visually distinct, not inline with it.
+- [ ] Contextual note carries the DOL Fact Sheet 15 source URL.
+- [ ] WCAG 2.1 AA: all controls labeled, color contrast ≥ 4.5:1, fully keyboard-navigable (slider operable by arrow keys; presets reachable as buttons), touch targets ≥ 44px.
+- [ ] Mobile-first: all controls and output usable at 375px with no horizontal scroll; verified at 375px before 1440px.
+- [ ] All outputs framed appropriately; no recommendation or urgency language (Do No Harm checklist passed — see `finxiety/CLAUDE.md`). The note informs; it never tells the user what to tip.
+- [ ] Homepage card added to `finxiety/src/routes/+page.svelte`.
+- [ ] `npm run build` from `finxiety/` exits 0.
+
+**V1 scope boundary:**
+- **State tipped minimums above $2.13** (e.g., Michigan's higher tipped floor): OUT. Only the One Fair Wage binary matters for v1. Exact per-state tipped minimums are v2.
+- **City-level overrides (Chicago, Flagstaff):** OUT for v1 unless the data layer supports a trivial city lookup (it does not today). Michigan as a full-state One Fair Wage entry MAY be included if trivial.
+- **Tip pooling, back-of-house wage gap, platform/delivery tip context, racial-bias research:** OUT for v1. Captured in the research doc for future myth-quiz questions and articles.
+- **Precise tax-delta computation** (separate tax field): OUT for v1; the post-tax note uses an illustrative example. v2 may add a tax field.
+
+**No storage required.** Pure arithmetic plus a static binary lookup, all client-side. Lightweight and shareable — good content-marketing companion.
+
+**Open questions:**
+- Default tip preset: ticket sets 18%. Confirm 18% (not 20%) is the right anchor given the research note that suggested-amount anchoring inflates tips — a lower default is the Do-No-Harm-aligned choice but worth a brand call. → Brand agent.
+- Include Michigan as a v1 full-state One Fair Wage entry, or hold all post-stub jurisdictions for v2 for consistency? → Engineer's call at build time based on data-layer effort; default to including MI if it's a one-line addition.
+
+⟦PM-GROOMED⟧ ticket="TIP-1" date="2026-06-17"
 
 ---
 

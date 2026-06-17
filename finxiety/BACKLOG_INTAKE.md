@@ -48,6 +48,46 @@ No formatting required. The pm agent handles the rest.
 
 ---
 
+### Tipping Article Series [Content, sourced from tip-1-tipping-research.md]
+
+**Problem:** The TIP-1 research surfaced material well beyond the calculator's scope. Five distinct article ideas, each standalone and each addressing a different angle on tipping that Finxiety's audience encounters in daily life. None of these are calculator-shaped; they are educational content.
+
+**Why Finxiety:** Tipping is a decision the ALICE user makes every week, often under social pressure from POS screens and face-to-face visibility with workers. Understanding the system context behind the decision is useful information that costs them nothing to have.
+
+**Article 1: Who doesn't get tipped.** The person who serves you is one person in a supply chain of people who never see a tip: the cook, the dishwasher, the truck driver, the warehouse worker, the farm worker who harvested the food. Agricultural workers are exempt from FLSA overtime and, in small operations, from the minimum wage entirely. This is the most emotionally resonant angle and the least told.
+
+**Article 2: The $2.13 wage and where it came from.** The federal tipped minimum wage has been $2.13/hr since 1991, unchanged for 35 years. Its history is inseparable from race: tipping was the mechanism that allowed employers to pay freed Black workers (Pullman porters, restaurant servers) sub-living wages and offload the obligation to customers who could discriminate freely. The 1996 FLSA amendment that froze it was lobbied by the National Restaurant Association.
+
+**Article 3: How the tip screen is designed to make you spend more.** POS anchoring (18/20/25% suggested minimums making 18% feel low), the guilt-screen effect (tipping more when the worker watches you enter the amount), skip-button placement, and the spread of tip prompts to contexts with no prior tipping culture.
+
+**Article 4: Does tipping reward good service?** Cornell research (50+ papers, Michael Lynn) and a March 2026 study confirm: tips correlate more with server race, appearance, and social behaviors (name-dropping, a light touch, writing on the check) than with service quality. The incentive mechanism doesn't work. This is a myth-quiz candidate as well.
+
+**Article 5: When DoorDash moved the button.** In December 2023, DoorDash and Uber Eats redesigned their apps to move the tip prompt from before ordering to after delivery. A January 2026 NYC DCWP report documented the result: average tips per delivery dropped from $2.17 to $0.76, a loss of approximately $550 million per year to NYC delivery workers alone. Platform tip manipulation is documented and measurable.
+
+**Source:** `finxiety/research-findings/tip-1-tipping-research.md`
+
+---
+
+### Tipping Quiz Questions for MYTH-2 [Content, sourced from tip-1-tipping-research.md]
+
+**Problem:** MYTH-2 (Extended Myth Quiz, Personal Finance Track, P2) already has a stub note that "Tipping rewards good service" maps to TIP-1. The research now has specific, well-sourced questions ready for MYTH-2 content development.
+
+**Four candidate questions (all sourced, all national scope):**
+
+1. **Racial bias in tipping.** "Black servers receive lower tips than white servers for equivalent service." True, documented in Brewster and Lynn (Sociological Inquiry), replicated. Strong "surprised?" moment. Reveal must follow the MYTH-1 pattern: blame the system (unconscious bias is a documented structural phenomenon), never the guesser.
+
+2. **What tips actually reward.** "What do tips mostly reward?" Correct answer: server social behaviors and diner demographics, not service quality. Cornell research (Michael Lynn, 50+ papers). Format: multiple choice. Works as a reveal that reframes the entire premise of tipping without moralizing.
+
+3. **The $2.13 freeze.** "The federal tipped minimum wage has been $2.13/hr since what year?" Estimate type: year picker. Answer: 1991. Counterintuitive because the number is so low and the freeze so long. Connects naturally to the $2.13 contextual note in TIP-1.
+
+4. **Platform tip manipulation.** "DoorDash moved the tip prompt to after delivery. What happened to average tips in New York City?" Estimate type: dollar amount before vs. after. Answer: dropped from $2.17 to $0.76 per delivery. Source: NYC DCWP January 2026 report. High surprise value; indicts a platform decision rather than individual behavior.
+
+**Not yet groomed.** PM agent should groom these into full question specs (following myth-1-quiz-content.md format) when MYTH-2 enters the active build sequence.
+
+**Source:** `finxiety/research-findings/tip-1-tipping-research.md`
+
+---
+
 ## Groomed (Archived)
 
 Items that have been groomed and moved to `PRODUCT_BACKLOG.md`:
