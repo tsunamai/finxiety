@@ -28,6 +28,14 @@
 		<span class="tool-arrow" aria-hidden="true">→</span>
 	</a>
 
+	<a href="/tools/tip-calculator" class="tool-card">
+		<div class="tool-card-content">
+			<h3>Tip Calculator</h3>
+			<p>Split the check and see the actual math. Plus what your tip means for the person serving you, depending on the state you're in.</p>
+		</div>
+		<span class="tool-arrow" aria-hidden="true">→</span>
+	</a>
+
 	<a href="/tools/myth-quiz" class="tool-card">
 		<div class="tool-card-content">
 			<h3>Benefits Myth-Check Quiz</h3>

@@ -607,7 +607,7 @@ Anyone splitting a restaurant check on their phone at the table. Specifically, t
 
 **Inputs:**
 - **Bill amount** — number, required. Currency input, two decimals.
-- **Tip percentage** — slider, required. Preset stops at 15 / 18 / 20 / 25%. Default 18%. Slider must be operable by keyboard (arrow keys) and the preset values reachable as discrete buttons.
+- **Tip percentage** — segmented button set (15% | 18% | 20% | 25%) plus an "Other" numeric input for custom values (0–100, two decimals). Default selection: 18%. All four preset buttons equal visual weight, no color-coding low-to-high. "Other" input must reach 0 without friction or stigma label. The button group is `role="radiogroup"`, arrow-key navigable, each target >=44px. (Design review confirmed buttons over a slider: better phone ergonomics, no directional fill that anchors high, and codebase precedent with EMG-1's `.btn-toggle` pattern.)
 - **Party size for split** — integer, optional, defaults to 1. When 1, no per-person line renders.
 - **State** — 2-letter selector, required for the wage-context note. Uses the shared input model `state` field (`finxiety/src/lib/input-model/types.ts`); do not redefine.
 - **Pre-tax / post-tax toggle** — which base the tip percentage applies to. Default: pre-tax subtotal (etiquette-standard base; see note copy below). When post-tax is selected, the user supplies (or the tool reuses) the bill as the post-tax total.
@@ -625,7 +625,7 @@ Note on the pre-tax/post-tax base: v1 treats the entered "Bill amount" as the ba
 **Contextual note copy (both variants, ready for the engineer — engineer fills [STATE] dynamically from the state selector):**
 
 Tipped-wage state variant:
-> "In [STATE], servers may be paid as little as $2.13/hr by their employer. Tips aren't a bonus here, they're most of their wage."
+> "In [STATE], the law lets employers pay tipped workers as little as $2.13/hr, with tips expected to make up the rest. Here, a tip is part of the wage, not an extra on top of it."
 
 One Fair Wage state variant:
 > "In [STATE], servers receive the full state minimum wage regardless of tips. A tip here is additional income, not a wage substitute."
