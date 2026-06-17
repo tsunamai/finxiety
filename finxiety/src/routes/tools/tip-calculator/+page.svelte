@@ -197,29 +197,7 @@
 		{/if}
 	</div>
 
-	<!-- 3. Result block -->
-	<section class="result" aria-live="polite" aria-label="Tip result">
-		{#if hasBill}
-			<div class="result-row">
-				<span class="result-label">Tip amount</span>
-				<span class="result-value">{money(result.tipAmount)}</span>
-			</div>
-			<div class="result-row">
-				<span class="result-label">Total</span>
-				<span class="result-value result-total">{money(result.total)}</span>
-			</div>
-			{#if partySize > 1 && result.perPerson !== null}
-				<div class="result-row result-per-person">
-					<span class="result-label">Per person</span>
-					<span class="result-value">{money(result.perPerson)} each (approximately)</span>
-				</div>
-			{/if}
-		{:else}
-			<p class="result-empty">Enter a bill amount to see the tip and total.</p>
-		{/if}
-	</section>
-
-	<!-- 4. Party size -->
+	<!-- 3. Party size -->
 	<div class="field">
 		<span class="group-label" id="party-label">Split between</span>
 		<div class="stepper" role="group" aria-labelledby="party-label">
@@ -248,6 +226,28 @@
 		</div>
 	</div>
 
+	<!-- 4. Result block -->
+	<section class="result" aria-live="polite" aria-label="Tip result">
+		{#if hasBill}
+			<div class="result-row">
+				<span class="result-label">Tip amount</span>
+				<span class="result-value">{money(result.tipAmount)}</span>
+			</div>
+			<div class="result-row">
+				<span class="result-label">Total</span>
+				<span class="result-value result-total">{money(result.total)}</span>
+			</div>
+			{#if partySize > 1 && result.perPerson !== null}
+				<div class="result-row result-per-person">
+					<span class="result-label">Per person</span>
+					<span class="result-value">{money(result.perPerson)} each (approximately)</span>
+				</div>
+			{/if}
+		{:else}
+			<p class="result-empty">Enter a bill amount to see the tip and total.</p>
+		{/if}
+	</section>
+
 	<!-- 5. State selector -->
 	<div class="field">
 		<label for="state">Your state</label>
@@ -257,6 +257,7 @@
 				<option value={opt.code}>{opt.name}</option>
 			{/each}
 		</select>
+		<p class="field-hint">States where servers earn full minimum wage: AK, CA, DC, MI, MN, MT, NV, OR, WA.</p>
 	</div>
 
 	<!-- State-aware wage note. Slot reserved from first paint to avoid layout shift. -->
@@ -333,8 +334,10 @@
 		<details class="base-details">
 			<summary>How much does this change?</summary>
 			<p>
-				The difference is small. On a $50 bill in an 8% tax area, post-tax vs. pre-tax is about
-				$0.80 at 20%.
+				It depends on local sales tax. On a $50 meal in a high-tax city (NYC sales tax: 8.875%),
+				tipping 20% post-tax sends $10.89 instead of $10.00. In states with no sales tax,
+				post-tax and pre-tax tipping are identical. Etiquette guides have historically recommended
+				pre-tax because the tip amount stays the same regardless of where you eat.
 			</p>
 		</details>
 	</div>
