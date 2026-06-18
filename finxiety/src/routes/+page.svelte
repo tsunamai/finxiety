@@ -20,18 +20,20 @@
 <section class="tools">
 	<h2>Available now</h2>
 
-	<a href="/tools/emergency-fund" class="tool-card">
+	<a href="/tools/screener" class="tool-card tool-card--hero">
 		<div class="tool-card-content">
-			<h3>Emergency Fund Checker</h3>
-			<p>Find out how many months of runway you actually have.</p>
+			<h3>Benefits Screener</h3>
+			<p>See which California programs you may be able to get help from: food, health coverage, phone, energy, school meals, and more. A few questions. No account. Nothing saved.</p>
 		</div>
 		<span class="tool-arrow" aria-hidden="true">→</span>
 	</a>
 
-	<a href="/tools/tip-calculator" class="tool-card">
+	<p class="more-tools-label">More tools</p>
+
+	<a href="/tools/emergency-fund" class="tool-card">
 		<div class="tool-card-content">
-			<h3>Tip Calculator</h3>
-			<p>Split the check and see the actual math. Plus what your tip means for the person serving you, depending on the state you're in.</p>
+			<h3>Emergency Fund Checker</h3>
+			<p>Find out how many months of runway you actually have.</p>
 		</div>
 		<span class="tool-arrow" aria-hidden="true">→</span>
 	</a>
@@ -44,10 +46,10 @@
 		<span class="tool-arrow" aria-hidden="true">→</span>
 	</a>
 
-	<a href="/tools/screener" class="tool-card">
+	<a href="/tools/tip-calculator" class="tool-card">
 		<div class="tool-card-content">
-			<h3>Benefits Screener</h3>
-			<p>Check which California programs you may qualify for: CalFresh, Medi-Cal, WIC, Lifeline, HEAP, school meals, and CalEITC.</p>
+			<h3>Tip Calculator</h3>
+			<p>Split the check and see the actual math. Plus the wage context where you are: what servers in your state actually earn before tips.</p>
 		</div>
 		<span class="tool-arrow" aria-hidden="true">→</span>
 	</a>
@@ -133,6 +135,29 @@
 		font-size: 1.25rem;
 		color: var(--terracotta);
 		flex-shrink: 0;
+	}
+
+	.tool-card--hero {
+		background: var(--surface);
+		border-color: var(--terracotta);
+		box-shadow: 0 2px 8px rgba(193, 103, 76, 0.1);
+	}
+
+	.tool-card--hero h3 {
+		font-size: 1.125rem;
+	}
+
+	.tool-card--hero:hover {
+		box-shadow: 0 4px 16px rgba(193, 103, 76, 0.2);
+	}
+
+	.more-tools-label {
+		font-size: 0.8125rem;
+		font-weight: 600;
+		color: var(--muted);
+		text-transform: uppercase;
+		letter-spacing: 0.08em;
+		margin-top: var(--space-sm);
 	}
 
 	.coming-soon {
