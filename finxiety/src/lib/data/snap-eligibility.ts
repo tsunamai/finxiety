@@ -102,7 +102,7 @@ export const WIC = {
 		8: 8128
 	} as Record<number, number>,
 	grossMonthlyAdditional: 829,
-	applicationUrl: 'https://www.cdph.ca.gov/Programs/CFH/DWICSN/Pages/WICProgram.aspx',
+	applicationUrl: 'https://myfamily.wic.ca.gov/home/wicofficegrocer',
 	applicationLabel: 'Find a WIC office near you'
 } as const;
 
