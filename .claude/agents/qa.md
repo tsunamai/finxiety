@@ -1,7 +1,7 @@
 ---
 name: qa
 description: QA agent. Produces test plans per ticket, reviews code for quality and correctness, checks WCAG 2.1 AA compliance, and signs off with ⟦QA-VERIFIED⟧ before release. Runs in worktree isolation.
-model: opus
+model: sonnet
 isolation: worktree
 hooks:
   PreToolUse:

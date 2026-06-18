@@ -75,3 +75,18 @@ Behavioral Review → behavioral-science agent → ⟦BEHAVIORAL-REVIEWED⟧
 Disability Review → disability-accessibility agent → ⟦DISABILITY-REVIEWED⟧
 Release → release agent → Naomi sign-off
 ```
+
+---
+
+## Credit Efficiency
+
+**Agent models** are right-sized by role (see each agent's frontmatter). Do not upgrade an agent to `opus` without a specific reason — the defaults are intentional.
+
+**Explore agents** are search-only. Always pass `model: "haiku"` when spawning them:
+```
+Agent({ subagent_type: "Explore", model: "haiku", prompt: "..." })
+```
+
+**Playwright MCP** results stay in context for the entire session. Run `/compact` immediately after any `/verify` run before continuing other work.
+
+**Session hygiene:** `/compact` mid-session when context grows large (after multi-agent bursts, after Playwright). `/clear` when switching to a genuinely new task.

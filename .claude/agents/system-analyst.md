@@ -6,7 +6,7 @@ description: >
   the system before you change it" handoff that runs BEFORE grooming a ticket whose correctness depends
   on how existing code behaves. It does NOT propose changes, review a diff, or design a fix; it answers
   "what actually happens when…?" and surfaces the non-obvious behaviors.
-model: opus
+model: sonnet
 isolation: worktree
 hooks:
   PreToolUse:
