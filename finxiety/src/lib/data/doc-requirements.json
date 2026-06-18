@@ -1,0 +1,281 @@
+{
+  "last_updated": "2026-06-17",
+  "verify_at": {
+    "snap": "https://www.fns.usda.gov/snap/applicant-recipient",
+    "medicaid": "https://www.medicaid.gov/medicaid/eligibility",
+    "liheap": "https://www.acf.hhs.gov/ocs/programs/liheap",
+    "eitc": "https://www.irs.gov/credits-deductions/individuals/earned-income-tax-credit-eitc"
+  },
+  "programs": {
+    "snap": {
+      "label": "SNAP",
+      "ca_label": "CalFresh",
+      "official_url": "https://www.fns.usda.gov/snap/applicant-recipient",
+      "ca_official_url": "https://benefitscal.com",
+      "requirements": [
+        {
+          "id": "identity.photo_id",
+          "category": "identity",
+          "name": "Government-issued photo ID",
+          "description": "A driver's license, state ID, or passport for the person applying.",
+          "status": "required",
+          "one_of_group": null,
+          "condition_note": null
+        },
+        {
+          "id": "identity.ssn",
+          "category": "identity",
+          "name": "Social Security number",
+          "description": "A Social Security card, or any document that shows the Social Security number for each person in your household who is applying.",
+          "status": "required",
+          "one_of_group": null,
+          "condition_note": null
+        },
+        {
+          "id": "income.pay_stubs",
+          "category": "income",
+          "name": "Recent proof of income",
+          "description": "Pay stubs or other proof of income from the last 30 days -- pay stubs, an employer letter, or your most recent tax return if self-employed.",
+          "status": "required",
+          "one_of_group": null,
+          "condition_note": null
+        },
+        {
+          "id": "residency.proof_of_address",
+          "category": "residency",
+          "name": "Proof of address",
+          "description": "Something that shows where you live -- a utility bill, a lease, or recent mail with your name and address.",
+          "status": "one_of",
+          "one_of_group": "residency",
+          "condition_note": null,
+          "accepts": [
+            "A utility bill",
+            "A lease or rental agreement",
+            "Recent mail with your name and address"
+          ]
+        },
+        {
+          "id": "income.self_employment",
+          "category": "income",
+          "name": "Self-employment business records",
+          "description": "Records of your business income and expenses, such as a profit and loss statement or bank statements.",
+          "status": "conditional",
+          "one_of_group": null,
+          "condition_note": "if anyone in your household is self-employed."
+        },
+        {
+          "id": "income.benefit_income",
+          "category": "income",
+          "name": "Benefit award letters",
+          "description": "Award letters or statements showing the amount and type of any benefits received.",
+          "status": "conditional",
+          "one_of_group": null,
+          "condition_note": "if anyone in your household receives disability, unemployment, child support, or other benefits."
+        }
+      ]
+    },
+    "medicaid": {
+      "label": "Medicaid",
+      "ca_label": "Medi-Cal",
+      "official_url": "https://www.medicaid.gov/medicaid/eligibility",
+      "ca_official_url": "https://www.dhcs.ca.gov/services/medi-cal",
+      "requirements": [
+        {
+          "id": "identity.photo_id",
+          "category": "identity",
+          "name": "Government-issued photo ID",
+          "description": "A driver's license, state ID, or passport for the person applying.",
+          "status": "required",
+          "one_of_group": null,
+          "condition_note": null
+        },
+        {
+          "id": "identity.ssn",
+          "category": "identity",
+          "name": "Social Security number",
+          "description": "A Social Security card, or any document that shows the Social Security number for each person in your household who is applying.",
+          "status": "required",
+          "one_of_group": null,
+          "condition_note": null
+        },
+        {
+          "id": "income.pay_stubs",
+          "category": "income",
+          "name": "Recent proof of income",
+          "description": "Pay stubs or other proof of income from the last 30 days -- pay stubs, an employer letter, or your most recent tax return if self-employed.",
+          "status": "required",
+          "one_of_group": null,
+          "condition_note": null
+        },
+        {
+          "id": "residency.proof_of_address",
+          "category": "residency",
+          "name": "Proof of address",
+          "description": "Something that shows where you live -- a utility bill, a lease, or recent mail with your name and address.",
+          "status": "one_of",
+          "one_of_group": "residency",
+          "condition_note": null,
+          "accepts": [
+            "A utility bill",
+            "A lease or rental agreement",
+            "Recent mail with your name and address"
+          ]
+        },
+        {
+          "id": "household.birth_certificate_child",
+          "category": "household",
+          "name": "Birth certificate for a child",
+          "description": "A birth certificate or other document showing the child's name, date of birth, and relationship to you.",
+          "status": "conditional",
+          "one_of_group": null,
+          "condition_note": "if you are applying for a child."
+        },
+        {
+          "id": "income.self_employment",
+          "category": "income",
+          "name": "Self-employment business records",
+          "description": "Records of your business income and expenses, such as a profit and loss statement or bank statements.",
+          "status": "conditional",
+          "one_of_group": null,
+          "condition_note": "if anyone in your household is self-employed."
+        },
+        {
+          "id": "income.benefit_income",
+          "category": "income",
+          "name": "Benefit award letters",
+          "description": "Award letters or statements showing the amount and type of any benefits received.",
+          "status": "conditional",
+          "one_of_group": null,
+          "condition_note": "if anyone in your household receives disability, unemployment, child support, or other benefits."
+        }
+      ]
+    },
+    "liheap": {
+      "label": "LIHEAP",
+      "ca_label": "HEAP",
+      "official_url": "https://www.acf.hhs.gov/ocs/programs/liheap",
+      "ca_official_url": "https://www.csd.ca.gov/energybills",
+      "requirements": [
+        {
+          "id": "identity.photo_id",
+          "category": "identity",
+          "name": "Government-issued photo ID",
+          "description": "A driver's license, state ID, or passport for the person applying.",
+          "status": "required",
+          "one_of_group": null,
+          "condition_note": null
+        },
+        {
+          "id": "identity.ssn",
+          "category": "identity",
+          "name": "Social Security number",
+          "description": "A Social Security card, or any document that shows the Social Security number for each adult in your household who is applying.",
+          "status": "required",
+          "one_of_group": null,
+          "condition_note": null
+        },
+        {
+          "id": "income.pay_stubs",
+          "category": "income",
+          "name": "Recent proof of income",
+          "description": "Proof of income for all household members from the last 30 days, or the prior year's tax return.",
+          "status": "required",
+          "one_of_group": null,
+          "condition_note": null
+        },
+        {
+          "id": "program_specific.energy_bill",
+          "category": "program_specific",
+          "name": "Most recent energy or utility bill",
+          "description": "Your most recent energy or utility bill (electric, gas, or heating). This shows your account number and service address -- it is required for the application.",
+          "status": "required",
+          "one_of_group": null,
+          "condition_note": null
+        },
+        {
+          "id": "income.benefit_income",
+          "category": "income",
+          "name": "Benefit award letters",
+          "description": "Award letters or statements showing the amount and type of any benefits received.",
+          "status": "conditional",
+          "one_of_group": null,
+          "condition_note": "if anyone in your household receives disability, unemployment, child support, or other benefits."
+        }
+      ]
+    },
+    "eitc": {
+      "label": "EITC",
+      "ca_label": "CalEITC",
+      "official_url": "https://www.irs.gov/credits-deductions/individuals/earned-income-tax-credit-eitc",
+      "ca_official_url": "https://www.ftb.ca.gov/file/personal/credits/california-earned-income-tax-credit.html",
+      "program_note": "EITC is a tax credit you claim on your tax return when you file, not a separate application. The documents below are what you bring to your tax preparer or use to file.",
+      "requirements": [
+        {
+          "id": "identity.photo_id",
+          "category": "identity",
+          "name": "Government-issued photo ID",
+          "description": "A driver's license, state ID, or passport for the person filing.",
+          "status": "required",
+          "one_of_group": null,
+          "condition_note": null
+        },
+        {
+          "id": "identity.ssn_filer_and_children",
+          "category": "identity",
+          "name": "Social Security numbers for you and each child you claim",
+          "description": "Social Security numbers for yourself and for each child you are claiming -- this is a tax credit claimed on your return, so the IRS needs SSNs for everyone listed.",
+          "status": "required",
+          "one_of_group": null,
+          "condition_note": null
+        },
+        {
+          "id": "income.w2_1099",
+          "category": "income",
+          "name": "Earned income documents (W-2 or 1099 forms)",
+          "description": "Your W-2 forms or 1099 forms showing what you earned last year. If you are self-employed, bring your Schedule SE.",
+          "status": "required",
+          "one_of_group": null,
+          "condition_note": null
+        },
+        {
+          "id": "household.qualifying_child_eitc",
+          "category": "household",
+          "name": "Proof of a qualifying child (relationship and age)",
+          "description": "A birth certificate or official school record that shows the child's name, date of birth, and relationship to you.",
+          "status": "conditional",
+          "one_of_group": null,
+          "condition_note": "if you are claiming a qualifying child."
+        },
+        {
+          "id": "income.prior_year_return",
+          "category": "income",
+          "name": "Prior-year tax return",
+          "description": "Your most recent tax return -- helpful but not required. Bring it if you have it.",
+          "status": "conditional",
+          "one_of_group": null,
+          "condition_note": "if you have one available."
+        }
+      ]
+    }
+  },
+  "state_overrides": {
+    "CA": {
+      "snap": {
+        "residency.proof_of_address": {
+          "divergence_note": "CalFresh can accept a utility bill, a lease, or recent mail. If you are also applying for HEAP, use a recent energy or utility bill -- one document covers both."
+        }
+      },
+      "medicaid": {
+        "identity.photo_id": {
+          "divergence_note": "Medi-Cal may accept a signed statement if you do not have a photo ID available. Ask your county office."
+        }
+      },
+      "liheap": {
+        "program_specific.energy_bill": {
+          "divergence_note": "This same energy or utility bill also works as proof of where you live for CalFresh and Medi-Cal applications, so one copy covers all three."
+        }
+      },
+      "eitc": {}
+    }
+  }
+}
