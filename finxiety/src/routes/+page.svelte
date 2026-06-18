@@ -57,7 +57,7 @@
 	<a href="/tools/document-checklist" class="tool-card">
 		<div class="tool-card-content">
 			<h3>Document Checklist</h3>
-			<p>Applying to more than one program? Get one list of what to bring -- de-duplicated across all the programs you pick.</p>
+			<p>Applying to more than one program? Get one list of what to bring, de-duplicated across all the programs you pick.</p>
 		</div>
 		<span class="tool-arrow" aria-hidden="true">→</span>
 	</a>

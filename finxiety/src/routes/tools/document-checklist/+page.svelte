@@ -185,6 +185,9 @@
 	</div>
 
 	<button class="btn btn-primary" type="submit" disabled={!canSubmit}>Show my list</button>
+	{#if !canSubmit}
+		<p class="field-hint submit-hint" aria-live="polite">Select at least one program and a state to continue.</p>
+	{/if}
 </form>
 
 {#if submitted}

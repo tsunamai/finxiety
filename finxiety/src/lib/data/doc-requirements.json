@@ -35,7 +35,7 @@
           "id": "income.pay_stubs",
           "category": "income",
           "name": "Recent proof of income",
-          "description": "Pay stubs or other proof of income from the last 30 days -- pay stubs, an employer letter, or your most recent tax return if self-employed.",
+          "description": "Proof of income from the last 30 days: pay stubs, an employer letter, or your most recent tax return if self-employed.",
           "status": "required",
           "one_of_group": null,
           "condition_note": null
@@ -44,7 +44,7 @@
           "id": "residency.proof_of_address",
           "category": "residency",
           "name": "Proof of address",
-          "description": "Something that shows where you live -- a utility bill, a lease, or recent mail with your name and address.",
+          "description": "Something that shows where you live: a utility bill, a lease, or recent mail with your name and address.",
           "status": "one_of",
           "one_of_group": "residency",
           "condition_note": null,
@@ -102,7 +102,7 @@
           "id": "income.pay_stubs",
           "category": "income",
           "name": "Recent proof of income",
-          "description": "Pay stubs or other proof of income from the last 30 days -- pay stubs, an employer letter, or your most recent tax return if self-employed.",
+          "description": "Proof of income from the last 30 days: pay stubs, an employer letter, or your most recent tax return if self-employed.",
           "status": "required",
           "one_of_group": null,
           "condition_note": null
@@ -111,7 +111,7 @@
           "id": "residency.proof_of_address",
           "category": "residency",
           "name": "Proof of address",
-          "description": "Something that shows where you live -- a utility bill, a lease, or recent mail with your name and address.",
+          "description": "Something that shows where you live: a utility bill, a lease, or recent mail with your name and address.",
           "status": "one_of",
           "one_of_group": "residency",
           "condition_note": null,
@@ -187,7 +187,7 @@
           "id": "program_specific.energy_bill",
           "category": "program_specific",
           "name": "Most recent energy or utility bill",
-          "description": "Your most recent energy or utility bill (electric, gas, or heating). This shows your account number and service address -- it is required for the application.",
+          "description": "Your most recent energy or utility bill (electric, gas, or heating). This shows your account number and service address. It is required for the application.",
           "status": "required",
           "one_of_group": null,
           "condition_note": null
@@ -223,7 +223,7 @@
           "id": "identity.ssn_filer_and_children",
           "category": "identity",
           "name": "Social Security numbers for you and each child you claim",
-          "description": "Social Security numbers for yourself and for each child you are claiming -- this is a tax credit claimed on your return, so the IRS needs SSNs for everyone listed.",
+          "description": "Social Security numbers for yourself and for each child you are claiming. This is a tax credit claimed on your return, so the IRS needs SSNs for everyone listed.",
           "status": "required",
           "one_of_group": null,
           "condition_note": null
@@ -250,7 +250,7 @@
           "id": "income.prior_year_return",
           "category": "income",
           "name": "Prior-year tax return",
-          "description": "Your most recent tax return -- helpful but not required. Bring it if you have it.",
+          "description": "Your most recent tax return. Helpful but not required. Bring it if you have it.",
           "status": "conditional",
           "one_of_group": null,
           "condition_note": "if you have one available."
@@ -262,7 +262,7 @@
     "CA": {
       "snap": {
         "residency.proof_of_address": {
-          "divergence_note": "CalFresh can accept a utility bill, a lease, or recent mail. If you are also applying for HEAP, use a recent energy or utility bill -- one document covers both."
+          "divergence_note": "CalFresh can accept a utility bill, a lease, or recent mail. If you are also applying for HEAP, use a recent energy or utility bill. One document covers both."
         }
       },
       "medicaid": {
