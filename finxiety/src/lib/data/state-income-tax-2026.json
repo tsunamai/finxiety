@@ -1,0 +1,45 @@
+{
+	"last_updated": "2026-06-19",
+	"_note": "2026 state personal income tax — SINGLE filer brackets only (V1 scope: CA, TX, FL, NY, AZ). 'max' is the top of each marginal band; the top band uses null to mean no upper limit. 'type' is 'brackets' (progressive), 'flat' (single rate), or 'none' (no state income tax). These are statutory marginal rates on taxable income; the tool applies them to an annualized estimate and does not model state-specific deductions, credits, or surcharges beyond the brackets listed. CA's 13.3% top figure includes a separate 1% Mental Health Services surcharge on income over $1,000,000, captured here as the 'surcharge' object. Re-verify annually against verify_at; state figures update for the following tax year (CA/NY index brackets to inflation).",
+	"verify_at": {
+		"CA": "https://www.ftb.ca.gov/file/personal/tax-calculator-tables-rates.html",
+		"TX": "https://comptroller.texas.gov/taxes/",
+		"FL": "https://floridarevenue.com/taxes/",
+		"NY": "https://www.tax.ny.gov/pit/file/tax_tables.htm",
+		"AZ": "https://azdor.gov/forms/individual-income-tax-highlights"
+	},
+	"states": {
+		"CA": {
+			"type": "brackets",
+			"brackets": [
+				{ "rate": 0.01, "min": 0, "max": 10756 },
+				{ "rate": 0.02, "min": 10756, "max": 25499 },
+				{ "rate": 0.04, "min": 25499, "max": 40245 },
+				{ "rate": 0.06, "min": 40245, "max": 55866 },
+				{ "rate": 0.08, "min": 55866, "max": 70612 },
+				{ "rate": 0.093, "min": 70612, "max": 360659 },
+				{ "rate": 0.103, "min": 360659, "max": 432787 },
+				{ "rate": 0.113, "min": 432787, "max": 721314 },
+				{ "rate": 0.123, "min": 721314, "max": null }
+			],
+			"surcharge": { "rate": 0.01, "min": 1000000, "label": "Mental Health Services Tax (income over $1,000,000)" }
+		},
+		"TX": { "type": "none" },
+		"FL": { "type": "none" },
+		"NY": {
+			"type": "brackets",
+			"brackets": [
+				{ "rate": 0.04, "min": 0, "max": 8500 },
+				{ "rate": 0.045, "min": 8500, "max": 11700 },
+				{ "rate": 0.0525, "min": 11700, "max": 13900 },
+				{ "rate": 0.055, "min": 13900, "max": 80650 },
+				{ "rate": 0.06, "min": 80650, "max": 215400 },
+				{ "rate": 0.0685, "min": 215400, "max": 1077550 },
+				{ "rate": 0.0965, "min": 1077550, "max": 5000000 },
+				{ "rate": 0.103, "min": 5000000, "max": 25000000 },
+				{ "rate": 0.109, "min": 25000000, "max": null }
+			]
+		},
+		"AZ": { "type": "flat", "rate": 0.025 }
+	}
+}

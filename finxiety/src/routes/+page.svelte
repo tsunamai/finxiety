@@ -78,6 +78,13 @@
 			</span>
 			<span class="tool-arrow" aria-hidden="true">→</span>
 		</a>
+		<a href="/tools/work-hours" class="tool-row">
+			<span class="tool-row-inner">
+				<span class="tool-name">Work Hours Breakdown</span>
+				<span class="tool-desc">Where does each hour of work actually go? See your pay broken down by taxes, deductions, and take-home — in time, not just dollars.</span>
+			</span>
+			<span class="tool-arrow" aria-hidden="true">→</span>
+		</a>
 		<a href="/tools/emergency-fund" class="tool-row">
 			<span class="tool-row-inner">
 				<span class="tool-name">Emergency Fund Checker</span>
