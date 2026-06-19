@@ -91,6 +91,65 @@ This shame has specific design consequences:
 
 ---
 
+## The Acute Trigger Calendar — When She's Actually Reachable
+
+Dani's background state is **avoidance**. She doesn't browse financial tools in her downtime. She doesn't wake up curious about her benefits eligibility. Financial topics carry enough weight that disengagement is protective.
+
+But avoidance has gaps. Specific events break through it and create a brief window — usually minutes to hours — where she is activated, searching, and willing to engage. These are the entry points.
+
+**The acute moments, in rough frequency order:**
+
+**Unexpected expense hits** (every 6 weeks or so)
+The car makes a noise. The water heater dies. The kid's shoe size jumped two sizes before anyone noticed. She looks at her balance and does the math. This is when she types something into her phone. The moment is: "how do I make this work?"
+→ Tools reachable: EMG-1 (cash runway), BEN-1 (do I qualify for help?)
+
+**A bill she can't pay arrives** (several times a year)
+The medical bill. The utility shutoff notice. The rent increase letter. These are more alarming than an unexpected expense — they come with stakes and deadlines. She's in focused, anxious problem-solving mode.
+→ Tools reachable: BEN-1, DOC-1, RECERT-1
+
+**She gets a raise or a better job offer** (rare, but very high stakes)
+This is the most emotionally complex moment in the suite. She knows, or suspects, that earning more could mean losing SNAP, Medi-Cal, childcare subsidies. She can't fully run those numbers. She may decline the raise without asking anyone, or take it without understanding the tradeoff. The window is the moment she's deciding.
+→ Tools reachable: CLIFF-1 (this is the tool's entire reason for existing)
+
+**A recertification deadline approaches** (2–3 times a year per benefit)
+She got a letter. It says she has 30 days. She doesn't fully understand what's required. Missing it means losing a benefit she depends on. She might ask a caseworker; she might search online; she might panic and do nothing.
+→ Tools reachable: RECERT-1, DOC-1
+
+**She's confused about her paycheck** (irregular, but recurring)
+Tip wages, gig income, overtime miscalculations — the paycheck doesn't match her expectation and she doesn't know if that's normal. This moment is especially common after a job change.
+→ Tools reachable: TIP-1, HOURS-1
+
+**Tax time, January–April** (annual)
+She files her own taxes on TurboTax Free Edition and hopes she's doing it right. She doesn't know she may qualify for credits she isn't claiming. The moment of "I'm staring at this W-2 and I don't know what goes where" is predictable, annual, and shared with most of the ALICE population at the same time.
+→ Tools reachable: DEDUCT-1, HOURS-1
+
+---
+
+**What this means for design:**
+- Every tool needs a hook that names its moment, not its category. Not "emergency fund" — "what happens when something expensive breaks?"
+- The window is short. Five to ten minutes is optimistic. The tool must return something useful before she runs out of time.
+- She doesn't remember URLs. She arrives from a link someone sent or a search result. She will not bookmark and return unless the result was immediately valuable.
+- She won't share her location, email, income, or household size unless she understands exactly what it's for. Every field that isn't obviously necessary for the answer is a leak in the funnel.
+
+---
+
+## How She Finds Finxiety
+
+She doesn't search "free financial tools." She searches the problem:
+- "do i qualify for snap if i work"
+- "will i lose medi-cal if i get a raise"
+- "what to bring to snap application"
+- "benefits cliff calculator"
+
+Or she doesn't search at all — she gets the link from someone:
+- A caseworker at the food pantry texts it to her
+- Her sister sends it via iMessage
+- The community health center has a printed QR code in the waiting room
+
+The second path is the more reliable one. Dani-in-crisis does search; Dani-in-chronic-avoidance does not. The distribution model that reaches the most Danis is one where a trusted human deploys the tool, not one that depends on Dani finding it herself.
+
+---
+
 ## What Would Make Her Trust This Tool
 
 1. **It starts without asking for anything.** No email, no account, no "tell us who you are first."

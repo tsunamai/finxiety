@@ -521,38 +521,6 @@ Notes on the schema: the federal `programs` block is the baseline every state fa
 
 ---
 
-### ALICE-1 — "Are You ALICE?" Self-Assessment [P1]
-
-**What it is:**
-ALICE (Asset Limited, Income Constrained, Employed) households are above the federal poverty line but below a realistic cost-of-living threshold. Many don't realize their financial strain is structural and widespread — not personal failure. This tool makes an abstract statistic personally legible.
-
-**Inputs:**
-- `household_size`, `zip_code`, `gross_monthly_income` (from shared input model)
-
-**Outputs:**
-- Comparison of household income vs. local ALICE Household Survival Budget (county-level if zip provided; state average as fallback)
-- Dollar gap (or surplus) between income and survival budget
-- Breakdown of survival budget by category (housing, childcare, food, transportation, healthcare, technology)
-- Framing copy emphasizing systemic pattern: "X% of households in [county] are below this threshold" — from published United for ALICE data
-
-**V1 scope:**
-- United for ALICE published county-level Household Survival Budget data (available all states; most recent: 2025 reports covering 2023 data)
-- Start with states where data is cleanly available; expand as time allows
-
-**Data sources:**
-- unitedforalice.org county-level dashboards (public data — may require manual extraction into static lookup JSON)
-- Lookup table: `finxiety/data/alice-budgets-{year}.json` keyed by county FIPS or ZIP prefix
-
-**Technical approach:**
-- Static JSON lookup table bundled with the app
-- ZIP → county resolution (use ZIP-to-county crosswalk file in `finxiety/data/`)
-- All comparison done client-side
-- No shared input model `current_benefits` needed for this tool
-
-**No storage required.** Static JSON lookup, client-side comparison.
-
----
-
 ### RECERT-1 — Recertification Deadline Tracker [P2]
 
 **What it is:**

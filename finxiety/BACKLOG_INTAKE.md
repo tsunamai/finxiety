@@ -97,7 +97,6 @@ Items that have been groomed and moved to `PRODUCT_BACKLOG.md`:
 | Benefits Myth-Check Quiz | Jun 2026 | MYTH-1 | P0 — first ship (Track 1) |
 | SNAP + Benefits Stack Screener | Jun 2026 | BEN-1 | P0-B — core utility |
 | Document Checklist Generator | Jun 2026 | DOC-1 | P1 |
-| "Are You ALICE?" Self-Assessment | Jun 2026 | ALICE-1 | P1 |
 | Recertification Deadline Tracker | Jun 2026 | RECERT-1 | P2 |
 | Benefits Cliff Calculator | Jun 2026 | CLIFF-1 | P2 — replaces BEN-2 |
 | Real Emergency Fund Checker | Jun 2026 | EMG-1 | P0-T2 — first ship (Track 2) |
