@@ -57,6 +57,13 @@
 			</span>
 			<span class="tool-arrow" aria-hidden="true">→</span>
 		</a>
+		<a href="/tools/compound-interest" class="tool-row">
+			<span class="tool-row-inner">
+				<span class="tool-name">The Compounding Effect</span>
+				<span class="tool-desc">See how a starting amount and monthly additions grow over time — split into what you put in and what interest added.</span>
+			</span>
+			<span class="tool-arrow" aria-hidden="true">→</span>
+		</a>
 		<a href="/tools/debt-growth" class="tool-row">
 			<span class="tool-row-inner">
 				<span class="tool-name">Debt vs. Growth Visualizer</span>
