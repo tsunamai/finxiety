@@ -57,7 +57,8 @@ Agents live in `.claude/agents/`. Each has a defined role; invoke by name via th
 
 - **Product backlogs:** `finxiety/PRODUCT_BACKLOG.md` · `mortalia/PRODUCT_BACKLOG.md`
 - **Ideation intake:** `finxiety/BACKLOG_INTAKE.md` — rough ideas land here before grooming
-- **Research findings:** `finxiety/research-findings/` — saved outputs from Claude web-search research sessions (see `finxiety/docs/research-prompts.md` for prompt templates)
+- **Research findings:** `finxiety/research-findings/` · `mortalia/research-findings/` — saved outputs from Claude research sessions (see `finxiety/docs/research-prompts.md` for prompt templates)
+- **Cross-product principles:** `FRONT-DOOR.md` — question-first architecture; applies to Finxiety, Mortalia-for-others, and all future tools
 - **Harness reference:** `nsum-harnesses/docs/` — development loop, checks-and-balances, worktrees
 - **Brand source:** `../tsunam_vault/finxiety/Finxiety — Brand & Mission.md`
 
