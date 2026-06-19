@@ -275,6 +275,9 @@ After all questions, ask 1-2 questions that connect earlier estimates: "Earlier 
 
 **No storage required.** Static quiz content, client-side scoring.
 
+**Status: LIVE** — https://finxiety.vercel.app/tools/myth-quiz
+**Validated:** pending — validation gate not yet run
+
 ---
 
 ### BEN-1 — SNAP + Benefits Stack Screener [P0-B — Core Utility]
@@ -353,6 +356,9 @@ Response:
 A person who earns $2,200/month with a family of three gets a clear, accurate list of programs they likely qualify for and exactly where to apply — in under 2 minutes.
 
 **No storage required.** All calculation client-side.
+
+**Status: LIVE** — https://finxiety.vercel.app/tools/screener
+**Validated:** in progress (2026-06-15) — UX and behavioral gates blocked; see `status-updates/`
 
 ---
 
@@ -587,6 +593,9 @@ People lose benefits not because they're ineligible but because they miss a rece
 
 **No storage required.** All calculation client-side.
 
+**Status: LIVE** — https://finxiety.vercel.app/tools/cliff-calculator
+**Validated:** pending — validation gate not yet run
+
 ---
 
 ## SECTION B — FOOD SECURITY
@@ -789,6 +798,9 @@ New route `finxiety/src/routes/tools/tip-calculator/+page.svelte`. Pure calculat
 - Include Michigan as a v1 full-state One Fair Wage entry, or hold all post-stub jurisdictions for v2 for consistency? → Engineer's call at build time based on data-layer effort; default to including MI if it's a one-line addition.
 
 ⟦PM-GROOMED⟧ ticket="TIP-1" date="2026-06-17"
+
+**Status: LIVE** — https://finxiety.vercel.app/tools/tip-calculator
+**Validated:** 2026-06-17 — see `status-updates/tip-1-validation-2026-06-17.md`
 
 ---
 
