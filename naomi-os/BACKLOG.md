@@ -38,6 +38,7 @@ _Nothing in flight yet._
 |---|------|-----------|--------|-------|
 | M1 | Nervous System Dashboard | Log session type + mood before/after; let trends emerge — companion to Tsunam Labs tools (vagal toolkit, breathwork companion) | Web app / local | Personal tracking layer; Tsunam Labs seed 8 is the public-facing version |
 | M2 | Psychedelic Integration Journal | Structured markdown templates first: intention, insights, themes, body sensations — no analysis layer until the journal has enough entries to be worth analyzing | Local only | "Local only" and "pattern recognition" are in tension; start as a structured journal, add a local analysis step later if needed. No cloud sync ever. |
+| M3 | Ego / Soul Audit | Structured reflection on whether a thought, desire, or activity is serving the ego (social contract, image, aspirational identity) or the self (purpose, contribution, true joy) — a personal practice, not an app | Local journaling template | Start as a weekly markdown prompt, not a tool. Questions: "Who am I doing this for?" "Would I do this if no one could see?" "Is this temporary happiness or something that actually fills me?" Connects to M2 (integration themes) and the bias awareness work (see Tsunam Labs Seed 10). No analysis layer yet — the practice is the point. |
 
 ### Creative
 
