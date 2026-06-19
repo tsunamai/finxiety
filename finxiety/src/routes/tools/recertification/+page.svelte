@@ -83,16 +83,17 @@
 		return data.periods[state]?.[program]?.label ?? GENERIC_LABELS[program];
 	}
 
-	// Today at local midnight, for "I don't know" guidance + max date guard.
-	const todayIso = new Date().toISOString().slice(0, 10);
+	// Use local date parts to match parseLocalDate; toISOString() returns UTC
+	// and can yield tomorrow in negative-offset timezones.
+	const _d = new Date();
+	const todayIso = `${_d.getFullYear()}-${String(_d.getMonth() + 1).padStart(2, '0')}-${String(_d.getDate()).padStart(2, '0')}`;
 
 	// --- Plain-language "days until due" --------------------------------------
 	// Under 60 days: count in days. Otherwise: round to whole months.
 	function describeDue(result: RecertResult): string {
 		const days = result.daysUntilDue;
 		if (days < 0) {
-			// Past due per our estimate. Stay neutral; the agency notice is truth.
-			return 'Your estimated date has already passed. Check your approval notice for the real date.';
+			return 'The estimated date has already passed.';
 		}
 		if (days === 0) return 'around today, based on our estimate';
 		if (days < 60) {
@@ -181,6 +182,8 @@
 		downloadStatus = '';
 	}
 
+	const hasDateableResults = $derived(results.some((r) => r.daysUntilDue >= 0));
+
 	// --- .ics composition -----------------------------------------------------
 	// Two events per program: a 30-day and a 7-day reminder. All-day events use an
 	// exclusive DTEND, so dtend = reminder date + 1 day.
@@ -202,16 +205,16 @@
 
 	function buildEvents(): IcsEvent[] {
 		const events: IcsEvent[] = [];
-		for (const r of results) {
+		for (const r of results.filter((r) => r.daysUntilDue >= 0)) {
 			events.push({
-				summary: `${r.programLabel} recertification — reminder (about 30 days out)`,
+				summary: `${r.programLabel} recertification: 30-day reminder`,
 				description: buildDescription(r, 30),
 				dtstart: r.reminder30,
 				dtend: nextDay(r.reminder30),
 				uid: `recert-${resultState}-${r.program}-30d@finxiety`
 			});
 			events.push({
-				summary: `${r.programLabel} recertification — reminder (about 7 days out)`,
+				summary: `${r.programLabel} recertification: 7-day reminder`,
 				description: buildDescription(r, 7),
 				dtstart: r.reminder7,
 				dtend: nextDay(r.reminder7),
@@ -229,7 +232,8 @@
 		}
 		const ics = generateIcs(events);
 		downloadIcs('finxiety-recertification-reminders.ics', ics);
-		downloadStatus = 'Your reminder file is downloading. Open it to add the dates to your calendar.';
+		downloadStatus =
+			'The reminder file is ready. On an iPhone, tap the file when it appears and choose “Add All.” On a computer, open the file to add dates to your calendar.';
 	}
 </script>
 
@@ -237,7 +241,7 @@
 	<title>Recertification Deadline Tracker | Finxiety</title>
 	<meta
 		name="description"
-		content="See when your SNAP or Medicaid benefits come up for recertification, and download calendar reminders so the date doesn't slip by. No account. Nothing saved."
+		content="See when your SNAP or Medicaid benefits come up for recertification and download calendar reminders to keep track. No account. Nothing saved."
 	/>
 </svelte:head>
 
@@ -401,13 +405,24 @@
 					<p class="result-date">
 						Estimated next recertification: <strong>{formatLong(r.nextCertDate)}</strong>
 					</p>
-					<p class="result-due">{describeDue(r)}</p>
-					<p class="result-detail">
-						Based on a {r.months}-month certification period, starting from {formatLong(
-							r.lastCertDate
-						)}. Recertification is due by this date. Missing it can interrupt your benefits while
-						you're still eligible, so it's worth setting a reminder.
-					</p>
+					{#if r.daysUntilDue < 0}
+						<p class="result-due">The estimated date has already passed.</p>
+						<div class="signpost-box" role="note">
+							<p>
+								Your approval notice from the agency shows the actual deadline. If you're not
+								sure where things stand, calling <strong>211</strong> connects you to a navigator
+								who can check with the agency on your behalf.
+							</p>
+						</div>
+					{:else}
+						<p class="result-due">{describeDue(r)}</p>
+						<p class="result-detail">
+							Based on a {r.months}-month certification period, starting from {formatLong(
+								r.lastCertDate
+							)}. The estimated renewal window is based on typical periods in {resultState}. Your
+							actual deadline appears on your approval notice.
+						</p>
+					{/if}
 
 					{#if r.midCertNote}
 						<div class="signpost-box mid-cert" role="note">
@@ -441,7 +456,7 @@
 			</div>
 		{/if}
 
-		{#if results.length > 0}
+		{#if hasDateableResults}
 			<div class="download-block">
 				<button class="btn btn-primary" type="button" onclick={handleDownload}>
 					Download reminders
