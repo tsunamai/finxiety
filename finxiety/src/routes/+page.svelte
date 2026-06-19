@@ -109,7 +109,6 @@
 	</nav>
 </section>
 
-<p class="coming-soon">More coming: Earnings Calculator</p>
 
 <style>
 	/* Hero */
@@ -283,11 +282,4 @@
 		transition: transform 0.12s;
 	}
 
-	/* Coming soon */
-	.coming-soon {
-		font-size: 0.8125rem;
-		color: var(--muted);
-		text-align: center;
-		padding: var(--space-sm) 0 var(--space-lg);
-	}
 </style>
