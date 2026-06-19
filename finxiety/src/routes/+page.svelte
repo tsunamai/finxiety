@@ -10,8 +10,7 @@
 </svelte:head>
 
 <section class="hero">
-	<h1>When money gets complicated,<br />let&rsquo;s figure it out one step at a time.</h1>
-	<p class="trust">Free. No sign-up. We&rsquo;re not selling anything.</p>
+	<h1>When money gets complicated, let&rsquo;s figure it out one step at a time.</h1>
 </section>
 
 <section class="screener" aria-labelledby="screener-title">
@@ -58,14 +57,9 @@
 		font-size: clamp(1.9375rem, 6vw, 2.375rem);
 		line-height: 1.12;
 		letter-spacing: -0.01em;
-		max-width: 18ch;
-		margin-bottom: var(--space-md);
-	}
-
-	.trust {
-		color: var(--ink-mute);
-		font-size: 0.9375rem;
-		margin: 0;
+		max-width: 22ch;
+		text-wrap: balance;
+		margin-bottom: 0;
 	}
 
 	/* Screener band — breaks out of main padding to fill the column */
