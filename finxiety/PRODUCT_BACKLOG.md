@@ -801,7 +801,22 @@ New route `finxiety/src/routes/tools/tip-calculator/+page.svelte`. Pure calculat
 
 ---
 
+### COMPOUND-1 — The Compounding Effect Calculator [P2]
+
+**Status: LIVE** — https://finxiety.vercel.app/tools/compound-interest
+
+**What it is:** A clean compound interest calculator showing how a starting amount plus monthly contributions grow over time — split into what you put in versus what interest added. Educational framing only. No investment recommendations. Rule-of-72 callout. Stacked-area SVG chart.
+
+**Inputs:** Starting amount, monthly contribution, annual rate (default 7%, labeled as historical S&P 500 average), time horizon (5/10/20/30 yr).
+
+**Route:** `finxiety/src/routes/tools/compound-interest/+page.svelte`
+**Calculator:** `finxiety/src/lib/calculators/compound.ts`
+
+---
+
 ### DEBT-VIZ-1 — Debt vs. Growth Compound Visualizer [P2]
+
+**Status: LIVE** — https://finxiety.vercel.app/tools/debt-growth
 
 **What it is:**
 People are taught compound interest as a savings superpower but don't apply the same mental model to debt — credit card APR compounds against them on the same exponential curve. This tool puts both curves on the same chart.
@@ -827,6 +842,8 @@ Single debt + single investment scenario. No multi-debt prioritization logic (fu
 
 ### DEDUCT-1 — Deduction vs. Credit vs. Refund Clarifier [P2]
 
+**Status: LIVE** — https://finxiety.vercel.app/tools/tax-clarity
+
 **What it is:**
 Deductions (reduce taxable income), credits (reduce tax owed dollar-for-dollar), and refunds (return of overwithheld money, no interest) are routinely confused, causing people to over- or under-value tax decisions and treat refunds as "found money."
 
@@ -851,6 +868,8 @@ Federal brackets only for v1. State tax treatment of deductions/credits varies t
 
 ### HOURS-1 — "Where Do Your Work Hours Actually Go?" Calculator [P2]
 
+**Status: LIVE** — https://finxiety.vercel.app/tools/work-hours
+
 **What it is:**
 Tax withholding is an abstract dollar line on a pay stub. This tool converts it to working time — how many minutes/hours of each workday fund each deduction vs. take-home pay. Includes the hidden employer-side FICA match.
 
@@ -874,6 +893,8 @@ Federal income tax brackets, FICA (6.2%) and Medicare (1.45%) rates. State incom
 ---
 
 ### MYTH-2 — Extended Myth Quiz (Personal Finance Track) [P2]
+
+**Status: LIVE** — https://finxiety.vercel.app/tools/myth-quiz-2
 
 **What it is:**
 Same shareable/content-marketing function as MYTH-1, but covering the personal finance myths from Track 2. Could be merged into MYTH-1 as additional question categories or kept separate — decide at build time based on how MYTH-1 performs and whether the audiences feel distinct.
