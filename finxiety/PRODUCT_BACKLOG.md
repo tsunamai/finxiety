@@ -894,6 +894,121 @@ Same shareable/content-marketing function as MYTH-1, but covering the personal f
 
 ---
 
+### SAVE-1 — Savings Commitment Maker [P2 — Track 2]
+
+**Problem statement:** People who want to save more leave every financial tool the same way they arrived — knowing they should save more, with no changed structure in their life that makes saving more likely.
+
+**Target user:** Dani, 34, single parent, $31,200/year, $0 designated savings. She has tried to save before — she moved $100 into a savings account and moved it back three weeks later when the car battery died. She is not failing to save because she lacks knowledge or willpower. She is failing to save because nothing in her financial structure makes saving the default, automatic, or low-friction action. She is not the EMG-1 user discovering she has no runway; she already knows. She is the person who wants to change one thing and needs that one thing to actually be different tomorrow.
+
+This tool is also for Track 2 users with more financial slack — a gig worker, a tipped-wage employee with irregular income, anyone for whom "save more" is abstract motivation they want to convert into a specific, concrete, self-made commitment.
+
+**What it is:**
+A behavioral savings commitment tool. It does not calculate how much the user "should" save. It asks two questions, surfaces one insight about the user's own stated savings goal versus their stated obstacles, and produces a concrete artifact: a personalized commitment statement the user writes in their own words, plus an optional calendar reminder generated client-side.
+
+The mechanism is not information delivery. It is structured commitment-making using implementation intentions (Gollwitzer 1999): "I will [action] at [time] in [place]." Implementation intentions are the single strongest behavioral intervention for savings behavior in low-income populations (Milkman et al., 2011; Soman & Cheema, 2011). The tool's job is to walk the user through forming one.
+
+The "thing that is different after you close this tab" is: a specific self-authored action statement ("On the last Friday of the month, I will transfer $20 from my checking to my savings account before I open any other bill"), and, if they choose it, a calendar event set in their own phone for the date they named. That calendar event is the enabling environment — the same mechanism as RECERT-1's .ics file — except here it is not a deadline, it is a personal savings appointment the user made with themselves.
+
+**Inputs:**
+- **Savings goal** — plain-language free-text field, max 120 characters. "What are you trying to save for?" No examples listed that imply a scale (not "vacation, retirement, down payment") — the user names their own goal. Required before any output renders.
+- **Target amount** — optional number. "How much would you need?" If left blank, the tool works without it. If entered, it is used to calculate one number the user may not have done: how many weeks/months at a user-named transfer amount it would take.
+- **Transfer amount** — number, required for the commitment builder. "What's the smallest amount that would feel like progress?" Framing is critical: not "how much should you save" but "what amount would feel like forward motion even on a hard month." $5 is a valid answer; the tool must not suggest a floor.
+- **When** — a specific time prompt, required. "When will you do it — what day, and what triggers it?" This is the implementation-intention "when" component. Free-text or guided selector (day of week, bi-weekly, monthly). Required because an implementation intention without a when has substantially weaker effect.
+- **Where / linked to what** — optional but prompted. "Is there something you already do that you could link it to?" (Examples: "after I get paid," "when I pay rent," "when I drop the kids at school.") Habit-stacking anchor. Free-text, optional.
+
+No shared input model fields are required. SAVE-1 does not use household_size, state, income, or current_benefits. It operates entirely on user-stated values. No field should be labeled "income" or ask for income — this is not an eligibility screener. Do not import shared input model fields into this tool.
+
+**Outputs:**
+After the user fills in their goal, transfer amount, and when:
+
+1. **Commitment statement** — a full sentence generated from the user's inputs, displayed in a styled block they can read back to themselves: "I will transfer [amount] to savings [when] so that I can [goal]." The sentence must use the user's own words verbatim — no paraphrasing, no financial-advice glossing. The user has one edit pass directly in the rendered statement before they accept it.
+
+2. **One optional calculation, clearly labeled as an estimate:** "At [amount] [frequency], reaching [target] would take approximately [N] months." Only renders if both target_amount and transfer_amount are provided. Labeled: "This is a rough estimate. Your actual timeline will vary." No chart, no compound interest, no projection — a single sentence. The tool does not celebrate or motivate based on this number.
+
+3. **Calendar download (.ics)** — generated client-side using the same .ics generator as RECERT-1 (`finxiety/src/lib/ics-generator/`). Event title: "My savings appointment" (not named after any program or platform; no branding in the calendar event). Event body: the user's commitment statement verbatim. The first event date is set to the next occurrence of the day/trigger the user named. One repeat event is included (same recurrence if weekly/monthly); subsequent events are the user's to set. The .ics is generated locally — no server, no email, no account.
+
+4. **One plain-text "take it with you" option:** "Copy your commitment" — clipboard only, the statement text. For users who do not want to add a calendar event, this is the minimum artifact.
+
+5. **Related-tools footer:** Link to EMG-1 ("See how much runway you have") and to BEN-1 ("Find programs that might create more breathing room"). The bridge to BEN-1 is framed as expanding supply, not as a judgment that the user's transfer amount is too small.
+
+**What is not in any output:**
+- No recommended savings amount. No "financial advisors suggest," no "most people," no benchmark.
+- No projected compound growth. That is DEBT-VIZ-1's job. SAVE-1 is about starting the behavior, not optimizing it.
+- No urgency, no countdown, no "you're behind."
+- No reference to the user's income. The tool never calculates what percentage of income the transfer amount represents. That framing creates shame when the percentage is small.
+
+**V1 scope:**
+- National scope. No state-specific logic. Implementation intentions and commitment statements are universal; no data files required.
+- Free-text goal field, number inputs, and a day/frequency selector are the full input set.
+- .ics generation is in scope (reuses RECERT-1's generator).
+- Clipboard copy is in scope.
+- The optional rough-timeline calculation is in scope but renders only when both target_amount and transfer_amount are provided.
+- No savings account integration, no bank linking, no balance checking.
+- No email capture, no reminder via SMS or email — the calendar event is the only external artifact.
+- No compound interest projection (v2 scope if behavioral research supports it; strong risk of making small amounts feel futile).
+- No social sharing ("tell a friend"). The commitment is personal; public commitment research in low-income populations is mixed and outside scope for v1.
+- No spaced repetition / return mechanism. See ARCH-RETURN note in BACKLOG_INTAKE.md for the architectural constraint.
+
+**Data sources:**
+No external data required. All calculation uses user-supplied inputs. No eligibility tables, no threshold files, no annually-updated JSON.
+
+Behavioral science sources that must be reviewed before copy is finalized (not data files — background for copy decisions):
+- Gollwitzer (1999): implementation intentions. The core mechanism. PM and behavioral-science agent must confirm commitment-statement format is consistent with the Gollwitzer "I will [action] at [time] in [place]" structure.
+- Milkman, Beshears, Choi, Laibson & Madrian (2011): "Using implementation intentions prompts to enhance influenza vaccination rates" — most-cited behavioral nudge paper; the mechanism transfers to savings with strong evidence.
+- Soman & Cheema (2011): mental accounting and savings in low-income households. Directly relevant to the ALICE user's relationship with earmarking.
+- Thaler & Benartzi (2004): Save More Tomorrow (SMarT). The "smallest amount that feels like progress" framing is consistent with their finding that small commitments to save future income increments have higher uptake than large commitments now.
+
+Research gap: no dedicated SAVE-1 research file exists in `finxiety/research-findings/`. See Open Questions.
+
+**Technical approach:**
+New route `finxiety/src/routes/tools/savings-commitment/+page.svelte`, prerendered like all other routes. No calculation library required — the only math is division (target / transfer). Commitment statement assembly in `finxiety/src/lib/calculators/savings-commitment.ts` — a pure function that takes {goal, amount, frequency, when_anchor, habit_anchor} and returns the formatted commitment string. The .ics generator is imported from `finxiety/src/lib/ics-generator/` (built for RECERT-1); the only new parameters are the event title, body (the commitment statement), and start date (next occurrence of the user-named day). Clipboard copy uses the browser Clipboard API with textarea fallback, matching DOC-1's implementation. No external data files. Add a homepage card per the standard new-tool steps. Reuse ARCH-1 shared UI components (Button, InputField, ResultBox) if landed by build time; otherwise build local and flag for later extraction.
+
+**Tool flow:**
+Step 1: Goal entry. "What are you trying to save for?" Free-text. "Next" disabled until filled.
+Step 2: Amount + frequency. "What's the smallest amount that would feel like progress?" + optional target amount + when/frequency. "Build my commitment" action.
+Step 3: Commitment display. The assembled statement in a styled block. One edit pass. Then two actions: "Add to my calendar" (.ics download) and "Copy this" (clipboard). Optional: the rough timeline estimate, if both amounts were provided, in a clearly labeled supplementary line below the statement.
+Step 4: Related-tools footer.
+
+**Dependencies:**
+- `finxiety/src/lib/ics-generator/` — built for RECERT-1. SAVE-1 must not duplicate this; it imports and reuses it. If RECERT-1 has not shipped, the engineer builds the .ics generator once and makes it shared before completing SAVE-1. The generator is the shared dependency; do not inline it in the SAVE-1 component.
+- ARCH-1 shared UI components if landed by build time. Not a hard blocker.
+
+**Acceptance criteria:**
+- [ ] A user who enters goal="new tires," transfer_amount=20, frequency=biweekly, when="every other Friday after I get paid" sees the commitment statement: "I will transfer $20 to savings every other Friday after I get paid so that I can save for new tires." The user's exact words appear verbatim; no paraphrasing.
+- [ ] The same user can edit the commitment statement inline before downloading or copying it.
+- [ ] A user who also enters target_amount=240 sees the rough timeline estimate: "At $20 every two weeks, reaching $240 would take approximately 24 weeks." The estimate is labeled "rough estimate — your actual timeline will vary."
+- [ ] A user who provides no target_amount sees no timeline estimate. The commitment statement and .ics download render regardless.
+- [ ] "Add to my calendar" downloads a valid .ics file. The event title is "My savings appointment." The event body contains the user's verbatim commitment statement. The start date is the next occurrence of the user-named day/frequency from today's date.
+- [ ] "Copy this" places the commitment statement as plain text on the clipboard with no network request.
+- [ ] No output ever includes a recommended savings amount, a percentage of income, a benchmark, or a comparative reference to what other people save.
+- [ ] The transfer amount field accepts $5 as a valid entry with no warning, no error, no prompt to reconsider. The tool must not set a floor or suggest one exists.
+- [ ] The "When" field is required; submitting without it keeps the "Build my commitment" action disabled and shows a plain-language inline prompt ("Add a when — a specific day or trigger makes commitments more likely to stick"), not an error.
+- [ ] WCAG 2.1 AA: all inputs labeled, color contrast ≥ 4.5:1, fully keyboard-navigable, touch targets ≥ 44px, free-text fields accessible to screen readers with appropriate aria-label.
+- [ ] Mobile-first: full flow usable at 375px with no horizontal scroll; commitment statement readable and actions reachable at 375px. Verified at 375px before 1440px.
+- [ ] No output uses urgency, fear, scarcity, or prescriptive framing ("you should," "you need to," "it's important to"). Do No Harm checklist passed (see `finxiety/CLAUDE.md`).
+- [ ] The related-tools footer links to EMG-1 and BEN-1 with framing that expands supply ("find programs that might create more breathing room") — not framing that implies the user's commitment amount is inadequate.
+- [ ] Homepage card added to `finxiety/src/routes/+page.svelte`.
+- [ ] `npm run build` from `finxiety/` exits 0.
+
+**Out of scope for v1 (explicit):**
+- Bank account linking or balance verification of any kind.
+- Email or SMS reminders. The .ics calendar event is the only external artifact; its delivery is the user's own calendar app.
+- Social commitment ("share your goal") or accountability partner features.
+- Compound interest projection or growth visualization. That is DEBT-VIZ-1.
+- Savings account recommendations or referrals to financial products.
+- Spaced-repetition return mechanism. See ARCH-RETURN in BACKLOG_INTAKE.md.
+- Pre-set transfer amount suggestions (e.g., "try $25/week"). The user names their own amount. Pre-sets anchor upward and create implicit shame when the user's real number is lower.
+
+**Open questions:**
+- **Research gap — BLOCKING.** No dedicated savings-behavior research file exists in `finxiety/research-findings/`. Before the engineer starts, a research session must confirm: (a) the Gollwitzer implementation-intention format is the right framing for the ALICE user at the income and cognitive-bandwidth level Dani represents; (b) the "smallest amount that feels like progress" framing (Thaler/Benartzi) does not inadvertently trigger shame for users whose answer is very small; (c) there is no evidence that commitment devices cause harm in low-income populations (some research suggests social commitment creates pressure that backfires — confirm private commitment is the right form for v1). Run the policy-research prompt from `finxiety/docs/research-prompts.md` on savings behavioral interventions in low-income populations and save output to `finxiety/research-findings/save-1-savings-behavioral-research.md`. Owner: Naomi to schedule research session before SAVE-1 enters the active build queue.
+- **Commitment statement edit pass:** Should the inline edit be a contenteditable span or a re-populated input field? The contenteditable approach is more visually integrated but requires careful ARIA handling for screen readers. The input approach is simpler and more accessible. Recommendation: input field pre-populated with the assembled string, allowing the user to edit freely. → Engineer to decide based on WCAG compliance ease; default to input field.
+- **RECERT-1 .ics generator interface:** Does the current RECERT-1 .ics generator accept a free-text event body, or is it hardcoded to recertification-date content? If hardcoded, the engineer must refactor it into a general-purpose generator before SAVE-1 can import it. → System-analyst agent to trace `finxiety/src/lib/ics-generator/` before build starts and confirm the interface. Escalate to engineer if refactor is needed.
+- **Priority slot:** SAVE-1 is behavioral-design-first and data-light — closer to EMG-1 in build cost than to HOURS-1. Possible insertion between MYTH-2 and HOURS-1 in the ship order, or after MYTH-2 as SHIP T2-7. PM to confirm placement after research gap is resolved. → Naomi.
+
+⟦PM-GROOMED⟧ ticket="SAVE-1" date="2026-06-19"
+
+---
+
 ## APPENDIX A — Personal Finance Myths: Research Reference
 
 From research session 2026-06-14. Full list of 12 myths. Tools 6-10 above cover myths 1, 5, 8, 9, 12. Myths 2, 3, 4, 6, 7, 10, 11 are not yet mapped to a specific tool — flagged for future backlog items.
