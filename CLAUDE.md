@@ -2,7 +2,7 @@
 
 Tsunam.ai is a portfolio of civic and financial tools. Two products are in active development:
 - **Finxiety** — free financial clarity tools for underserved communities
-- **Mortalia** — decumulation and retirement planning for mass-affluent individuals
+- **Mortalia** — retirement scenario tools for single pre-retirees with $1M-$6M, California-first
 
 `nsum-harnesses/` is a reference harness borrowed from nsum.ai. Read it; do not modify it.
 
@@ -26,7 +26,7 @@ Tsunam.ai is a portfolio of civic and financial tools. Two products are in activ
 | Path | Covers |
 |---|---|
 | `finxiety/CLAUDE.md` | Finxiety product conventions, Do No Harm, tool structure |
-| `mortalia/CLAUDE.md` | Mortalia architecture, three-layer design, no shared state with Finxiety |
+| `mortalia/CLAUDE.md` | Mortalia product philosophy, Do No Harm (financial), target user, validation gate |
 
 ---
 
@@ -48,12 +48,14 @@ Agents live in `.claude/agents/`. Each has a defined role; invoke by name via th
 | `system-analyst` | `.claude/agents/system-analyst.md` | Read-only behavioral trace; signs verified claims |
 | `code-reviewer` | `.claude/agents/code-reviewer.md` | PR review; three-layer methodology |
 | `link-checker` | `.claude/agents/link-checker.md` | Checks and auto-fixes broken application URLs in Finxiety data files |
+| `cpa-tax` | `.claude/agents/cpa-tax.md` | Tax calculation accuracy, RMD schedules, IRS + CA FTB table freshness — Mortalia only. **Inactive (personal use phase).** |
+| `legal-compliance` | `.claude/agents/legal-compliance.md` | Unlicensed advice boundary, disclaimer adequacy, liability exposure — Mortalia only. **Inactive (personal use phase).** |
 
 ---
 
 ## Where to Find Things
 
-- **Product backlogs:** `finxiety/PRODUCT_BACKLOG.md` · `mortalia/` (TBD)
+- **Product backlogs:** `finxiety/PRODUCT_BACKLOG.md` · `mortalia/PRODUCT_BACKLOG.md`
 - **Ideation intake:** `finxiety/BACKLOG_INTAKE.md` — rough ideas land here before grooming
 - **Research findings:** `finxiety/research-findings/` — saved outputs from Claude web-search research sessions (see `finxiety/docs/research-prompts.md` for prompt templates)
 - **Harness reference:** `nsum-harnesses/docs/` — development loop, checks-and-balances, worktrees

@@ -127,7 +127,8 @@ export const questions: Question[] = [
 		structuralExplanation:
 			"Each program has its own income cutoff. When SNAP, Medicaid, housing assistance, and childcare subsidies all hit their limits near each other, accepting a raise can be financially irrational. That's a design flaw, not a reflection of how hard someone is working.",
 		signpost:
-			"A Benefits Cliff Calculator is coming. It will tell you whether a specific raise would leave you ahead or behind once benefits are factored in.",
+			"A Benefits Cliff Calculator is in the works. In the meantime, the Benefits Screener can show you which programs you currently qualify for — knowing what you're enrolled in is the starting point for understanding what a raise might affect.",
+		signpostUrl: '/tools/screener',
 		sources: [
 			{
 				label: 'Atlanta Fed: What are benefits cliffs?',

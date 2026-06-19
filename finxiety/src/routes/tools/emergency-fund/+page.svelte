@@ -46,24 +46,6 @@
 	};
 
 	const recommendations: Record<string, Record<string, Rec>> = {
-		zero: {
-			yes: {
-				action:
-					"When there's no emergency cushion and high-interest debt at the same time, people tend to approach it in one of two ways: address the debt first, or build a small dedicated buffer first — typically $300–500 in a separate account — then shift focus to the debt. The case for building the buffer first: without one, the next unexpected cost tends to go on the card, which grows the debt rather than reducing it.",
-				tactic:
-					"A separate account — rather than cash sitting in checking — is the most common approach. Money in a separate account is harder to absorb into everyday spending before an emergency arrives.",
-				watchOut:
-					'Without a designated account, emergency savings tend to get spent on everyday expenses before they\'re needed. The separation is what makes the money available when something unexpected happens.'
-			},
-			no: {
-				action:
-					"A near-zero result here most often reflects how much is left over each month, not a missing habit. For people in this situation, the most common change is creating a separate space for emergency savings — so that irregular expenses don't absorb what's there before an emergency arrives.",
-				tactic:
-					"Many banks allow a second savings account to be opened in a few minutes. Some people time a transfer to happen on the same day as a paycheck, so the money moves before it's spent elsewhere. Even small amounts, consistently, add up over months.",
-				watchOut:
-					'Keeping emergency savings in the same account as regular spending means it tends to get spent before an emergency arrives. Physical separation — a different account — is what makes it available when something unexpected happens.'
-			}
-		},
 		starting: {
 			steady: {
 				action:
@@ -299,21 +281,28 @@
 			</div>
 
 			<h2 class="branch-headline">{config.headline}</h2>
-			<p class="branch-question">{config.question}</p>
 
-			<div class="toggle-group" role="group" aria-label={config.question}>
-				{#each config.options as opt}
-					<button
-						class="btn btn-toggle"
-						class:selected={toggleAnswer === opt.key}
-						aria-pressed={toggleAnswer === opt.key}
-						onclick={() => selectToggle(opt.key)}
-						type="button"
-					>
-						{opt.label}
-					</button>
-				{/each}
-			</div>
+			{#if branch === 'zero'}
+				<div class="bridge-box" role="note">
+					<p>A near-zero result most often reflects tight monthly slack, not a missing habit. If you're not sure whether you qualify for food assistance, utility support, or other programs that could help, the <a href="/tools/screener">Benefits Screener</a> checks in about two minutes.</p>
+				</div>
+			{:else}
+				<p class="branch-question">{config.question}</p>
+
+				<div class="toggle-group" role="group" aria-label={config.question}>
+					{#each config.options as opt}
+						<button
+							class="btn btn-toggle"
+							class:selected={toggleAnswer === opt.key}
+							aria-pressed={toggleAnswer === opt.key}
+							onclick={() => selectToggle(opt.key)}
+							type="button"
+						>
+							{opt.label}
+						</button>
+					{/each}
+				</div>
+			{/if}
 
 			<button class="btn btn-ghost" onclick={goBack} type="button">← Back</button>
 		</section>
@@ -347,12 +336,6 @@
 				<p class="box-label">Worth knowing</p>
 				<p>{rec.watchOut}</p>
 			</div>
-
-			{#if branch === 'zero'}
-				<div class="bridge-box" role="note">
-					<p>A near-zero result often reflects tight monthly slack. If you're not sure whether you qualify for benefits that could help — food assistance, utility support, and others — <a href="https://www.benefits.gov" target="_blank" rel="noopener noreferrer">benefits.gov</a> is a free federal resource that lists what programs are available.</p>
-				</div>
-			{/if}
 
 			<div class="step-actions">
 				<button class="btn btn-ghost" onclick={goBack} type="button">← Back</button>

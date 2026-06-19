@@ -337,12 +337,12 @@
 			{#if likelyCount === 0}
 				<div class="bridge-box" role="note">
 					<p>
-						The programs above have income limits that may not match your situation right now.
-						Income limits are set by Congress and state agencies and update annually each October.
+						Income limits for these programs are set by Congress and state agencies and update each
+						October. If your income or household changes, it is worth checking again.
 					</p>
 					<p>
-						The <a href="/tools/myth-quiz">Benefits Myth-Check Quiz</a> covers what these programs
-						actually provide and why so many eligible families never enroll.
+						For resources not listed here, calling <strong>211</strong> connects you to a community
+						navigator who knows what is available in your area.
 					</p>
 				</div>
 			{/if}
@@ -355,6 +355,9 @@
 			</div>
 
 			<div class="cross-tool-link">
+				{#if likelyCount > 0}
+					<a href="/tools/document-checklist">Document Checklist — get one list for all your applications →</a>
+				{/if}
 				<a href="/tools/myth-quiz">Benefits Myth-Check Quiz →</a>
 			</div>
 
@@ -748,6 +751,9 @@
 	.cross-tool-link {
 		margin-bottom: var(--space-lg);
 		font-size: 0.9375rem;
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-sm);
 	}
 
 	.cross-tool-link a {

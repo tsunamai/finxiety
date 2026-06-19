@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-06-17",
+  "last_updated": "2026-06-18",
   "verify_at": {
     "snap": "https://www.fns.usda.gov/snap/applicant-recipient",
     "medicaid": "https://www.medicaid.gov/medicaid/eligibility",
@@ -26,10 +26,18 @@
           "id": "identity.ssn",
           "category": "identity",
           "name": "Social Security number",
-          "description": "A Social Security card, or any document that shows the Social Security number for each person in your household who is applying.",
-          "status": "required",
+          "description": "Your Social Security card works, and so do a W-2, a pay stub with the full number, or a letter from Social Security. Whatever you have that shows the number — a full list is just below.",
+          "status": "one_of",
           "one_of_group": null,
-          "condition_note": null
+          "condition_note": null,
+          "accepts": [
+            "Original Social Security card",
+            "Official letter from the Social Security Administration (SSA)",
+            "A recent W-2 or 1099 tax form showing the full SSN",
+            "A pay stub that shows the full SSN",
+            "Military ID card, or military discharge papers (these are sometimes called a DD-214)",
+            "A Medi-Cal or Medicare card, if yours has the Social Security number printed on it (some do, some don't)"
+          ]
         },
         {
           "id": "income.pay_stubs",
@@ -67,7 +75,7 @@
           "id": "income.benefit_income",
           "category": "income",
           "name": "Benefit award letters",
-          "description": "Award letters or statements showing the amount and type of any benefits received.",
+          "description": "Any letter or statement that shows benefits someone in your household gets and how much — for example, a disability or unemployment notice, or a record of child support payments. Whatever you have that shows the amount works.",
           "status": "conditional",
           "one_of_group": null,
           "condition_note": "if anyone in your household receives disability, unemployment, child support, or other benefits."
@@ -93,10 +101,18 @@
           "id": "identity.ssn",
           "category": "identity",
           "name": "Social Security number",
-          "description": "A Social Security card, or any document that shows the Social Security number for each person in your household who is applying.",
-          "status": "required",
+          "description": "Your Social Security card works, and so do a W-2, a pay stub with the full number, or a letter from Social Security. Whatever you have that shows the number — a full list is just below.",
+          "status": "one_of",
           "one_of_group": null,
-          "condition_note": null
+          "condition_note": null,
+          "accepts": [
+            "Original Social Security card",
+            "Official letter from the Social Security Administration (SSA)",
+            "A recent W-2 or 1099 tax form showing the full SSN",
+            "A pay stub that shows the full SSN",
+            "Military ID card, or military discharge papers (these are sometimes called a DD-214)",
+            "A Medi-Cal or Medicare card, if yours has the Social Security number printed on it (some do, some don't)"
+          ]
         },
         {
           "id": "income.pay_stubs",
@@ -143,7 +159,7 @@
           "id": "income.benefit_income",
           "category": "income",
           "name": "Benefit award letters",
-          "description": "Award letters or statements showing the amount and type of any benefits received.",
+          "description": "Any letter or statement that shows benefits someone in your household gets and how much — for example, a disability or unemployment notice, or a record of child support payments. Whatever you have that shows the amount works.",
           "status": "conditional",
           "one_of_group": null,
           "condition_note": "if anyone in your household receives disability, unemployment, child support, or other benefits."
@@ -169,16 +185,24 @@
           "id": "identity.ssn",
           "category": "identity",
           "name": "Social Security number",
-          "description": "A Social Security card, or any document that shows the Social Security number for each adult in your household who is applying.",
-          "status": "required",
+          "description": "For each adult in your household: a Social Security card, W-2, or pay stub with the full number all work. A full list of what counts is just below.",
+          "status": "one_of",
           "one_of_group": null,
-          "condition_note": null
+          "condition_note": null,
+          "accepts": [
+            "Original Social Security card",
+            "Official letter from the Social Security Administration (SSA)",
+            "A recent W-2 or 1099 tax form showing the full SSN",
+            "A pay stub that shows the full SSN",
+            "Military ID card, or military discharge papers (these are sometimes called a DD-214)",
+            "A Medi-Cal or Medicare card, if yours has the Social Security number printed on it (some do, some don't)"
+          ]
         },
         {
           "id": "income.pay_stubs",
           "category": "income",
           "name": "Recent proof of income",
-          "description": "Proof of income for all household members from the last 30 days, or the prior year's tax return.",
+          "description": "Proof of income from the last 30 days for anyone in your household who earns money — pay stubs work, or last year's tax return. If you're the only one who works, that's just your own.",
           "status": "required",
           "one_of_group": null,
           "condition_note": null
@@ -187,7 +211,7 @@
           "id": "program_specific.energy_bill",
           "category": "program_specific",
           "name": "Most recent energy or utility bill",
-          "description": "Your most recent energy or utility bill (electric, gas, or heating). This shows your account number and service address. It is required for the application.",
+          "description": "Your most recent energy or utility bill — electric, gas, or whatever heats your home. It shows the account number and service address the program looks for. This same bill often counts as proof of where you live for other programs too.",
           "status": "required",
           "one_of_group": null,
           "condition_note": null
@@ -196,7 +220,7 @@
           "id": "income.benefit_income",
           "category": "income",
           "name": "Benefit award letters",
-          "description": "Award letters or statements showing the amount and type of any benefits received.",
+          "description": "Any letter or statement that shows benefits someone in your household gets and how much — for example, a disability or unemployment notice, or a record of child support payments. Whatever you have that shows the amount works.",
           "status": "conditional",
           "one_of_group": null,
           "condition_note": "if anyone in your household receives disability, unemployment, child support, or other benefits."
@@ -223,16 +247,24 @@
           "id": "identity.ssn_filer_and_children",
           "category": "identity",
           "name": "Social Security numbers for you and each child you claim",
-          "description": "Social Security numbers for yourself and for each child you are claiming. This is a tax credit claimed on your return, so the IRS needs SSNs for everyone listed.",
-          "status": "required",
+          "description": "A document showing the Social Security number for yourself and each child you are claiming. This is a tax credit claimed on your return, so the IRS needs SSNs for everyone listed.",
+          "status": "one_of",
           "one_of_group": null,
-          "condition_note": null
+          "condition_note": null,
+          "accepts": [
+            "Original Social Security card",
+            "Official letter from the Social Security Administration (SSA)",
+            "A recent W-2 or 1099 tax form showing the full SSN",
+            "A pay stub that shows the full SSN",
+            "Military ID card, or military discharge papers (these are sometimes called a DD-214)",
+            "A Medi-Cal or Medicare card, if yours has the Social Security number printed on it (some do, some don't)"
+          ]
         },
         {
           "id": "income.w2_1099",
           "category": "income",
           "name": "Earned income documents (W-2 or 1099 forms)",
-          "description": "Your W-2 forms or 1099 forms showing what you earned last year. If you are self-employed, bring your Schedule SE.",
+          "description": "Your W-2 or 1099 forms showing what you earned last year. If any of that was self-employment income, your tax preparer may also ask for the self-employment form that goes with it (Schedule SE).",
           "status": "required",
           "one_of_group": null,
           "condition_note": null
@@ -262,7 +294,7 @@
     "CA": {
       "snap": {
         "residency.proof_of_address": {
-          "divergence_note": "CalFresh can accept a utility bill, a lease, or recent mail. If you are also applying for HEAP, use a recent energy or utility bill. One document covers both."
+          "divergence_note": "CalFresh can accept a utility bill, a lease, or recent mail. If you are also applying for HEAP, a recent energy or utility bill covers both at once."
         }
       },
       "medicaid": {

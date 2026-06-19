@@ -56,9 +56,15 @@ TRACK 1 — Financial Inclusion Core
   SHIP T1-3 — Framing + Documentation
     DOC-1: Document Checklist Generator
     ALICE-1: "Are You ALICE?" Self-Assessment
+    Behavioral review note: ALICE-1's value is shame-dissolving, not material.
+    It must bridge hard to BEN-1 or it risks being another workshop slide.
 
-  SHIP T1-4 — Administrative Burden
+  SHIP T1-4 — Administrative Burden [promoted to P1]
     RECERT-1: Recertification Deadline Tracker
+    Behavioral review note: Promoted from P2. Prevents the most common way
+    enrolled users lose benefits. The .ics reminder is the cleanest
+    enabling-environment win in the backlog — something is literally different
+    after closing the tab.
 
   SHIP T1-5 — Economic Complexity
     CLIFF-1: Benefits Cliff Calculator
@@ -100,11 +106,12 @@ TRACK 2 — Personal Finance Myth-Busting
 - **P0 — First ship (Track 1)**: MYTH-1 — establishes brand voice
 - **P0-B — Core utility**: BEN-1 — foundational screener
 - **P0-T2 — First ship (Track 2)**: EMG-1 — fastest calculator across both tracks
-- **P1 — Framing suite**: DOC-1, ALICE-1, TIP-1
-- **P2 — State research / visualization**: RECERT-1, DEBT-VIZ-1, DEDUCT-1
+- **P1 — Framing + Admin Burden**: DOC-1, ALICE-1, TIP-1, RECERT-1 — RECERT-1 promoted from P2 per behavioral review: prevents the #1 source of benefit loss (missed recertification), cleanest enabling-environment test in the suite (a calendar event exists after closing the tab)
 - **P2 — Economic complexity**: CLIFF-1, HOURS-1 (most complex in each track)
+- **P2 — Food security**: FOOD-1, FOOD-2 — promoted from P3 per behavioral review: best match for Dani's tactical present-tense scarcity state; underrated relative to material impact
+- **P2 — Visualization / tax clarity**: DEBT-VIZ-1, DEDUCT-1
 - **P2 — Suite completions**: MYTH-2
-- **P3 — Wave 2 expansion**: FOOD-1, FOOD-2, WORK-1, WORK-2, HOUSE-1, HOUSE-2, BEN-3, BEN-4
+- **P3 — Wave 2 expansion**: WORK-1, WORK-2, HOUSE-1, HOUSE-2, BEN-3, BEN-4
 
 ---
 
@@ -351,36 +358,166 @@ A person who earns $2,200/month with a family of three gets a clear, accurate li
 
 ### DOC-1 — Document Checklist Generator [P1]
 
-**What it is:**
-Programs (SNAP, Medicaid, LIHEAP, EITC, WIC) require overlapping but non-identical documentation. Applying to multiple programs means redundant, confusing paperwork hunts. A single de-duplicated checklist reduces friction.
+**Problem statement:** Someone applying to more than one benefits program has to assemble overlapping but non-identical paperwork from separate agency websites, with no single source telling them what one folder of documents would satisfy all of their applications at once.
+
+**Target user:** A parent applying to CalFresh and Medi-Cal in the same week who has already been asked for "proof of income" twice and does not know whether the pay stubs they gathered for one application will also work for the other. The person who gave up on a second application last year because the document hunt felt like starting over from scratch. They are doing this on a phone, often after the kids are asleep, with limited bandwidth and no caseworker to call.
 
 **Inputs:**
-- Multi-select: which programs the user is applying for
-- State (document requirements vary by state administration)
+- **Programs** — multi-select, required. Which programs the user is applying for. v1 set: SNAP (CalFresh), Medicaid (Medi-Cal), LIHEAP (HEAP in CA), EITC (CalEITC). At least one must be selected before a checklist renders. Presented as plain-language labels with the program acronym in parentheses, no jargon.
+- **State** — 2-letter selector, required. Uses the shared input model `state` field (`finxiety/src/lib/input-model/types.ts`); do not redefine. Drives state-specific overrides. v1: CA has full state-specific data. Any other state renders the federal baseline with a clearly labeled note that requirements are shown at the national level and the user should confirm with their state agency.
+
+No other shared input fields are used. DOC-1 does not ask for `household_size`, `income`, or `current_benefits`; it is a documentation planner, not an eligibility screener. Keeping the input surface to two fields is a scarcity-bandwidth decision, not an oversight.
 
 **Outputs:**
-- Single de-duplicated checklist covering all selected programs, grouped by document type (identity, income, residency, household composition, expenses)
-- Notes where requirements diverge (e.g., "LIHEAP requires a copy of your most recent energy bill — not needed for SNAP")
-- Printable/downloadable format (PDF or plain text — client-side generation)
+- A single de-duplicated checklist covering all selected programs, grouped by document category in this fixed order: **Identity, Income, Residency, Household composition, Program-specific.**
+- Each line item shows: the document name, a plain-language one-line description of what counts, a REQUIRED / IF THIS APPLIES TO YOU / CHOOSE ONE label, and a "needed for" tag naming which selected programs require it (e.g., "needed for CalFresh and Medi-Cal").
+- **Divergence callouts** rendered inline on the relevant item, never as a separate wall of caveats. Example: under Residency, "CalFresh can accept a utility bill, a lease, or recent mail. HEAP specifically needs a recent energy or utility bill, so a copy of that one bill covers both."
+- **CHOOSE ONE groups** render as a small set the user picks from, with the shared note "Any one of these works" so the user does not gather all of them.
+- A short header line: "These are the documents commonly requested for the programs you picked. Your county may ask for something slightly different. This is a guide, not the official list." Carries the official source URL per program (links below).
+- **Copy to clipboard** and **Print** actions. Both run entirely client-side. No download-to-file, no PDF in v1 (see V1 scope). The clipboard payload is plain text, grouped by category, with the "needed for" tags preserved.
+- Related-tools footer linking to BEN-1 (to check what they may qualify for) and RECERT-1 (which reuses this checklist for recertification).
+
+All output uses "commonly requested" / "your county may ask" framing. No output tells the user a document is mandatory in their specific case, because county-level practice varies; the tool surfaces the common baseline and routes to the official source for confirmation.
 
 **V1 scope:**
-- SNAP, Medicaid, LIHEAP, EITC — 4 programs
-- National baseline requirements with state-specific notes only where they significantly diverge
-- CA + 4 additional states (TX, FL, NY, AZ) for state-specific notes
+- **Four programs:** SNAP (CalFresh), Medicaid (Medi-Cal), LIHEAP (HEAP), EITC (CalEITC).
+- **One state with full data: California.** CA gets state-specific document language and divergence notes. Every other state renders the federal baseline with a labeled "national baseline — confirm with your state" banner. Multi-state divergence (TX, FL, NY, AZ and beyond) is explicitly OUT for v1 and deferred to v2. (This narrows the earlier stub's CA+4 ambition: compiling verified document lists for five state administrations is a much larger research task than the P1 slot supports, and CA-first matches BEN-1's scope so the two tools tell a consistent story.)
+- **Five document categories**, fixed order, as listed in Outputs.
+- **De-duplication across selected programs** is in scope and is the core feature.
+- Output via **copy-to-clipboard and print only.** No file download, no PDF generation.
 
 **Data sources:**
-- USDA SNAP application guides
-- Medicaid.gov application requirements
-- LIHEAP state agency guides
-- IRS EITC requirements
+The document-requirements data must be compiled into a static JSON file before build. There is no existing research file for DOC-1 in `research-findings/` — see Open Questions; this compilation is a blocking pre-build task. Named primary sources for the compilation:
+- **SNAP / CalFresh:** USDA FNS SNAP applicant documentation guidance (https://www.fns.usda.gov/snap/applicant-recipient) and CA CDSS / BenefitsCal CalFresh verification list (https://www.cdss.ca.gov/calfresh and https://benefitscal.com).
+- **Medicaid / Medi-Cal:** Medicaid.gov eligibility documentation (https://www.medicaid.gov/medicaid/eligibility) and CA DHCS Medi-Cal "what you need to apply" (https://www.dhcs.ca.gov/services/medi-cal).
+- **LIHEAP / HEAP:** federal LIHEAP program documentation (https://www.acf.hhs.gov/ocs/programs/liheap) and CA CSD HEAP required-documents list (https://www.csd.ca.gov/energybills).
+- **EITC / CalEITC:** IRS EITC documentation requirements (https://www.irs.gov/credits-deductions/individuals/earned-income-tax-credit-eitc) and CA FTB CalEITC (https://www.ftb.ca.gov/file/personal/credits/california-earned-income-tax-credit.html).
+
+**Research effort estimate:** ~1 focused research session (3–4 hours) to compile the four programs at the federal baseline plus CA overrides into `doc-requirements.json`, cross-checking each document item against two sources. The output is the seed data plus a short findings note saved to `finxiety/research-findings/YYYY-MM-DD_CA_doc-requirements.md` recording which sources backed each item. This must complete and be verified before the engineer starts.
 
 **Technical approach:**
-- Static rules-based logic: `finxiety/data/document-requirements.json`
-- De-duplication algorithm: merge requirements across selected programs, group by type, surface divergences
-- Client-side PDF/text generation (no server needed)
-- Uses `state` from shared input model
+New route `finxiety/src/routes/tools/document-checklist/+page.svelte`, prerendered like every other route. Document requirements live as static data in `finxiety/src/lib/data/doc-requirements.json` (schema below), keyed by program with a CA override block. A pure de-duplication / merge function in `finxiety/src/lib/calculators/doc-checklist.ts` takes the selected program list plus state and returns a category-grouped, de-duplicated checklist with "needed for" tags and resolved divergence notes. Clipboard uses the browser Clipboard API with a textarea fallback; print uses a print-optimized CSS stylesheet so the on-screen checklist reformats cleanly for paper. No server, no storage, no PII. Add a homepage card per the standard new-tool steps. Reuses ARCH-1 shared UI components (Button, multi-select, ResultBox) if landed by build time; otherwise build local and flag for later extraction.
 
-**No storage required.** Static logic; output downloaded client-side.
+**De-duplication algorithm spec:**
+The merge function operates on the selected programs and resolves three cases. Each document requirement in the data file carries a stable `id`; merging is keyed on that `id`.
+
+1. **Identical requirement (simple dedup).** When two or more selected programs reference the same document `id`, emit one line item. Its "needed for" tag lists every selected program that referenced it. Example: SNAP and Medicaid both reference `income.pay_stubs`. The checklist shows "Recent pay stubs" once, tagged "needed for CalFresh and Medi-Cal." A document required by one program and only sometimes-required by another resolves to REQUIRED on the merged item (the stricter status wins), with the conditional program still listed in the "needed for" tag.
+
+2. **Same category, different acceptable documents (show the satisfying set).** Some requirements are CHOOSE ONE groups: a program accepts any one of several documents to satisfy a need (e.g., residency accepts utility bill OR lease OR recent mail). When multiple selected programs each have a CHOOSE ONE group in the same need, the merged group is the **intersection** of acceptable documents — the documents that satisfy ALL selected programs — surfaced first under "Any one of these works for all of them." If the intersection is empty (no single document satisfies every program's residency need), the tool does NOT silently drop the requirement; it lists each program's accepted set separately with its own "needed for" tag and a divergence note. The HEAP-vs-CalFresh energy-bill case is the canonical example: CalFresh residency intersection includes a utility bill, HEAP narrows to an energy/utility bill specifically, so the merged result surfaces "a recent energy or utility bill" as the one document that covers both, with the note explaining why.
+
+3. **Program-specific requirement (show separately).** A document required by only one selected program (e.g., HEAP's recent energy bill, EITC's prior-year tax return / SSNs for everyone claimed) renders as its own line item under the appropriate category, tagged "needed for [that program] only." It is never merged away.
+
+Ordering within each category: REQUIRED items first, then CHOOSE ONE groups, then IF THIS APPLIES TO YOU items. Across categories, the fixed order from Outputs.
+
+**User flow spec:**
+All copy below is brand-final and must pass brand review before build. Plain language, no jargon, no urgency, no shame.
+
+- **Step 1 — Program selection.** Heading: "Which programs are you applying for?" Helper: "Pick all that apply. We'll build one document list that covers them all." Multi-select with the four program labels. A "Next" action, disabled until at least one is selected.
+- **Step 2 — State selection.** Heading: "Which state are you applying in?" Helper: "Document requirements are set state by state. Right now we have full detail for California; for other states we'll show the national baseline." State selector defaulting to no selection. "Show my list" action.
+- **Step 3 — Checklist display.** Heading: "Your document list." Sub-line: the "commonly requested … this is a guide, not the official list" header from Outputs. Then the de-duplicated, category-grouped checklist with inline divergence callouts. If state is not CA, a labeled banner above the list: "Showing the national baseline. Your state may ask for something different — check the official link for each program below." Each program block in the footer carries its official source URL.
+- **Step 4 — Take it with you.** Two actions: "Copy this list" (clipboard) and "Print" (print stylesheet). Confirmation microcopy after copy: "Copied. Paste it into your notes or a message to yourself." No email capture, no account, no "save."
+
+**Dependencies:**
+- Shared input model `state` field (`finxiety/src/lib/input-model/types.ts`) — already exists.
+- `finxiety/src/lib/data/states.ts` for the state selector list — already exists.
+- ARCH-1 shared UI components if landed by build time; not a hard blocker.
+- RECERT-1 depends on DOC-1's data and merge logic (it reuses the checklist for recertification); DOC-1 does not depend on RECERT-1. BEN-1 and DOC-1 are independent but cross-link.
+
+**Data file schema** (`finxiety/src/lib/data/doc-requirements.json`):
+```jsonc
+{
+  "last_updated": "2026-06-XX",        // build-date of the compiled data
+  "verify_at": {                        // official source per program, for the release freshness audit
+    "snap": "https://www.fns.usda.gov/snap/applicant-recipient",
+    "medicaid": "https://www.medicaid.gov/medicaid/eligibility",
+    "liheap": "https://www.acf.hhs.gov/ocs/programs/liheap",
+    "eitc": "https://www.irs.gov/credits-deductions/individuals/earned-income-tax-credit-eitc"
+  },
+  "_note": "Document requirements compiled at the federal baseline with California overrides. v1 scope: SNAP/CalFresh, Medicaid/Medi-Cal, LIHEAP/HEAP, EITC/CalEITC. Non-CA states render the federal baseline only. Re-verify annually; agency document lists change.",
+  "programs": {
+    "snap": {
+      "label": "SNAP (CalFresh)",
+      "official_url": "https://benefitscal.com",
+      "requirements": [
+        {
+          "id": "identity.gov_id",          // stable id used as the merge key
+          "category": "identity",            // identity | income | residency | household | program_specific
+          "name": "Government-issued photo ID",
+          "description": "A driver's license, state ID, or passport for the person applying.",
+          "status": "required",              // required | conditional | one_of
+          "one_of_group": null,              // group key when status === "one_of"; null otherwise
+          "condition_note": null             // shown when status === "conditional", e.g. "if anyone in your home is self-employed"
+        },
+        {
+          "id": "residency.proof",
+          "category": "residency",
+          "name": "Proof of where you live",
+          "description": "A utility bill, a lease, or recent mail with your name and address.",
+          "status": "one_of",
+          "one_of_group": "residency_proof",
+          "condition_note": null,
+          "accepts": ["utility_bill", "lease", "recent_mail"]   // members of the one_of group, for intersection logic
+        }
+      ]
+    },
+    "medicaid": { "label": "Medicaid (Medi-Cal)", "official_url": "...", "requirements": [ /* ... */ ] },
+    "liheap":   { "label": "LIHEAP (HEAP)",       "official_url": "...", "requirements": [ /* ... */ ] },
+    "eitc":     { "label": "EITC (CalEITC)",      "official_url": "...", "requirements": [ /* ... */ ] }
+  },
+  "state_overrides": {
+    "CA": {
+      // Per-requirement overrides keyed by the same requirement id.
+      // Each override may replace name/description/status/accepts and may add a divergence_note.
+      "snap": {
+        "residency.proof": {
+          "divergence_note": "CalFresh can accept a utility bill, a lease, or recent mail. If you're also applying for HEAP, use a recent energy or utility bill so one document covers both."
+        }
+      },
+      "liheap": {
+        "program_specific.energy_bill": {
+          "status": "required",
+          "divergence_note": "HEAP specifically needs a recent energy or utility bill. This same bill also works as proof of where you live for CalFresh and Medi-Cal."
+        }
+      }
+    }
+  }
+}
+```
+Notes on the schema: the federal `programs` block is the baseline every state falls back to. `state_overrides.CA` patches individual requirements by `id` and is the only state populated in v1. The release agent's freshness audit reads `last_updated` and the `verify_at` map. Every document item carries a stable `id` so the merge function and RECERT-1 can both key on it. Representative seed content for SNAP is shown above; the full four-program compilation is the pre-build research task.
+
+**Acceptance criteria:**
+- [ ] Selecting SNAP + Medicaid produces a checklist where a shared item such as "Recent pay stubs" (`income.pay_stubs`) appears exactly once, tagged "needed for CalFresh and Medi-Cal," not twice.
+- [ ] Selecting SNAP + LIHEAP with state = CA produces a residency result that surfaces "a recent energy or utility bill" as the single document covering both, with the CA divergence note explaining why; the energy bill does not appear as two separate items.
+- [ ] A CHOOSE ONE residency group renders with "Any one of these works" and does not instruct the user to gather every option.
+- [ ] A program-specific item required by only one selected program (e.g., EITC's prior-year tax return when only EITC is selected) renders under its category tagged "needed for CalEITC only" and is never merged away.
+- [ ] When two programs assign different statuses to the same `id` (one REQUIRED, one conditional), the merged item shows REQUIRED and the "needed for" tag still lists both programs.
+- [ ] Selecting all four programs with state = CA produces a checklist of no more than 12 line items (de-duplication is working; if it exceeds 12, merging has failed).
+- [ ] State = CA shows CA-specific divergence notes; state = TX (or any non-CA) shows the federal baseline with the "Showing the national baseline" banner and no CA-only notes.
+- [ ] Selecting zero programs does not render a checklist; the "Next" action stays disabled until at least one program is selected.
+- [ ] "Copy this list" places the grouped, de-duplicated plain-text checklist (with "needed for" tags) on the clipboard with no network request; "Print" reflows the checklist via the print stylesheet with no network request.
+- [ ] Every program block in the footer carries its official source URL, and the header frames the list as a guide, not the official requirement set.
+- [ ] WCAG 2.1 AA met: multi-select and state selector fully keyboard-operable, every control labeled, color contrast ≥ 4.5:1, status labels (REQUIRED / CHOOSE ONE / IF THIS APPLIES) not conveyed by color alone, touch targets ≥ 44px.
+- [ ] Mobile-first: the full flow and the four-program checklist are usable at 375px with no horizontal scroll; verified at 375px before 1440px.
+- [ ] All outputs use "commonly requested" / "your county may ask" framing; no urgency, no recommendation, no shame (Do No Harm checklist passed — see `finxiety/CLAUDE.md`).
+- [ ] `doc-requirements.json` includes `last_updated` and the `verify_at` source map.
+- [ ] Homepage card added to `finxiety/src/routes/+page.svelte`.
+- [ ] `npm run build` from `finxiety/` exits 0.
+
+**Out of scope for v1 (explicit):**
+- Multi-state document divergence beyond California (TX, FL, NY, AZ, and all others) — they render the federal baseline only. v2.
+- WIC and its program-specific documentation (proof of pregnancy / infant, medical/nutritional risk). Not in the v1 four-program set. v2.
+- TANF / CalWORKs, housing assistance (Section 8 / HCV), childcare subsidy documentation. v2+.
+- Immigration-status documentation. Deliberately OUT — this is sensitive, high-stakes, and county-variable; surfacing it incorrectly risks deterring eligible applicants or implying a requirement that does not apply to mixed-status households. Document only via the official source links. Revisit only with dedicated research and a behavioral + brand review.
+- PDF generation and file download — copy-to-clipboard and print only in v1.
+- Persisting or pre-filling the user's selections across sessions (no storage; consistent with the no-PII / stateless constraint).
+- Eligibility determination — DOC-1 lists documents; it does not tell the user whether they qualify. That is BEN-1's job, and the footer links there.
+
+**Open questions:**
+- **Research compilation is a blocking pre-build dependency.** No DOC-1 research file exists in `research-findings/`. The four-program document data (federal baseline + CA overrides) must be compiled and source-verified into `doc-requirements.json`, with a findings note saved to `research-findings/`, before the engineer starts. Owner: research session, then PM verification. → Escalate scheduling to Naomi.
+- Should the "needed for" tag use full program names ("CalFresh and Medi-Cal") or short tags throughout? Default to the plain program names used in the labels. → Brand agent.
+- Confirm the 12-item ceiling for all-four-programs-CA is realistic against the actual compiled data; adjust the acceptance-criteria number once the data exists if real de-duplicated counts differ. → PM, after research.
+
+⟦PM-GROOMED⟧ ticket="DOC-1" date="2026-06-17"
 
 ---
 
