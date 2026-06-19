@@ -131,7 +131,7 @@ Two tracks. Track 1 sequence is fixed by dependencies. Track 2 can interleave.
 **Track 1 — Financial Inclusion:**
 1. MYTH-1 (Myth Quiz) — national, no state data, establishes brand voice
 2. BEN-1 (SNAP Screener) — CA-first, builds the shared eligibility engine
-3. DOC-1 (Document Checklist) + ALICE-1 (ALICE Assessment)
+3. DOC-1 (Document Checklist)
 4. RECERT-1 (Recertification Tracker)
 5. CLIFF-1 (Benefits Cliff Calculator) — depends on BEN-1's lib/eligibility/
 

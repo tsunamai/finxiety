@@ -55,9 +55,6 @@ TRACK 1 — Financial Inclusion Core
 
   SHIP T1-3 — Framing + Documentation
     DOC-1: Document Checklist Generator
-    ALICE-1: "Are You ALICE?" Self-Assessment
-    Behavioral review note: ALICE-1's value is shame-dissolving, not material.
-    It must bridge hard to BEN-1 or it risks being another workshop slide.
 
   SHIP T1-4 — Administrative Burden [promoted to P1]
     RECERT-1: Recertification Deadline Tracker
@@ -106,7 +103,7 @@ TRACK 2 — Personal Finance Myth-Busting
 - **P0 — First ship (Track 1)**: MYTH-1 — establishes brand voice
 - **P0-B — Core utility**: BEN-1 — foundational screener
 - **P0-T2 — First ship (Track 2)**: EMG-1 — fastest calculator across both tracks
-- **P1 — Framing + Admin Burden**: DOC-1, ALICE-1, TIP-1, RECERT-1 — RECERT-1 promoted from P2 per behavioral review: prevents the #1 source of benefit loss (missed recertification), cleanest enabling-environment test in the suite (a calendar event exists after closing the tab)
+- **P1 — Framing + Admin Burden**: DOC-1, TIP-1, RECERT-1 — RECERT-1 promoted from P2 per behavioral review: prevents the #1 source of benefit loss (missed recertification), cleanest enabling-environment test in the suite (a calendar event exists after closing the tab)
 - **P2 — Economic complexity**: CLIFF-1, HOURS-1 (most complex in each track)
 - **P2 — Food security**: FOOD-1, FOOD-2 — promoted from P3 per behavioral review: best match for Dani's tactical present-tense scarcity state; underrated relative to material impact
 - **P2 — Visualization / tax clarity**: DEBT-VIZ-1, DEDUCT-1
