@@ -57,6 +57,13 @@
 			</span>
 			<span class="tool-arrow" aria-hidden="true">→</span>
 		</a>
+		<a href="/tools/tax-clarity" class="tool-row">
+			<span class="tool-row-inner">
+				<span class="tool-name">Tax Clarity</span>
+				<span class="tool-desc">What a deduction actually saves you, what a credit is worth, and what your refund really means.</span>
+			</span>
+			<span class="tool-arrow" aria-hidden="true">→</span>
+		</a>
 		<a href="/tools/compound-interest" class="tool-row">
 			<span class="tool-row-inner">
 				<span class="tool-name">The Compounding Effect</span>
