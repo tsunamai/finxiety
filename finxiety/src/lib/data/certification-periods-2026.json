@@ -1,0 +1,88 @@
+{
+	"last_updated": "2026-06-18",
+	"verify_at": {
+		"CA_snap": "https://www.cdss.ca.gov/calfresh",
+		"CA_medicaid": "https://www.dhcs.ca.gov/services/medi-cal",
+		"TX_snap": "https://www.hhs.texas.gov/services/food/snap-food-benefits",
+		"TX_medicaid": "https://www.hhs.texas.gov/services/health/medicaid-chip",
+		"FL_snap": "https://www.myflfamilies.com/services/public-assistance/food-assistance-snap",
+		"FL_medicaid": "https://www.myflfamilies.com/medicaid",
+		"NY_snap": "https://otda.ny.gov/programs/snap/",
+		"NY_medicaid": "https://www.health.ny.gov/health_care/medicaid/",
+		"AZ_snap": "https://des.az.gov/na",
+		"AZ_medicaid": "https://www.azahcccs.gov/Members/AlreadyCovered/EligibilityInformation.html"
+	},
+	"periods": {
+		"CA": {
+			"snap": {
+				"label": "CalFresh",
+				"months": 12,
+				"notes": "Most households certify every 12 months. Semi-Annual Reports (SAR-7) are due at 6 months but are not a recertification — they are a mid-period income report.",
+				"mid_cert_note": "CalFresh also asks for a mid-certification report (the SAR-7) around the 6-month mark. This is not a renewal — you stay enrolled — but turning it in keeps your benefits going without a pause. Your approval notice shows the due date.",
+				"source": "https://www.cdss.ca.gov/calfresh"
+			},
+			"medicaid": {
+				"label": "Medi-Cal",
+				"months": 12,
+				"notes": "Annual renewal. The renewal is usually set for the 11th month after the month you applied or last renewed.",
+				"source": "https://www.dhcs.ca.gov/services/medi-cal"
+			}
+		},
+		"TX": {
+			"snap": {
+				"label": "SNAP (food benefits)",
+				"months": 6,
+				"notes": "Most households in Texas are certified for 6 months. Households where everyone is elderly or has a disability with no earned income may get a 36-month period. Your approval notice shows your exact period.",
+				"source": "https://www.hhs.texas.gov/services/food/snap-food-benefits"
+			},
+			"medicaid": {
+				"label": "Medicaid",
+				"months": 12,
+				"notes": "Annual renewal. Texas usually mails a renewal notice about 90 days before the due date.",
+				"source": "https://www.hhs.texas.gov/services/health/medicaid-chip"
+			}
+		},
+		"FL": {
+			"snap": {
+				"label": "SNAP (food assistance)",
+				"months": 6,
+				"notes": "Most Florida households are certified for 6 months. Households where everyone is elderly or has a disability with no earned income may get a 24-month period. Your approval notice shows your exact period.",
+				"source": "https://www.myflfamilies.com/services/public-assistance/food-assistance-snap"
+			},
+			"medicaid": {
+				"label": "Medicaid",
+				"months": 12,
+				"notes": "Annual renewal handled by the Department of Children and Families.",
+				"source": "https://www.myflfamilies.com/medicaid"
+			}
+		},
+		"NY": {
+			"snap": {
+				"label": "SNAP",
+				"months": 12,
+				"notes": "Most New York households are certified for 12 months. Households where everyone is elderly or has a disability may be certified for up to 24 or 36 months. Your recertification packet shows your exact period.",
+				"source": "https://otda.ny.gov/programs/snap/"
+			},
+			"medicaid": {
+				"label": "Medicaid",
+				"months": 12,
+				"notes": "Annual renewal. Your local Department of Social Services usually sends a notice 60 to 90 days before the due date.",
+				"source": "https://www.health.ny.gov/health_care/medicaid/"
+			}
+		},
+		"AZ": {
+			"snap": {
+				"label": "Nutrition Assistance (SNAP)",
+				"months": 6,
+				"notes": "Most Arizona households renew every 6 months. Households where everyone is 60 or older with no earned income may get a 36-month period. Your Notice of Expiration shows your exact period.",
+				"source": "https://des.az.gov/na"
+			},
+			"medicaid": {
+				"label": "AHCCCS (Medicaid)",
+				"months": 12,
+				"notes": "Annual renewal. AHCCCS usually sends a notice about 90 days before coverage expires.",
+				"source": "https://www.azahcccs.gov/Members/AlreadyCovered/EligibilityInformation.html"
+			}
+		}
+	}
+}
