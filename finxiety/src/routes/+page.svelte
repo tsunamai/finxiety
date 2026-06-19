@@ -57,6 +57,13 @@
 			</span>
 			<span class="tool-arrow" aria-hidden="true">→</span>
 		</a>
+		<a href="/tools/debt-growth" class="tool-row">
+			<span class="tool-row-inner">
+				<span class="tool-name">Debt vs. Growth Visualizer</span>
+				<span class="tool-desc">See compound interest run in both directions — a debt growing against you and an investment growing for you, on one chart.</span>
+			</span>
+			<span class="tool-arrow" aria-hidden="true">→</span>
+		</a>
 		<a href="/tools/emergency-fund" class="tool-row">
 			<span class="tool-row-inner">
 				<span class="tool-name">Emergency Fund Checker</span>
