@@ -92,6 +92,13 @@
 			</span>
 			<span class="tool-arrow" aria-hidden="true">→</span>
 		</a>
+		<a href="/tools/savings-commitment" class="tool-row">
+			<span class="tool-row-inner">
+				<span class="tool-name">Savings Commitment Maker</span>
+				<span class="tool-desc">Write one specific savings commitment in your own words — and get a calendar reminder to make it happen.</span>
+			</span>
+			<span class="tool-arrow" aria-hidden="true">→</span>
+		</a>
 		<a href="/tools/emergency-fund" class="tool-row">
 			<span class="tool-row-inner">
 				<span class="tool-name">Emergency Fund Checker</span>
