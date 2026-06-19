@@ -49,13 +49,13 @@
 
 <section class="hero">
 	<h1>What&rsquo;s going on with your money?</h1>
-	<p class="hero-sub">Type your situation &mdash; we&rsquo;ll point you to the right tool.</p>
+
 </section>
 
 <section class="search-surface" aria-label="Search tools">
 	<SearchBox bind:query onSearch={handleSearch} />
 	<PromptChips onChip={handleChip} />
-	<p class="privacy-note">What you type isn&rsquo;t stored or tied to you.</p>
+
 </section>
 
 {#if hasSearched}
@@ -86,21 +86,8 @@
 		margin-bottom: var(--space-sm);
 	}
 
-	.hero-sub {
-		color: var(--ink-mute);
-		font-size: 1rem;
-		margin: 0;
-	}
-
 	.search-surface {
 		margin-bottom: var(--space-lg);
-	}
-
-	.privacy-note {
-		font-size: 0.8125rem;
-		color: var(--ink-faint);
-		margin-top: 10px;
-		margin-bottom: 0;
 	}
 
 	.results-surface {

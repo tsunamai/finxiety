@@ -19,7 +19,3 @@
 <main id="main-content">
 	{@render children()}
 </main>
-
-<footer class="site-footer">
-	<p>Free. Always.</p>
-</footer>
