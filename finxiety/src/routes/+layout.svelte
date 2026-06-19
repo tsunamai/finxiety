@@ -5,7 +5,9 @@
 </script>
 
 <svelte:head>
-	<title>Finxiety — Financial tools for the rest of us</title>
+	<title>Finxiety — Free financial tools, one step at a time</title>
+	<link rel="preconnect" href="https://fonts.googleapis.com" />
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
 </svelte:head>
 
 <a href="#main-content" class="skip-link">Skip to main content</a>

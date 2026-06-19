@@ -1,15 +1,28 @@
-:root {
-	--terracotta: #a85338;
-	--copper: #8b5e3c;
-	--olive: #5c6b3a;
-	--cream: #faf3e8;
-	--dark: #1c1a18;
-	--text: #2d2a26;
-	--muted: #625c57;
-	--border: #d9cfc4;
-	--surface: #f0e9dc;
+@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..60,400;12..60,700;12..60,800&family=Public+Sans:wght@400;600;700&display=swap');
 
-	--font: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+:root {
+	/* Brand palette */
+	--pine: #2C4A3B;
+	--pine-dark: #1E3529;
+	--sage: #6B8A78;
+	--paper: #F4F6F2;
+	--ink: #1E2B25;
+	--peach: #F0A989;
+	--muted: #506258;
+	--border: #D4DDD6;
+	--surface: #E8EEE9;
+
+	/* Legacy token aliases — tool pages inherit without edits */
+	--terracotta: var(--pine);
+	--copper: var(--pine-dark);
+	--olive: var(--sage);
+	--cream: var(--paper);
+	--dark: var(--ink);
+	--text: var(--ink);
+
+	/* Typography */
+	--font: 'Public Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+	--font-display: 'Bricolage Grotesque', system-ui, sans-serif;
 	--radius: 6px;
 
 	--space-xs: 0.5rem;
@@ -32,8 +45,8 @@
 html {
 	font-family: var(--font);
 	font-size: 16px;
-	color: var(--text);
-	background: var(--cream);
+	color: var(--ink);
+	background: var(--paper);
 	-webkit-font-smoothing: antialiased;
 }
 
@@ -44,34 +57,35 @@ body {
 }
 
 a {
-	color: var(--terracotta);
+	color: var(--pine);
 	text-decoration: underline;
 	text-underline-offset: 3px;
 }
 
 a:hover {
-	color: var(--copper);
+	color: var(--pine-dark);
 }
 
 h1 {
+	font-family: var(--font-display);
 	font-size: clamp(1.75rem, 5vw, 2.25rem);
 	font-weight: 800;
 	line-height: 1.15;
 	letter-spacing: -0.02em;
-	color: var(--dark);
+	color: var(--ink);
 }
 
 h2 {
 	font-size: clamp(1.25rem, 4vw, 1.5rem);
 	font-weight: 700;
 	line-height: 1.25;
-	color: var(--dark);
+	color: var(--ink);
 }
 
 h3 {
 	font-size: 1rem;
 	font-weight: 700;
-	color: var(--dark);
+	color: var(--ink);
 }
 
 p {
@@ -96,8 +110,8 @@ p {
 	position: absolute;
 	top: -100%;
 	left: var(--space-md);
-	background: var(--dark);
-	color: var(--cream);
+	background: var(--ink);
+	color: var(--paper);
 	padding: var(--space-xs) var(--space-md);
 	border-radius: var(--radius);
 	text-decoration: none;
@@ -119,12 +133,12 @@ p {
 	font-size: 1.25rem;
 	font-weight: 800;
 	letter-spacing: -0.02em;
-	color: var(--dark);
+	color: var(--ink);
 	text-decoration: none;
 }
 
 .site-header .wordmark:hover {
-	color: var(--terracotta);
+	color: var(--pine);
 }
 
 /* Main */
@@ -171,7 +185,7 @@ input[type='text'] {
 	border: 2px solid var(--border);
 	border-radius: var(--radius);
 	background: white;
-	color: var(--dark);
+	color: var(--ink);
 	width: 100%;
 	transition: border-color 0.15s;
 	-moz-appearance: textfield;
@@ -184,11 +198,11 @@ input[type='number']::-webkit-outer-spin-button {
 
 input:focus {
 	outline: none;
-	border-color: var(--terracotta);
+	border-color: var(--pine);
 }
 
 input:focus-visible {
-	outline: 3px solid var(--terracotta);
+	outline: 3px solid var(--pine);
 	outline-offset: 2px;
 }
 
@@ -210,7 +224,7 @@ input:focus-visible {
 }
 
 .btn:focus-visible {
-	outline: 3px solid var(--terracotta);
+	outline: 3px solid var(--pine);
 	outline-offset: 2px;
 }
 
@@ -219,18 +233,18 @@ input:focus-visible {
 }
 
 .btn-primary {
-	background: var(--terracotta);
+	background: var(--pine);
 	color: white;
 	width: 100%;
 }
 
 .btn-primary:hover {
-	background: var(--copper);
+	background: var(--pine-dark);
 }
 
 .btn-ghost {
 	background: transparent;
-	color: var(--terracotta);
+	color: var(--pine);
 	text-decoration: underline;
 	text-underline-offset: 3px;
 	padding: 0;
@@ -238,7 +252,7 @@ input:focus-visible {
 }
 
 .btn-ghost:hover {
-	color: var(--copper);
+	color: var(--pine-dark);
 }
 
 /* Error message */
