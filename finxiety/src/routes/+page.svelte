@@ -85,6 +85,13 @@
 			</span>
 			<span class="tool-arrow" aria-hidden="true">→</span>
 		</a>
+		<a href="/tools/myth-quiz-2" class="tool-row">
+			<span class="tool-row-inner">
+				<span class="tool-name">Personal Finance Myth Quiz</span>
+				<span class="tool-desc">Ten money rules most people live by — tips, taxes, credit, compound interest. Guess first, then see what the research says.</span>
+			</span>
+			<span class="tool-arrow" aria-hidden="true">→</span>
+		</a>
 		<a href="/tools/emergency-fund" class="tool-row">
 			<span class="tool-row-inner">
 				<span class="tool-name">Emergency Fund Checker</span>
