@@ -61,6 +61,14 @@
 		</div>
 		<span class="tool-arrow" aria-hidden="true">→</span>
 	</a>
+
+	<a href="/tools/recertification" class="tool-card">
+		<div class="tool-card-content">
+			<h3>Recertification Deadline Tracker</h3>
+			<p>See when your SNAP or Medicaid benefits come up for renewal, and download calendar reminders so the date doesn't slip by.</p>
+		</div>
+		<span class="tool-arrow" aria-hidden="true">→</span>
+	</a>
 </section>
 
 <section class="coming-soon">
