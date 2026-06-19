@@ -21,7 +21,7 @@
 		Answer a few questions and we&rsquo;ll point you to the tools that fit your situation &mdash;
 		instead of all of them at once.
 	</p>
-	<a href="/tools/screener" class="cta">See what&rsquo;s available to you</a>
+	<a href="/tools/guide" class="cta">See what&rsquo;s available to you</a>
 	<p class="reassure">A few questions. Nothing shared.</p>
 </section>
 
