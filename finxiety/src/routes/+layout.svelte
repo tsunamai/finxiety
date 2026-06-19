@@ -21,5 +21,5 @@
 </main>
 
 <footer class="site-footer">
-	<p>Free. Always. &nbsp;·&nbsp; More tools coming soon.</p>
+	<p>Free. Always.</p>
 </footer>

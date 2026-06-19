@@ -3,112 +3,48 @@
 
 <svelte:head>
 	<title>Finxiety — Free financial tools, one step at a time</title>
-	<meta name="description" content="Free financial tools for people navigating money and benefits without a guide. No account. No sign-up. Nothing saved." />
+	<meta
+		name="description"
+		content="Free financial tools for people navigating money and benefits without a guide. No account. No sign-up. Nothing saved."
+	/>
 </svelte:head>
 
 <section class="hero">
-	<h1>When money gets complicated,<br />let's figure it out one step at a time.</h1>
-	<p class="hero-sub">Free. No sign-up. We're not selling anything.</p>
+	<h1>When money gets complicated,<br />let&rsquo;s figure it out one step at a time.</h1>
+	<p class="trust">Free. No sign-up. We&rsquo;re not selling anything.</p>
 </section>
 
-<section class="callout" aria-label="Featured tool: Benefits Screener">
-	<p class="callout-eyebrow">Not sure where to start?</p>
-	<h2 class="callout-title">Benefits Screener</h2>
-	<p class="callout-desc">Food, health coverage, phone, energy, school meals, and more — see what California programs may help you.</p>
-	<a href="/tools/screener" class="btn btn-callout">See what's available to you</a>
-	<p class="callout-note">A few questions. Nothing shared.</p>
+<section class="screener" aria-labelledby="screener-title">
+	<p class="eyebrow">Not sure where to start?</p>
+	<h2 id="screener-title">What kind of help do you need?</h2>
+	<p class="lede">
+		Answer a few questions and we&rsquo;ll point you to the tools that fit your situation &mdash;
+		instead of all of them at once.
+	</p>
+	<a href="/tools/screener" class="cta">See what&rsquo;s available to you</a>
+	<p class="reassure">A few questions. Nothing shared.</p>
 </section>
 
-<section class="tools" aria-label="Other tools">
-	<h2 class="tools-heading">Other tools</h2>
-	<nav>
-		<a href="/tools/recertification" class="tool-row">
-			<span class="tool-row-inner">
-				<span class="tool-name">Recertification Tracker</span>
-				<span class="tool-desc">When does your SNAP or Medicaid renewal come up? Get a calendar reminder.</span>
-			</span>
-			<span class="tool-arrow" aria-hidden="true">→</span>
-		</a>
-		<a href="/tools/cliff-calculator" class="tool-row">
-			<span class="tool-row-inner">
-				<span class="tool-name">Benefits Cliff Calculator</span>
-				<span class="tool-desc">Got a raise or job offer? See what happens to your benefits — and whether you come out ahead.</span>
-			</span>
-			<span class="tool-arrow" aria-hidden="true">→</span>
-		</a>
-		<a href="/tools/document-checklist" class="tool-row">
-			<span class="tool-row-inner">
-				<span class="tool-name">Document Checklist</span>
-				<span class="tool-desc">One de-duplicated list of what to bring across every program you're applying to.</span>
-			</span>
-			<span class="tool-arrow" aria-hidden="true">→</span>
-		</a>
-		<a href="/tools/tip-calculator" class="tool-row">
-			<span class="tool-row-inner">
-				<span class="tool-name">Tip Calculator</span>
-				<span class="tool-desc">Split the check, see the math, and know what servers in your state actually earn.</span>
-			</span>
-			<span class="tool-arrow" aria-hidden="true">→</span>
-		</a>
-		<a href="/tools/myth-quiz" class="tool-row">
-			<span class="tool-row-inner">
-				<span class="tool-name">Benefits Myth-Check Quiz</span>
-				<span class="tool-desc">Five things most people believe about benefits — and what's actually true.</span>
-			</span>
-			<span class="tool-arrow" aria-hidden="true">→</span>
-		</a>
-		<a href="/tools/tax-clarity" class="tool-row">
-			<span class="tool-row-inner">
-				<span class="tool-name">Tax Clarity</span>
-				<span class="tool-desc">What a deduction actually saves you, what a credit is worth, and what your refund really means.</span>
-			</span>
-			<span class="tool-arrow" aria-hidden="true">→</span>
-		</a>
-		<a href="/tools/compound-interest" class="tool-row">
-			<span class="tool-row-inner">
-				<span class="tool-name">The Compounding Effect</span>
-				<span class="tool-desc">See how a starting amount and monthly additions grow over time — split into what you put in and what interest added.</span>
-			</span>
-			<span class="tool-arrow" aria-hidden="true">→</span>
-		</a>
-		<a href="/tools/debt-growth" class="tool-row">
-			<span class="tool-row-inner">
-				<span class="tool-name">Debt vs. Growth Visualizer</span>
-				<span class="tool-desc">See compound interest run in both directions — a debt growing against you and an investment growing for you, on one chart.</span>
-			</span>
-			<span class="tool-arrow" aria-hidden="true">→</span>
-		</a>
-		<a href="/tools/work-hours" class="tool-row">
-			<span class="tool-row-inner">
-				<span class="tool-name">Work Hours Breakdown</span>
-				<span class="tool-desc">Where does each hour of work actually go? See your pay broken down by taxes, deductions, and take-home — in time, not just dollars.</span>
-			</span>
-			<span class="tool-arrow" aria-hidden="true">→</span>
-		</a>
-		<a href="/tools/myth-quiz-2" class="tool-row">
-			<span class="tool-row-inner">
-				<span class="tool-name">Personal Finance Myth Quiz</span>
-				<span class="tool-desc">Ten money rules most people live by — tips, taxes, credit, compound interest. Guess first, then see what the research says.</span>
-			</span>
-			<span class="tool-arrow" aria-hidden="true">→</span>
-		</a>
-		<a href="/tools/savings-commitment" class="tool-row">
-			<span class="tool-row-inner">
-				<span class="tool-name">Savings Commitment Maker</span>
-				<span class="tool-desc">Write one specific savings commitment in your own words — and get a calendar reminder to make it happen.</span>
-			</span>
-			<span class="tool-arrow" aria-hidden="true">→</span>
-		</a>
-		<a href="/tools/emergency-fund" class="tool-row">
-			<span class="tool-row-inner">
-				<span class="tool-name">Emergency Fund Checker</span>
-				<span class="tool-desc">How many months of runway do you actually have?</span>
-			</span>
-			<span class="tool-arrow" aria-hidden="true">→</span>
-		</a>
-	</nav>
+<section class="featured" aria-label="Jump straight in">
+	<p class="label">Or jump straight in</p>
+
+	<a class="tool" href="/tools/recertification">
+		<h3>When does your renewal come up?</h3>
+		<p>Get a calendar reminder before your SNAP or Medicaid recertification.</p>
+	</a>
+
+	<a class="tool" href="/tools/cliff-calculator">
+		<h3>Got a raise &mdash; do you actually come out ahead?</h3>
+		<p>See what a higher income does to your benefits before you decide.</p>
+	</a>
+
+	<a class="tool" href="/tools/emergency-fund">
+		<h3>How many months of runway do you actually have?</h3>
+		<p>Check your emergency fund against your real monthly costs.</p>
+	</a>
 </section>
 
+<p class="seeall"><a href="/tools">See all tools &rarr;</a></p>
 
 <style>
 	/* Hero */
@@ -116,30 +52,35 @@
 		padding-bottom: var(--space-lg);
 	}
 
-	.hero-sub {
-		margin-top: var(--space-sm);
-		font-size: 0.9375rem;
+	.hero h1 {
+		font-family: var(--font-display);
 		font-weight: 600;
-		color: var(--muted);
-		letter-spacing: 0.01em;
+		font-size: clamp(1.9375rem, 6vw, 2.375rem);
+		line-height: 1.12;
+		letter-spacing: -0.01em;
+		max-width: 18ch;
+		margin-bottom: var(--space-md);
 	}
 
-	/* Callout block — full-bleed on mobile, contained on desktop */
-	.callout {
-		background: var(--surface);
-		border-top: 2px solid var(--pine);
-		border-bottom: 2px solid var(--pine);
-		padding: var(--space-lg) var(--space-md);
+	.trust {
+		color: var(--ink-mute);
+		font-size: 0.9375rem;
+		margin: 0;
+	}
+
+	/* Screener band — breaks out of main padding to fill the column */
+	.screener {
+		background: var(--paper-band);
+		border-top: 1px solid var(--hair);
+		border-bottom: 1px solid var(--hair);
 		margin-left: calc(-1 * var(--space-md));
 		margin-right: calc(-1 * var(--space-md));
+		padding: 40px var(--space-md) 44px;
 		margin-bottom: var(--space-lg);
-		display: flex;
-		flex-direction: column;
-		gap: var(--space-sm);
 	}
 
 	@media (min-width: 640px) {
-		.callout {
+		.screener {
 			margin-left: calc(-1 * var(--space-lg));
 			margin-right: calc(-1 * var(--space-lg));
 			padding-left: var(--space-lg);
@@ -147,139 +88,138 @@
 		}
 	}
 
-	.callout-eyebrow {
+	.eyebrow {
+		color: var(--ink-mute);
 		font-size: 0.875rem;
-		font-weight: 600;
-		color: var(--pine);
+		margin-bottom: 8px;
 	}
 
-	.callout-title {
-		font-size: clamp(1.25rem, 4vw, 1.625rem);
-		color: var(--ink);
-		margin: 0;
+	.screener h2 {
+		font-size: clamp(1.4375rem, 4vw, 1.625rem);
+		font-weight: 500;
+		margin-bottom: 12px;
+		letter-spacing: -0.005em;
 	}
 
-	.callout-desc {
+	.lede {
+		color: var(--ink-soft);
 		font-size: 0.9375rem;
-		color: var(--muted);
-		line-height: 1.6;
-		max-width: 44ch;
+		line-height: 1.55;
+		margin-bottom: var(--space-lg);
+		max-width: 46ch;
 	}
 
-	.btn-callout {
-		display: inline-flex;
+	.cta {
+		display: flex;
 		align-items: center;
 		justify-content: center;
+		width: 100%;
+		background: var(--forest);
+		color: var(--paper);
+		text-align: center;
 		font-family: var(--font);
 		font-size: 1rem;
-		font-weight: 700;
-		padding: 0.875rem 1.5rem;
+		font-weight: 500;
+		padding: 16px;
+		border: 0;
 		border-radius: var(--radius);
-		border: none;
 		cursor: pointer;
-		background: var(--pine);
-		color: white;
 		text-decoration: none;
 		min-height: 48px;
-		transition: background 0.15s, transform 0.1s;
-		width: 100%;
-		margin-top: var(--space-xs);
+		transition: background 0.15s ease;
 	}
 
-	.btn-callout:hover {
+	.cta:hover {
 		background: var(--pine-dark);
-		color: white;
+		color: var(--paper);
 	}
 
-	.btn-callout:focus-visible {
-		outline: 3px solid var(--pine);
+	.cta:focus-visible {
+		outline: 3px solid var(--forest);
 		outline-offset: 2px;
+		color: var(--paper);
 	}
 
-	.btn-callout:active {
-		transform: translateY(1px);
-	}
-
-	.callout-note {
+	.reassure {
+		color: var(--ink-faint);
 		font-size: 0.8125rem;
-		color: var(--muted);
 		text-align: center;
+		margin-top: 14px;
+		margin-bottom: 0;
 	}
 
-	/* Tools section */
-	.tools {
-		margin-bottom: var(--space-lg);
-	}
-
-	.tools-heading {
-		font-size: 0.8125rem;
-		font-weight: 600;
-		color: var(--muted);
+	/* Featured tools */
+	.featured {
 		margin-bottom: var(--space-md);
 	}
 
-	nav {
-		display: flex;
-		flex-direction: column;
+	.label {
+		font-size: 0.875rem;
+		font-weight: 500;
+		color: var(--ink-mute);
+		margin-bottom: var(--space-md);
 	}
 
-	.tool-row {
-		display: flex;
-		align-items: center;
-		gap: var(--space-md);
-		padding: var(--space-sm) 0;
-		border-bottom: 1px solid var(--border);
+	.tool {
+		display: block;
 		text-decoration: none;
 		color: inherit;
-		transition: color 0.12s;
+		padding: var(--space-sm) 0;
+		border-bottom: 1px solid var(--border);
 	}
 
-	.tool-row:first-child {
+	.tool:first-of-type {
 		border-top: 1px solid var(--border);
 	}
 
-	.tool-row:hover {
-		color: var(--pine);
+	.tool h3 {
+		font-size: 1rem;
+		font-weight: 500;
+		margin-bottom: 4px;
+		color: var(--ink);
+		transition: color 0.12s ease;
 	}
 
-	.tool-row:hover .tool-arrow {
-		transform: translateX(3px);
+	.tool:hover h3,
+	.tool:focus-visible h3 {
+		color: var(--forest);
 	}
 
-	.tool-row:focus-visible {
-		outline: 3px solid var(--pine);
-		outline-offset: 2px;
+	.tool p {
+		color: var(--ink-mute);
+		font-size: 0.875rem;
+		line-height: 1.45;
+		margin: 0;
+	}
+
+	.tool:focus-visible {
+		outline: 2px solid var(--forest);
+		outline-offset: 4px;
 		border-radius: 2px;
 	}
 
-	.tool-row-inner {
-		flex: 1;
-		display: flex;
-		flex-direction: column;
-		gap: 2px;
+	/* See all */
+	.seeall {
+		margin-top: var(--space-md);
+		padding-bottom: var(--space-xl);
 	}
 
-	.tool-name {
+	.seeall a {
+		color: var(--forest);
 		font-size: 0.9375rem;
-		font-weight: 700;
-		color: var(--ink);
+		font-weight: 500;
+		text-decoration: none;
+		border-bottom: 1px solid rgba(60, 74, 58, 0.35);
+		padding-bottom: 1px;
 	}
 
-	.tool-row:hover .tool-name {
-		color: var(--pine);
+	.seeall a:hover {
+		border-bottom-color: var(--forest);
 	}
 
-	.tool-desc {
-		font-size: 0.8125rem;
-		color: var(--muted);
-		line-height: 1.45;
+	@media (prefers-reduced-motion: reduce) {
+		* {
+			transition: none !important;
+		}
 	}
-
-	.tool-arrow {
-		font-size: 1.125rem;
-		color: var(--sage);
-		flex-shrink: 0;
-		transition: transform 0.12s;
-	}
-
 </style>
