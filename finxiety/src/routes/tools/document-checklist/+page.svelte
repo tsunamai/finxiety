@@ -119,6 +119,8 @@
 		}
 	}
 
+	const today = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+
 	function printChecklist() {
 		if (typeof window !== 'undefined') window.print();
 	}
@@ -191,6 +193,13 @@
 </form>
 
 {#if submitted}
+	<div class="print-header" aria-hidden="true">
+		<p class="print-title">Your document checklist</p>
+		<p class="print-programs">{formatNeededFor(resultLabels)}</p>
+		<p class="print-date">Printed {today}</p>
+		<p class="print-source">finxiety.org/tools/document-checklist</p>
+	</div>
+
 	<section class="result" aria-label="Document checklist">
 		<div class="result-header">
 			<h2 bind:this={resultHeadingEl} tabindex="-1">
@@ -296,7 +305,7 @@
 					Copy as text
 				</button>
 				<button class="btn btn-secondary" type="button" onclick={printChecklist}>
-					Print
+					Print / Save as PDF
 				</button>
 			</div>
 			<p class="copy-status" role="status" aria-live="polite">{copyStatus}</p>
@@ -654,8 +663,36 @@
 		color: var(--muted);
 	}
 
+	/* Hidden in-browser; revealed at print time */
+	.print-header {
+		display: none;
+	}
+
 	/* Print: hide chrome, expose URLs, avoid breaking item blocks */
 	@media print {
+		.print-header {
+			display: block;
+			margin-bottom: 1.25rem;
+		}
+
+		.print-title {
+			font-size: 1.125rem;
+			font-weight: 700;
+			color: #000;
+			margin-bottom: 0.25rem;
+		}
+
+		.print-programs {
+			font-size: 0.9375rem;
+			color: #000;
+		}
+
+		.print-date,
+		.print-source {
+			font-size: 0.8125rem;
+			color: #555;
+		}
+
 		.breadcrumb,
 		.checklist-form,
 		.result-actions,
