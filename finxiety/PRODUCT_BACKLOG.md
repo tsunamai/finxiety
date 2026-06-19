@@ -1068,3 +1068,9 @@ From research session 2026-06-14. Full list of 12 myths. Tools 6-10 above cover 
 7. **Revenue model:** Institutional licensing (credit unions, CDFIs, banks under CRA pressure, municipal benefits portals pay to embed; end users stay free always). Mortalia cross-subsidizes during early growth. Grant funding viable for Track 1 civic tools. Formal pricing model deferred to pre-launch.
 
 8. **Relationship visibility:** Does Finxiety publicly credit Tsunam.ai/Naomi? Depends on BlackRock departure timeline.
+
+---
+
+## OPERATIONAL TASKS
+
+- [ ] **PostHog setup** — Create a free project at posthog.com, copy the Project API Key, and replace `YOUR_POSTHOG_PROJECT_API_KEY` in `finxiety/src/app.html`. Once live, verify `query_submitted` events appear in PostHog's Event Explorer. See ADR-003 for privacy configuration details.
