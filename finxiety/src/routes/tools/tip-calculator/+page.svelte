@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { calculateTip } from '$lib/calculators/tip';
+	import { calculateTip, calculateItemized, type LineItem } from '$lib/calculators/tip';
 	import { STATE_OPTIONS, stateName, isOneFairWage } from '$lib/data/states';
 
 	const DOL_FACT_SHEET = 'https://www.dol.gov/agencies/whd/fact-sheets/15-tipped-employees-flsa';
@@ -183,6 +183,55 @@
 		if (calcDisplay === 'Error') return;
 		calcDisplay = calcFormatResult(parseFloat(calcDisplay) / 100);
 		calcFresh = true;
+	}
+
+	// Itemized "my share" section
+	let showItemized = $state(false);
+	let lineItems: LineItem[] = $state([
+		{ id: crypto.randomUUID(), label: '', amount: 0, isAlcohol: false }
+	]);
+	let taxRateStr = $state('');
+	let alcoholTaxRateStr = $state('');
+	let itemizedTipBase = $state<'pretax' | 'posttax'>('pretax');
+
+	const hasAlcohol = $derived(lineItems.some((item) => item.isAlcohol));
+	const taxRate = $derived(Math.min(Math.max(parseFloat(taxRateStr) || 0, 0), 30));
+	const alcoholTaxRate = $derived(
+		alcoholTaxRateStr ? Math.min(Math.max(parseFloat(alcoholTaxRateStr) || 0, 0), 30) : taxRate
+	);
+	const itemizedResult = $derived(
+		calculateItemized({ items: lineItems, taxRate, alcoholTaxRate, tipPercent, tipBase: itemizedTipBase })
+	);
+	const itemizedHasInput = $derived(lineItems.some((item) => item.amount > 0));
+
+	function addItem() {
+		lineItems = [...lineItems, { id: crypto.randomUUID(), label: '', amount: 0, isAlcohol: false }];
+	}
+
+	function removeItem(id: string) {
+		if (lineItems.length <= 1) return;
+		lineItems = lineItems.filter((item) => item.id !== id);
+	}
+
+	function updateItemAmount(id: string, value: string) {
+		const amt = Math.max(parseFloat(value) || 0, 0);
+		const item = lineItems.find((it) => it.id === id);
+		if (item) item.amount = amt;
+	}
+
+	function toggleAlcohol(id: string) {
+		const item = lineItems.find((it) => it.id === id);
+		if (item) item.isAlcohol = !item.isAlcohol;
+	}
+
+	function onItemizedBaseKeydown(e: KeyboardEvent) {
+		if (!['ArrowRight', 'ArrowDown', 'ArrowLeft', 'ArrowUp'].includes(e.key)) return;
+		e.preventDefault();
+		itemizedTipBase = itemizedTipBase === 'pretax' ? 'posttax' : 'pretax';
+		const group = e.currentTarget as HTMLElement;
+		const buttons = group.querySelectorAll<HTMLElement>('[role="radio"]');
+		const target = itemizedTipBase === 'pretax' ? buttons[0] : buttons[1];
+		target?.focus();
 	}
 </script>
 
@@ -462,6 +511,174 @@
 				<button type="button" class="calc-btn" onclick={calcDot} aria-label="Decimal point">.</button>
 				<button type="button" class="calc-btn calc-op" onclick={calcEquals} aria-label="Equals">=</button>
 			</div>
+		</div>
+	{/if}
+</div>
+
+<!-- My share by items -->
+<div class="itemized-wrapper">
+	<button
+		type="button"
+		class="calc-toggle"
+		onclick={() => (showItemized = !showItemized)}
+		aria-expanded={showItemized}
+		aria-controls="itemized-section"
+	>
+		{showItemized ? 'Hide my-items calculator' : 'Calculate my share by items'}
+	</button>
+
+	{#if showItemized}
+		<div id="itemized-section" class="itemized-section" role="region" aria-label="Calculate my share by items">
+			<p class="itemized-intro">Enter what you ordered. Uses the {tipPercent}% tip chosen above.</p>
+
+			<ul class="item-list" aria-label="Your items">
+				{#each lineItems as item, i}
+					<li class="item-row">
+						<input
+							type="text"
+							class="item-label-input"
+							placeholder="Item (optional)"
+							bind:value={item.label}
+							aria-label={`Item ${i + 1} description`}
+						/>
+						<div class="input-prefix-wrap item-amount-wrap">
+							<span class="input-prefix" aria-hidden="true">$</span>
+							<input
+								type="number"
+								inputmode="decimal"
+								min="0"
+								step="0.01"
+								placeholder="0.00"
+								value={item.amount === 0 ? '' : item.amount}
+								aria-label={item.label ? `${item.label} amount` : `Item ${i + 1} amount`}
+								oninput={(e) => updateItemAmount(item.id, (e.currentTarget as HTMLInputElement).value)}
+							/>
+						</div>
+						<button
+							type="button"
+							class="alcohol-btn"
+							class:active={item.isAlcohol}
+							role="switch"
+							aria-checked={item.isAlcohol}
+							aria-label={`${item.label || `Item ${i + 1}`}: contains alcohol`}
+							onclick={() => toggleAlcohol(item.id)}
+						>🍺</button>
+						<button
+							type="button"
+							class="item-remove-btn"
+							onclick={() => removeItem(item.id)}
+							disabled={lineItems.length <= 1}
+							aria-label={`Remove ${item.label || `item ${i + 1}`}`}
+						><span aria-hidden="true">×</span></button>
+					</li>
+				{/each}
+			</ul>
+
+			<button type="button" class="add-item-btn" onclick={addItem}>+ Add item</button>
+
+			<div class="field itemized-field">
+				<label for="tax-rate" class="group-label">Sales tax</label>
+				<div class="input-suffix-wrap tax-rate-wrap">
+					<input
+						id="tax-rate"
+						type="number"
+						inputmode="decimal"
+						min="0"
+						max="30"
+						step="0.01"
+						placeholder="0.00"
+						bind:value={taxRateStr}
+					/>
+					<span class="input-suffix" aria-hidden="true">%</span>
+				</div>
+				<p class="field-hint">Tax rates vary by city and county. Check your receipt or look up your local rate.</p>
+			</div>
+
+			{#if hasAlcohol}
+				<div class="field itemized-field">
+					<label for="alcohol-tax-rate" class="group-label">
+						Alcohol sales tax <span class="optional-label">(if different)</span>
+					</label>
+					<div class="input-suffix-wrap tax-rate-wrap">
+						<input
+							id="alcohol-tax-rate"
+							type="number"
+							inputmode="decimal"
+							min="0"
+							max="30"
+							step="0.01"
+							placeholder={taxRateStr || '0.00'}
+							bind:value={alcoholTaxRateStr}
+						/>
+						<span class="input-suffix" aria-hidden="true">%</span>
+					</div>
+					<p class="field-hint">Leave blank to use the same rate as food.</p>
+				</div>
+			{/if}
+
+			<div class="field itemized-field">
+				<span class="group-label" id="itemized-base-label">Tip on</span>
+				<div
+					class="segmented segmented-two"
+					role="radiogroup"
+					aria-labelledby="itemized-base-label"
+					tabindex="-1"
+					onkeydown={onItemizedBaseKeydown}
+				>
+					<button
+						type="button"
+						class="btn btn-toggle"
+						class:selected={itemizedTipBase === 'pretax'}
+						role="radio"
+						aria-checked={itemizedTipBase === 'pretax'}
+						tabindex={itemizedTipBase === 'pretax' ? 0 : -1}
+						onclick={() => (itemizedTipBase = 'pretax')}
+					>
+						Pre-tax subtotal
+					</button>
+					<button
+						type="button"
+						class="btn btn-toggle"
+						class:selected={itemizedTipBase === 'posttax'}
+						role="radio"
+						aria-checked={itemizedTipBase === 'posttax'}
+						tabindex={itemizedTipBase === 'posttax' ? 0 : -1}
+						onclick={() => (itemizedTipBase = 'posttax')}
+					>
+						Post-tax total
+					</button>
+				</div>
+			</div>
+
+			<section class="result itemized-result" aria-live="polite" aria-label="My share">
+				{#if itemizedHasInput}
+					{#if itemizedResult.foodSubtotal > 0 && itemizedResult.alcoholSubtotal > 0}
+						<div class="result-row">
+							<span class="result-label">Food subtotal</span>
+							<span class="result-value">{money(itemizedResult.foodSubtotal)}</span>
+						</div>
+						<div class="result-row">
+							<span class="result-label">Alcohol subtotal</span>
+							<span class="result-value">{money(itemizedResult.alcoholSubtotal)}</span>
+						</div>
+					{/if}
+					<div class="result-row">
+						<span class="result-label">Sales tax</span>
+						<span class="result-value">{money(itemizedResult.taxAmount)}</span>
+					</div>
+					<div class="result-row">
+						<span class="result-label">Tip ({tipPercent}%)</span>
+						<span class="result-value">{money(itemizedResult.tipAmount)}</span>
+					</div>
+					<div class="result-row itemized-total-row">
+						<span class="result-label">My total</span>
+						<span class="result-value result-total">{money(itemizedResult.total)}</span>
+					</div>
+					<p class="itemized-disclaimer">Estimates only. Tax rates vary by city and county.</p>
+				{:else}
+					<p class="result-empty">Enter your items above to see your total.</p>
+				{/if}
+			</section>
 		</div>
 	{/if}
 </div>
@@ -891,5 +1108,173 @@
 		grid-column: span 2;
 		justify-content: flex-start;
 		padding-left: 1.5rem;
+	}
+
+	/* Itemized "my share" section */
+	.itemized-wrapper {
+		margin-top: var(--space-md);
+	}
+
+	.itemized-section {
+		margin-top: var(--space-sm);
+		padding: var(--space-md);
+		border: 1px solid var(--border);
+		border-radius: var(--radius);
+	}
+
+	.itemized-intro {
+		font-size: 0.875rem;
+		color: var(--muted);
+		margin-bottom: var(--space-md);
+	}
+
+	.item-list {
+		list-style: none;
+		padding: 0;
+		margin: 0 0 var(--space-sm);
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-sm);
+	}
+
+	.item-row {
+		display: flex;
+		align-items: center;
+		gap: var(--space-xs);
+	}
+
+	.item-label-input {
+		flex: 1 1 60px;
+		min-width: 0;
+	}
+
+	.item-amount-wrap {
+		flex: 0 0 100px;
+		width: 100px;
+	}
+
+	.item-amount-wrap input {
+		padding-left: 1.875rem;
+	}
+
+	.alcohol-btn {
+		flex: 0 0 44px;
+		width: 44px;
+		height: 44px;
+		border: 2px solid var(--border);
+		border-radius: var(--radius);
+		background: transparent;
+		cursor: pointer;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		font-size: 1.125rem;
+		line-height: 1;
+		transition: border-color 0.15s, background 0.15s;
+		padding: 0;
+	}
+
+	.alcohol-btn.active {
+		border-color: var(--terracotta);
+		background: var(--cream);
+	}
+
+	.alcohol-btn:hover {
+		border-color: var(--terracotta);
+	}
+
+	.alcohol-btn:focus-visible {
+		outline: 3px solid var(--terracotta);
+		outline-offset: 2px;
+	}
+
+	.item-remove-btn {
+		flex: 0 0 44px;
+		width: 44px;
+		height: 44px;
+		border: 2px solid var(--border);
+		border-radius: var(--radius);
+		background: transparent;
+		color: var(--muted);
+		cursor: pointer;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		font-size: 1.25rem;
+		line-height: 1;
+		transition: border-color 0.15s, color 0.15s;
+		padding: 0;
+	}
+
+	.item-remove-btn:hover:not(:disabled) {
+		border-color: var(--terracotta);
+		color: var(--terracotta);
+	}
+
+	.item-remove-btn:disabled {
+		opacity: 0.35;
+		cursor: not-allowed;
+	}
+
+	.item-remove-btn:focus-visible {
+		outline: 3px solid var(--terracotta);
+		outline-offset: 2px;
+	}
+
+	.add-item-btn {
+		background: none;
+		border: none;
+		cursor: pointer;
+		font-family: var(--font);
+		font-size: 0.9375rem;
+		font-weight: 600;
+		color: var(--terracotta);
+		padding: var(--space-xs) 0;
+		min-height: 44px;
+		display: flex;
+		align-items: center;
+	}
+
+	.add-item-btn:hover {
+		text-decoration: underline;
+		text-underline-offset: 3px;
+	}
+
+	.add-item-btn:focus-visible {
+		outline: 3px solid var(--terracotta);
+		outline-offset: 2px;
+		border-radius: var(--radius);
+	}
+
+	.itemized-field {
+		margin-top: var(--space-md);
+	}
+
+	.tax-rate-wrap {
+		max-width: 8rem;
+	}
+
+	.optional-label {
+		font-weight: 400;
+		color: var(--muted);
+		font-size: 0.875rem;
+	}
+
+	.itemized-result {
+		margin-top: var(--space-md);
+		margin-bottom: 0;
+	}
+
+	.itemized-total-row {
+		padding-top: var(--space-xs);
+		border-top: 1px solid var(--border);
+		margin-top: var(--space-xs);
+	}
+
+	.itemized-disclaimer {
+		margin-top: var(--space-sm);
+		font-size: 0.8125rem;
+		color: var(--muted);
+		line-height: 1.5;
 	}
 </style>
