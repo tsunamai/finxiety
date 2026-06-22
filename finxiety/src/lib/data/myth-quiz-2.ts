@@ -60,6 +60,8 @@ export interface Question {
 	signpost: string;
 	/** Optional path to a live tool the signpost references. Renders as a link button. */
 	signpostUrl?: string;
+	/** Optional secondary signpost note for additional cross-tool or resource bridge. */
+	signpostNote?: string;
 	/** Official sources for the figures in this reveal. */
 	sources: Source[];
 }
@@ -128,6 +130,7 @@ export const questions: Question[] = [
 			'This is a policy choice, not an oversight. The 1996 FLSA amendment that froze it was heavily lobbied by the National Restaurant Association. Tipped workers in states that follow the federal floor earn $2.13 before tips regardless of how much the cost of living has changed since Reagan was president.',
 		signpost: 'The Tip Calculator shows what the tip-credit minimum is in your state.',
 		signpostUrl: '/tools/tip-calculator',
+		signpostNote: 'Workers earning at or near the tipped minimum often qualify for programs like SNAP and Medi-Cal that aren\'t widely advertised. The Benefits Screener can check what\'s available based on income and household size.',
 		sources: [
 			{
 				label: 'FLSA tipped minimum wage history, U.S. Department of Labor',
@@ -161,6 +164,7 @@ export const questions: Question[] = [
 		signpost:
 			'The Tip Calculator shows what’s behind the tip screen — state minimums, wage credits, and who actually depends on tips.',
 		signpostUrl: '/tools/tip-calculator',
+		signpostNote: 'Workers earning at or near the tipped minimum often qualify for programs like SNAP and Medi-Cal that aren\’t widely advertised. The Benefits Screener can check what\’s available based on income and household size.',
 		sources: [
 			{
 				label: 'NYC DCWP: Impact of App-Based Tips on Worker Pay (Jan 2026)',
@@ -336,7 +340,7 @@ export const questions: Question[] = [
 		structuralExplanation:
 			'A 2010 Federal Reserve Bank of Boston study estimated that cash users pay more for goods to subsidize rewards card users, with the transfer running roughly $149/year from low-income to high-income households. The mechanism is invisible by design.',
 		signpost:
-			'No specific Finxiety tool covers rewards math yet — but understanding what interest actually costs is a start.',
+			'Debt vs. Growth shows what compound interest looks like on a balance over time — the same math that runs inside a rewards-card calculation.',
 		signpostUrl: '/tools/debt-growth',
 		sources: [
 			{

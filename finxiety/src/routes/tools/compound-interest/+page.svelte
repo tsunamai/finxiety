@@ -144,6 +144,26 @@
 		// Trim a trailing .0 so "7%" reads cleanly but "7.5%" survives.
 		return Number.isInteger(n) ? String(n) : n.toFixed(1);
 	}
+
+	const rateWarning = $derived(
+		rateStr !== '' && Number(rateStr) < 0 ? 'Rate adjusted to 0% — enter a value of 0 or more.' :
+		rateStr !== '' && Number(rateStr) > 50 ? 'Rates above 50% are unusual — double-check your entry.' : null
+	);
+
+	let headlineEl: HTMLElement | null = $state(null);
+	let firstResultShown = false;
+
+	$effect(() => {
+		if (hasInputs) {
+			if (!firstResultShown && headlineEl) {
+				firstResultShown = true;
+				headlineEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+				headlineEl.focus();
+			}
+		} else {
+			firstResultShown = false;
+		}
+	});
 </script>
 
 <svelte:head>
@@ -224,6 +244,9 @@
 				/>
 				<span class="input-suffix" aria-hidden="true">%</span>
 			</div>
+			{#if rateWarning}
+				<p class="field-hint rate-warning" role="alert">{rateWarning}</p>
+			{/if}
 		</div>
 
 		<div class="field">
@@ -249,6 +272,9 @@
 		<p class="field-hint submit-hint">
 			Enter a starting amount or a monthly addition, and a return above 0, to see the chart.
 		</p>
+		<p class="field-hint empty-signpost">
+			Don't have amounts to enter right now? <a href="/tools/emergency-fund">The Emergency Fund Checker</a> starts with what you have, and <a href="/tools/screener">the Benefits Screener</a> can check what programs are available.
+		</p>
 	{/if}
 </form>
 
@@ -259,7 +285,7 @@
 		</div>
 
 		<!-- Headline future value -->
-		<div class="headline">
+		<div class="headline" tabindex="-1" bind:this={headlineEl}>
 			<p class="headline-label">Estimated value after {years} years</p>
 			<p class="headline-value">
 				~{fmtDollars(futureValue)} <span class="estimated-tag">estimated</span>
@@ -383,12 +409,17 @@
 				</li>
 			</ul>
 		</div>
+
+		<!-- SSI asset limit / ABLE note -->
+		<div class="scope-note" role="note">
+			<p>This tool shows how any savings grow. If you receive SSI, a roughly $2,000 resource limit applies separately — saving above that limit in a regular account can affect SSI eligibility. <a href="https://www.calable.ca.gov/" target="_blank" rel="noopener noreferrer">ABLE accounts</a> (CalABLE in California) let eligible people save above that limit without it counting toward SSI.</p>
+		</div>
 	</section>
 {/if}
 
 <div class="signpost-footer" role="note">
 	<p>
-		The same compound math runs on debt too. <a href="/tools/emergency-fund">The Emergency Fund
+		The same compound math runs in reverse on debt — it's the same engine, different direction. <a href="/tools/emergency-fund">The Emergency Fund
 		Checker</a> looks at the runway you have right now, and <a href="/tools/myth-quiz">the Benefits
 		Myth-Check Quiz</a> covers other places money works differently than most people assume.
 	</p>
@@ -756,6 +787,35 @@
 		font-size: 0.9375rem;
 		line-height: 1.6;
 		color: var(--muted);
+	}
+
+	.empty-signpost {
+		margin-top: var(--space-sm);
+	}
+
+	.rate-warning {
+		color: var(--terracotta);
+		margin-top: var(--space-xs);
+	}
+
+	.headline:focus-visible {
+		outline: 2px solid var(--pine);
+		outline-offset: 4px;
+		border-radius: var(--radius);
+	}
+
+	.scope-note {
+		margin-top: var(--space-md);
+		padding: var(--space-sm) var(--space-md);
+		background: var(--surface);
+		border-radius: var(--radius);
+		font-size: 0.875rem;
+		line-height: 1.6;
+		color: var(--muted);
+	}
+
+	.scope-note a {
+		color: var(--pine);
 	}
 
 	/* Print */

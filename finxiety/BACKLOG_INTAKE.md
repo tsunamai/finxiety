@@ -88,6 +88,34 @@ No formatting required. The pm agent handles the rest.
 
 ---
 
+### Committed Spend Baseline Calculator [Rough Idea]
+
+**Problem:** Many ALICE users are paycheck-to-paycheck without a clear picture of how much
+of their income is already spoken for before any discretionary spending happens. They know
+their rent is due and their phone bill is due, but the total committed floor — the sum of
+everything they owe every month regardless of choices — is rarely visible as a single number.
+
+**Who has this problem:** Any ALICE user trying to understand where the money goes. Especially
+relevant for someone considering a raise, a new job, or a budget change who wants to know
+how much flexibility they actually have.
+
+**Why Finxiety:** This is a clarity tool, not a tracker. A stateless version — user enters
+their known recurring bills (rent, utilities, subscriptions, loan minimums, insurance, phone),
+gets back: total committed monthly spend, committed as % of stated income, and amount
+remaining before discretionary spending. No accounts, no persistence, no tracking. Different
+from DEBT-VIZ-1 (which focuses on payoff timelines) and EMG-1 (emergency fund size). This
+answers: "What's my floor?"
+
+**Phone-first constraint:** Works as a simple form — enter items one at a time, see a running
+total, share or screenshot the result. No charts required. The output is a number and a
+breakdown list.
+
+**Sourced from:** Kevin Kinnett's personal finance dashboard blog post (Apr 2026) — his
+recurring bills + forward cash flow features were the unexpectedly highest-value part of
+his app.
+
+---
+
 ## Groomed (Archived)
 
 Items that have been groomed and moved to `PRODUCT_BACKLOG.md`:

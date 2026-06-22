@@ -165,9 +165,7 @@
 					aria-describedby="program-hint"
 				/>
 				<span class="program-text">
-					{selectedState === 'CA'
-						? data.programs[key].ca_label
-						: data.programs[key].label}
+					{programLabel(data.programs[key], selectedState)}
 				</span>
 			</label>
 		{/each}
@@ -187,9 +185,9 @@
 	</div>
 
 	<button class="btn btn-primary" type="submit" disabled={!canSubmit}>Show my list</button>
-	{#if !canSubmit}
-		<p class="field-hint submit-hint" aria-live="polite">Select at least one program and a state to continue.</p>
-	{/if}
+	<p class="field-hint submit-hint" aria-live="polite" role="status">
+		{#if !canSubmit}Select at least one program and a state to continue.{/if}
+	</p>
 </form>
 
 {#if submitted}
@@ -210,6 +208,14 @@
 				with the official link for each program below.
 			</p>
 		</div>
+
+		{#each resultPrograms as key (key)}
+			{#if data.programs[key].program_note}
+				<div class="signpost-box program-note" role="note">
+					<p>{data.programs[key].program_note}</p>
+				</div>
+			{/if}
+		{/each}
 
 		{#if checklist.length === 0}
 			<div class="signpost-box" role="note">
@@ -289,6 +295,7 @@
 						>
 							{programLabel(data.programs[key], resultState)}
 							<span aria-hidden="true">→</span>
+							<span class="sr-only">(opens in a new tab)</span>
 						</a>
 					</li>
 				{/each}
@@ -577,7 +584,7 @@
 	}
 
 	.doc-needed-for {
-		font-size: 0.75rem;
+		font-size: 0.8125rem;
 		color: var(--muted);
 		margin-top: var(--space-sm);
 	}

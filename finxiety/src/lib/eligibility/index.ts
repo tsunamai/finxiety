@@ -215,10 +215,10 @@ export function checkSchoolMeals(inputs: ScreenerInputs): ProgramResult {
 
 	if (income <= freeLimit) {
 		status = 'likely';
-		estimatedBenefit = 'Free breakfast and lunch at school';
+		estimatedBenefit = 'Free breakfast and lunch at school (estimated)';
 	} else if (income <= reducedLimit) {
 		status = 'likely';
-		estimatedBenefit = 'Reduced-price meals ($0.30 breakfast, $0.40 lunch)';
+		estimatedBenefit = 'Reduced-price meals (up to $0.30 breakfast, $0.40 lunch, estimated)';
 	} else {
 		status = 'unlikely';
 		estimatedBenefit = null;

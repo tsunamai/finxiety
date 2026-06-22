@@ -26,7 +26,7 @@
 	--paper-elevated: #ffffff;
 	--ink-soft:       #54534C;
 	--ink-mute:       #6B6A62;
-	--ink-faint:      #8A897F;
+	--ink-faint:      #595959;
 	--hair:           rgba(0, 0, 0, 0.08);
 	--col:            600px;
 
@@ -248,8 +248,8 @@ input:focus-visible {
 	color: var(--pine);
 	text-decoration: underline;
 	text-underline-offset: 3px;
-	padding: 0;
-	min-height: auto;
+	padding: var(--space-xs) 0;
+	min-height: 44px;
 }
 
 .btn-ghost:hover {

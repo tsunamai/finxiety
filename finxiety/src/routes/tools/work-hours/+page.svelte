@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { tick } from 'svelte';
 	import {
 		calculateHours,
 		type PayFrequency,
@@ -141,6 +142,21 @@
 	// State display name for callouts.
 	const stateName = $derived(STATE_OPTIONS.find((s) => s.code === selectedState)?.name ?? '');
 	const hasStateTax = $derived(result.stateIncomeTax > 0);
+
+	let resultsEl: HTMLElement | null = $state(null);
+	let firstReadyShown = false;
+
+	$effect(() => {
+		if (ready) {
+			if (!firstReadyShown && resultsEl) {
+				firstReadyShown = true;
+				resultsEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+				resultsEl.focus();
+			}
+		} else {
+			firstReadyShown = false;
+		}
+	});
 </script>
 
 <svelte:head>
@@ -264,7 +280,7 @@
 </form>
 
 <!-- Results -->
-<section class="results" aria-live="polite" aria-label="Your work-hours breakdown">
+<section class="results" aria-live="polite" aria-label="Your work-hours breakdown" tabindex="-1" bind:this={resultsEl}>
 	{#if ready}
 		<!-- Workday bar -->
 		<div class="result-block">
@@ -324,6 +340,11 @@
 					<tr>
 						<th scope="row">Social Security (6.2%)</th>
 						<td class="deduct">−{money(result.socialSecurity)}</td>
+					</tr>
+					<tr class="credits-caveat-row">
+						<td colspan="2">
+							<p class="credits-caveat">Credits like the Earned Income Tax Credit and Child Tax Credit can reduce the federal tax line or produce a refund — they're not modeled here. <a href="/tools/tax-clarity">Tax Clarity</a> shows how credits work, or check <a href="https://www.irs.gov/credits-deductions/individuals/earned-income-tax-credit-eitc" target="_blank" rel="noopener noreferrer">IRS EITC info</a> to see if one applies to you.</p>
+						</td>
 					</tr>
 					<tr>
 						<th scope="row">Medicare (1.45%)</th>
@@ -390,6 +411,16 @@
 				</div>
 			{/if}
 		</div>
+
+		<!-- Benefits signpost -->
+		<div class="benefits-signpost" role="note">
+			<p>Looking at take-home pay alongside what programs might be available is often useful together. <a href="/tools/screener">The Benefits Screener</a> checks programs like SNAP and Medi-Cal based on income and household size — no account needed.</p>
+		</div>
+
+		<!-- SSI / SSDI scope note -->
+		<div class="scope-note" role="note">
+			<p>This tool models gross earned wages. If you receive SSDI, earnings above the Substantial Gainful Activity threshold (~$1,550/month in 2026 for non-blind recipients) can affect the benefit separately. If you receive SSI, a roughly $2,000 resource limit applies. <a href="https://www.calable.ca.gov/" target="_blank" rel="noopener noreferrer">ABLE accounts (CalABLE in California)</a> let eligible people save above that SSI limit without it counting toward eligibility.</p>
+		</div>
 	{:else}
 		<p class="results-empty">
 			Enter your gross pay and hours worked to see where each hour of work goes.
@@ -433,8 +464,7 @@
 
 <div class="signpost-footer" role="note">
 	<p>
-		Curious what a deduction is actually worth, or how a refund really works? The
-		<a href="/tools/tip-calculator">Tip Calculator</a> breaks down another everyday number the same way.
+		Wondering what a deduction is actually worth, or how a refund works? <a href="/tools/tax-clarity">Tax Clarity</a> breaks both down in plain language. Or see the same kind of math on a restaurant bill: <a href="/tools/tip-calculator">the Tip Calculator</a> does who-pays-what.
 	</p>
 </div>
 
@@ -618,7 +648,7 @@
 		background: var(--muted);
 	}
 	.bar-seg-net {
-		background: var(--olive);
+		background: var(--pine); /* --olive/#6B8A78 failed 4.5:1 with white text; pine passes at ~9.5:1 */
 	}
 
 	/* Legend */
@@ -720,7 +750,7 @@
 	}
 
 	.breakdown .net-row td {
-		color: var(--olive);
+		color: var(--pine);
 	}
 
 	/* Annual rollup */
@@ -869,5 +899,60 @@
 		.legend-label {
 			flex: 0 0 auto;
 		}
+	}
+
+	/* EITC credits caveat row */
+	.credits-caveat-row td {
+		padding: 0;
+	}
+
+	.credits-caveat {
+		font-size: 0.8125rem;
+		color: var(--muted);
+		line-height: 1.5;
+		padding: var(--space-xs) var(--space-sm);
+		background: var(--surface);
+		border-radius: var(--radius);
+		margin: var(--space-xs) 0 0;
+	}
+
+	.credits-caveat a {
+		color: var(--pine);
+	}
+
+	/* Benefits signpost */
+	.benefits-signpost {
+		background: var(--surface);
+		border-left: 3px solid var(--pine);
+		border-radius: 0 var(--radius) var(--radius) 0;
+		padding: var(--space-sm) var(--space-md);
+		margin-bottom: var(--space-md);
+		font-size: 0.9375rem;
+		line-height: 1.6;
+	}
+
+	.benefits-signpost a {
+		color: var(--pine);
+	}
+
+	/* SSI/SSDI scope note */
+	.scope-note {
+		background: var(--surface);
+		border: 1px solid var(--border);
+		border-radius: var(--radius);
+		padding: var(--space-sm) var(--space-md);
+		margin-bottom: var(--space-md);
+		font-size: 0.8125rem;
+		color: var(--muted);
+		line-height: 1.6;
+	}
+
+	.scope-note a {
+		color: var(--pine);
+	}
+
+	/* Focus ring for the results section (programmatic focus target) */
+	.results:focus-visible {
+		outline: none;
 	}
 </style>

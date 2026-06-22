@@ -51,9 +51,29 @@
 		debtBalanceStr !== '' && debtBalance > 0 && effectiveInvestment > 0
 	);
 
+	// Roving arrow-key navigation within the time-horizon radiogroup (WCAG radio pattern).
+	function onHorizonKeydown(e: KeyboardEvent) {
+		const count = HORIZONS.length;
+		const idx = HORIZONS.indexOf(years);
+		let next = idx;
+		if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+			next = (idx + 1) % count;
+		} else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+			next = (idx - 1 + count) % count;
+		} else {
+			return;
+		}
+		e.preventDefault();
+		years = HORIZONS[next];
+		const group = e.currentTarget as HTMLElement;
+		const buttons = group.querySelectorAll<HTMLElement>('[role="radio"]');
+		buttons[next]?.focus();
+	}
+
 	async function handleSubmit(e: Event) {
 		e.preventDefault();
 		if (!canSubmit) return;
+		submitted = true;
 		chartData = computeDebtGrowth(
 			debtBalance,
 			apr,
@@ -62,10 +82,24 @@
 			annualReturn,
 			years
 		);
-		submitted = true;
 		await tick();
 		resultHeadingEl?.focus();
 	}
+
+	// After first submit, recompute whenever inputs change so the horizon toggle
+	// and other fields update the chart immediately without requiring a re-submit.
+	$effect(() => {
+		if (submitted && canSubmit) {
+			chartData = computeDebtGrowth(
+				debtBalance,
+				apr,
+				monthlyPayment,
+				effectiveInvestment,
+				annualReturn,
+				years
+			);
+		}
+	});
 
 	// --- Derived end-of-horizon figures ---
 	const lastPoint = $derived(
@@ -74,6 +108,7 @@
 	const debtEnd = $derived(lastPoint ? lastPoint.debtBalance : 0);
 	const investmentEnd = $derived(lastPoint ? lastPoint.investmentBalance : 0);
 	const difference = $derived(investmentEnd - debtEnd);
+	const debtWinning = $derived(debtEnd > investmentEnd);
 	// Whether the debt was left untouched (no payment) — changes the callout framing.
 	const debtUntouched = $derived(monthlyPayment <= 0);
 	const debtPaidOff = $derived(submitted && debtEnd === 0);
@@ -280,7 +315,7 @@
 
 		<div class="field">
 			<span class="group-label" id="horizon-label">Time horizon</span>
-			<div class="segmented" role="radiogroup" aria-labelledby="horizon-label">
+			<div class="segmented" role="radiogroup" aria-labelledby="horizon-label" tabindex="-1" onkeydown={onHorizonKeydown}>
 				{#each HORIZONS as h}
 					<button
 						type="button"
@@ -288,6 +323,7 @@
 						class:selected={years === h}
 						role="radio"
 						aria-checked={years === h}
+						tabindex={years === h ? 0 : -1}
 						onclick={() => (years = h)}
 					>
 						{h} yr
@@ -398,6 +434,28 @@
 			{/if}
 		</div>
 
+		<!-- Winner row -->
+		<div class="summary-winner" role="note" aria-label="Comparison result">
+			{#if debtPaidOff}
+				<p class="winner-label">Debt paid off — investment ahead by ~<strong>{fmtDollars(investmentEnd)}</strong> <span class="estimated-tag">estimated</span></p>
+			{:else if debtWinning}
+				<p class="winner-label">Debt ahead by ~<strong>{fmtDollars(Math.abs(difference))}</strong> <span class="estimated-tag">estimated</span></p>
+			{:else if difference === 0}
+				<p class="winner-label">Both end at the same balance — ~<strong>{fmtDollars(debtEnd)}</strong> <span class="estimated-tag">estimated</span></p>
+			{:else}
+				<p class="winner-label">Investment ahead by ~<strong>{fmtDollars(difference)}</strong> <span class="estimated-tag">estimated</span></p>
+			{/if}
+		</div>
+
+		{#if debtWinning && !debtPaidOff}
+			<p class="structural-note" role="note">
+				When a payment falls below the monthly interest charge, the balance grows regardless of payments made — that's a math constraint, not a reflection of effort. High-APR debt can put payments in this position quickly.
+			</p>
+			<div class="debt-signpost" role="note">
+				<p>If the debt curve is climbing faster than payments are holding it down, a nonprofit credit counselor can look at the full picture. The <a href="https://www.nfcc.org" target="_blank" rel="noopener noreferrer">National Foundation for Credit Counseling (nfcc.org)</a> offers free or low-cost help. The <a href="/tools/screener">Benefits Screener</a> can also check whether programs are available that free up monthly cash.</p>
+			</div>
+		{/if}
+
 		<!-- Summary row -->
 		<div class="summary-row" aria-label="End-of-horizon balances">
 			<div class="summary-cell">
@@ -408,10 +466,11 @@
 				<p class="summary-label">Investment after {years} years</p>
 				<p class="summary-value value-investment">~{fmtDollars(investmentEnd)} <span class="estimated-tag">estimated</span></p>
 			</div>
-			<div class="summary-cell">
-				<p class="summary-label">Difference</p>
-				<p class="summary-value">~{fmtDollars(Math.abs(difference))} <span class="estimated-tag">estimated</span></p>
-			</div>
+		</div>
+
+		<!-- SSI/ABLE scope note -->
+		<div class="scope-note" role="note">
+			<p>This tool shows how savings or debt grow over time. If you receive SSI, a roughly $2,000 resource limit applies separately — saving above that limit in a regular account can affect SSI eligibility. <a href="https://www.calable.ca.gov/" target="_blank" rel="noopener noreferrer">ABLE accounts (CalABLE in California)</a> let eligible people save above that limit without it counting toward SSI.</p>
 		</div>
 
 		<!-- Sources -->
@@ -796,6 +855,68 @@
 		font-size: 0.9375rem;
 		line-height: 1.6;
 		color: var(--muted);
+	}
+
+	/* Winner row */
+	.summary-winner {
+		background: var(--surface);
+		border: 2px solid var(--pine);
+		border-radius: var(--radius);
+		padding: var(--space-md);
+		margin-bottom: var(--space-sm);
+	}
+
+	.winner-label {
+		font-size: 1.125rem;
+		font-weight: 700;
+		color: var(--pine);
+		margin: 0;
+		line-height: 1.4;
+	}
+
+	.winner-label strong {
+		font-size: 1.375rem;
+		font-weight: 800;
+		letter-spacing: -0.01em;
+	}
+
+	/* Structural note (debt-winning context) */
+	.structural-note {
+		font-size: 0.875rem;
+		color: var(--muted);
+		margin-bottom: var(--space-sm);
+		line-height: 1.6;
+	}
+
+	/* Debt-distress bridge */
+	.debt-signpost {
+		background: var(--surface);
+		border-left: 3px solid var(--pine);
+		border-radius: 0 var(--radius) var(--radius) 0;
+		padding: var(--space-sm) var(--space-md);
+		margin-bottom: var(--space-lg);
+		font-size: 0.9375rem;
+		line-height: 1.6;
+	}
+
+	.debt-signpost a {
+		color: var(--pine);
+	}
+
+	/* SSI/ABLE scope note */
+	.scope-note {
+		background: var(--surface);
+		border: 1px solid var(--border);
+		border-radius: var(--radius);
+		padding: var(--space-sm) var(--space-md);
+		margin-bottom: var(--space-lg);
+		font-size: 0.8125rem;
+		color: var(--muted);
+		line-height: 1.6;
+	}
+
+	.scope-note a {
+		color: var(--pine);
 	}
 
 	/* Print */

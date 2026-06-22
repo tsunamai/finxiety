@@ -204,6 +204,22 @@ The infrastructure that makes institutional embedding possible. A bootstrap scri
 
 ---
 
+### GUIDE — "What's going on?" Situation Picker [P0]
+
+**Status: LIVE** — https://finxiety.vercel.app/tools/guide
+
+**What it is:**
+The FRONT-DOOR principle made concrete. A situation-picker routing tool: the user picks the label that fits their life right now, and the tool surfaces the 2-3 most relevant Finxiety tools for that situation. No inputs, no math — pure routing. Designed for users who don't know which tool applies to them.
+
+**Route:** `finxiety/src/routes/tools/guide/+page.svelte`
+
+**Situations:** Cards presented as a radio group; selecting one triggers an `aria-live` results section listing matched tools with their question framing, description, and link.
+
+**Not groomed as a build ticket** — was built without a formal PM spec.
+**Validated:** ⟦BRAND-REVIEWED⟧ ⟦UX-REVIEWED⟧ ⟦QA-VERIFIED⟧ ⟦BEHAVIORAL-REVIEWED⟧ ⟦DISABILITY-REVIEWED⟧ — all five gates passed. See `status-updates/guide-validation-*`.
+
+---
+
 ## SECTION A — FINANCIAL INCLUSION CORE
 
 ### MYTH-1 — Benefits Myth-Check Quiz [P0 — First Ship]
@@ -273,7 +289,7 @@ After all questions, ask 1-2 questions that connect earlier estimates: "Earlier 
 **No storage required.** Static quiz content, client-side scoring.
 
 **Status: LIVE** — https://finxiety.vercel.app/tools/myth-quiz
-**Validated:** pending — validation gate not yet run
+**Validated:** ⟦BRAND-REVIEWED⟧ ⟦UX-REVIEWED⟧ ⟦QA-VERIFIED⟧ ⟦BEHAVIORAL-REVIEWED⟧ ⟦DISABILITY-REVIEWED⟧ — all five gates passed. See `status-updates/myth-1-validation-*`.
 
 ---
 
@@ -355,11 +371,13 @@ A person who earns $2,200/month with a family of three gets a clear, accurate li
 **No storage required.** All calculation client-side.
 
 **Status: LIVE** — https://finxiety.vercel.app/tools/screener
-**Validated:** in progress (2026-06-15) — UX and behavioral gates blocked; see `status-updates/`
+**Validated:** ⟦BRAND-REVIEWED⟧ ⟦UX-REVIEWED⟧ ⟦QA-VERIFIED⟧ ⟦BEHAVIORAL-REVIEWED⟧ ⟦DISABILITY-REVIEWED⟧ — all five gates passed. See `status-updates/ben-1-validation-*`.
 
 ---
 
 ### DOC-1 — Document Checklist Generator [P1]
+
+**Status: LIVE** — https://finxiety.vercel.app/tools/document-checklist
 
 **Problem statement:** Someone applying to more than one benefits program has to assemble overlapping but non-identical paperwork from separate agency websites, with no single source telling them what one folder of documents would satisfy all of their applications at once.
 
@@ -521,10 +539,13 @@ Notes on the schema: the federal `programs` block is the baseline every state fa
 - Confirm the 12-item ceiling for all-four-programs-CA is realistic against the actual compiled data; adjust the acceptance-criteria number once the data exists if real de-duplicated counts differ. → PM, after research.
 
 ⟦PM-GROOMED⟧ ticket="DOC-1" date="2026-06-17"
+**Validated:** ⟦BRAND-REVIEWED⟧ ⟦UX-REVIEWED⟧ ⟦QA-VERIFIED⟧ ⟦BEHAVIORAL-REVIEWED⟧ ⟦DISABILITY-REVIEWED⟧ — all five gates passed. See `status-updates/doc-1-validation-*`.
 
 ---
 
 ### RECERT-1 — Recertification Deadline Tracker [P2]
+
+**Status: LIVE** — https://finxiety.vercel.app/tools/recertification
 
 **What it is:**
 People lose benefits not because they're ineligible but because they miss a recertification deadline or lack documents at the right moment. This is the single largest administrative burden leakage point. The tool calculates when each benefit recertifies and generates a downloadable calendar reminder.
@@ -552,6 +573,8 @@ People lose benefits not because they're ineligible but because they miss a rece
 - Uses `state` and `current_benefits` from shared input model
 
 **No storage required.** Dates calculated and rendered client-side; `.ics` generated and downloaded directly.
+
+**Validated:** ⟦BRAND-REVIEWED⟧ ⟦UX-REVIEWED⟧ ⟦QA-VERIFIED⟧ ⟦BEHAVIORAL-REVIEWED⟧ ⟦DISABILITY-REVIEWED⟧ — all five gates passed. See `status-updates/recert-1-validation-*`.
 
 ---
 
@@ -591,7 +614,7 @@ People lose benefits not because they're ineligible but because they miss a rece
 **No storage required.** All calculation client-side.
 
 **Status: LIVE** — https://finxiety.vercel.app/tools/cliff-calculator
-**Validated:** pending — validation gate not yet run
+**Validated:** ⟦BRAND-REVIEWED⟧ ⟦UX-REVIEWED⟧ ⟦QA-VERIFIED⟧ ⟦BEHAVIORAL-REVIEWED⟧ ⟦DISABILITY-REVIEWED⟧ — all five gates passed. See `status-updates/cliff-1-validation-*`.
 
 ---
 
@@ -688,7 +711,7 @@ Pure calculation, no state/program data required. Fastest tool across both track
 **No storage required.** Single-session calculation, all client-side.
 
 **Status: LIVE** — https://finxiety.vercel.app/tools/emergency-fund  
-**Validated:** 2026-06-14 — see `status-updates/emg-1-validation-2026-06-14.md`
+**Validated:** ⟦BRAND-REVIEWED⟧ ⟦UX-REVIEWED⟧ ⟦QA-VERIFIED⟧ ⟦BEHAVIORAL-REVIEWED⟧ ⟦DISABILITY-REVIEWED⟧ — all five gates passed. See `status-updates/emg-1-*`.
 
 #### EMG-1 v1.1 — Post-Ship Refinements
 
@@ -797,7 +820,7 @@ New route `finxiety/src/routes/tools/tip-calculator/+page.svelte`. Pure calculat
 ⟦PM-GROOMED⟧ ticket="TIP-1" date="2026-06-17"
 
 **Status: LIVE** — https://finxiety.vercel.app/tools/tip-calculator
-**Validated:** 2026-06-17 — see `status-updates/tip-1-validation-2026-06-17.md`
+**Validated:** ⟦BRAND-REVIEWED⟧ ⟦UX-REVIEWED⟧ ⟦QA-VERIFIED⟧ ⟦BEHAVIORAL-REVIEWED⟧ ⟦DISABILITY-REVIEWED⟧ — all five gates passed. See `status-updates/tip-1-*`.
 
 ---
 
@@ -811,6 +834,8 @@ New route `finxiety/src/routes/tools/tip-calculator/+page.svelte`. Pure calculat
 
 **Route:** `finxiety/src/routes/tools/compound-interest/+page.svelte`
 **Calculator:** `finxiety/src/lib/calculators/compound.ts`
+
+**Validated:** ⟦BRAND-REVIEWED⟧ ⟦UX-REVIEWED⟧ ⟦QA-VERIFIED⟧ ⟦BEHAVIORAL-REVIEWED⟧ ⟦DISABILITY-REVIEWED⟧ — all five gates passed. See `status-updates/compound-1-validation-*`.
 
 ---
 
@@ -838,6 +863,8 @@ Single debt + single investment scenario. No multi-debt prioritization logic (fu
 
 **No storage required.** Requires a charting component (lightweight in-browser library).
 
+**Validated:** ⟦BRAND-REVIEWED⟧ ⟦UX-REVIEWED⟧ ⟦QA-VERIFIED⟧ ⟦BEHAVIORAL-REVIEWED⟧ ⟦DISABILITY-REVIEWED⟧ — all five gates passed. See `status-updates/debt-viz-1-validation-*`.
+
 ---
 
 ### DEDUCT-1 — Deduction vs. Credit vs. Refund Clarifier [P2]
@@ -863,6 +890,8 @@ Federal brackets only for v1. State tax treatment of deductions/credits varies t
 **Data sources:** IRS 2026 federal tax brackets and standard deduction amounts.
 
 **No storage required.** Single-session calculation, all client-side.
+
+**Validated:** ⟦BRAND-REVIEWED⟧ ⟦UX-REVIEWED⟧ ⟦QA-VERIFIED⟧ ⟦BEHAVIORAL-REVIEWED⟧ ⟦DISABILITY-REVIEWED⟧ — all five gates passed. See `status-updates/deduct-1-validation-*`.
 
 ---
 
@@ -890,6 +919,8 @@ Federal income tax brackets, FICA (6.2%) and Medicare (1.45%) rates. State incom
 
 **No storage required.** Single pay-stub snapshot, all client-side.
 
+**Validated:** ⟦BRAND-REVIEWED⟧ ⟦UX-REVIEWED⟧ ⟦QA-VERIFIED⟧ ⟦BEHAVIORAL-REVIEWED⟧ ⟦DISABILITY-REVIEWED⟧ — all five gates passed. See `status-updates/hours-1-validation-*`.
+
 ---
 
 ### MYTH-2 — Extended Myth Quiz (Personal Finance Track) [P2]
@@ -913,9 +944,13 @@ Same shareable/content-marketing function as MYTH-1, but covering the personal f
 
 **No storage required.** Static quiz content, client-side scoring.
 
+**Validated:** ⟦BRAND-REVIEWED⟧ ⟦UX-REVIEWED⟧ ⟦QA-VERIFIED⟧ ⟦BEHAVIORAL-REVIEWED⟧ ⟦DISABILITY-REVIEWED⟧ — all five gates passed. See `status-updates/myth-2-validation-*`.
+
 ---
 
 ### SAVE-1 — Savings Commitment Maker [P2 — Track 2]
+
+**Status: LIVE** — https://finxiety.vercel.app/tools/savings-commitment
 
 **Problem statement:** People who want to save more leave every financial tool the same way they arrived — knowing they should save more, with no changed structure in their life that makes saving more likely.
 
@@ -1027,6 +1062,7 @@ Step 4: Related-tools footer.
 - **Priority slot:** SAVE-1 is behavioral-design-first and data-light — closer to EMG-1 in build cost than to HOURS-1. Possible insertion between MYTH-2 and HOURS-1 in the ship order, or after MYTH-2 as SHIP T2-7. PM to confirm placement after research gap is resolved. → Naomi.
 
 ⟦PM-GROOMED⟧ ticket="SAVE-1" date="2026-06-19"
+**Validated:** ⟦BRAND-REVIEWED⟧ ⟦UX-REVIEWED⟧ ⟦QA-VERIFIED⟧ ⟦BEHAVIORAL-REVIEWED⟧ ⟦DISABILITY-REVIEWED⟧ — all five gates passed. See `status-updates/save-1-validation-*`.
 
 ---
 

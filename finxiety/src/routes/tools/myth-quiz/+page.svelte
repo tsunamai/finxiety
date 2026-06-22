@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { tick } from 'svelte';
 	import {
 		questions,
 		synthesisPrompts,
@@ -23,16 +24,24 @@
 	let surprisedChoice = $state<string | null>(null);
 	let assumeText = $state('');
 
+	// Element refs for focus management on phase transitions.
+	let estimateSectionEl: HTMLElement | null = $state(null);
+	let revealSectionEl: HTMLElement | null = $state(null);
+	let synthesisSectionEl: HTMLElement | null = $state(null);
+	let scoreSectionEl: HTMLElement | null = $state(null);
+
 	const current = $derived<Question>(questions[qIndex]);
 	const totalQuestions = questions.length;
 	// How many reveals the user has seen = how far they've progressed.
 	const revealsSeen = $derived(Object.keys(estimates).length);
 
-	function startQuiz() {
+	async function startQuiz() {
 		qIndex = 0;
 		currentValue = questions[0].inputDefault;
 		inputError = '';
 		phase = 'estimate';
+		await tick();
+		estimateSectionEl?.focus();
 	}
 
 	function formatGuess(q: Question, value: number): string {
@@ -66,9 +75,16 @@
 		return `${q.realAnswer} ${q.realAnswerLabel}`.trim();
 	}
 
-	function submitEstimate(e: Event) {
+	async function submitEstimate(e: Event) {
 		e.preventDefault();
 		inputError = '';
+
+		// Number/dollar inputs return '' when cleared — Number('') === 0 would pass the range
+		// check silently and attribute an answer the user never made.
+		if (String(currentValue) === '') {
+			inputError = 'Enter a number to see the real figure.';
+			return;
+		}
 
 		const value = Number(currentValue);
 		if (Number.isNaN(value)) {
@@ -82,29 +98,39 @@
 
 		estimates[current.id] = value;
 		phase = 'reveal';
+		await tick();
+		revealSectionEl?.focus();
 	}
 
-	function nextQuestion() {
+	async function nextQuestion() {
 		if (qIndex < totalQuestions - 1) {
 			qIndex += 1;
 			currentValue = questions[qIndex].inputDefault;
 			inputError = '';
 			phase = 'estimate';
+			await tick();
+			estimateSectionEl?.focus();
 		} else {
 			phase = 'synthesis';
+			await tick();
+			synthesisSectionEl?.focus();
 		}
 	}
 
 	// Re-see the previous reveal. Estimates stay locked.
-	function previousReveal() {
+	async function previousReveal() {
 		if (qIndex > 0) {
 			qIndex -= 1;
 			phase = 'reveal';
+			await tick();
+			revealSectionEl?.focus();
 		}
 	}
 
-	function finishSynthesis() {
+	async function finishSynthesis() {
 		phase = 'score';
+		await tick();
+		scoreSectionEl?.focus();
 	}
 
 	function startOver() {
@@ -143,7 +169,7 @@
 
 {:else if phase === 'estimate'}
 	{#key current.id}
-		<section class="step" aria-label="Question {qIndex + 1} of {totalQuestions}">
+		<section class="step" bind:this={estimateSectionEl} tabindex="-1" aria-label="Question {qIndex + 1} of {totalQuestions}">
 			<div class="progress" aria-hidden="true">
 				<div class="progress-track">
 					<div
@@ -196,7 +222,6 @@
 
 				{:else if current.inputType === 'percentage'}
 					<div class="field">
-						<label class="sr-only" for="estimate-input">Your estimate, as a percentage</label>
 						<div class="slider-row">
 							<input
 								id="estimate-input"
@@ -262,7 +287,7 @@
 
 {:else if phase === 'reveal'}
 	{#key current.id}
-		<section class="step reveal" aria-live="polite" aria-label="The real answer">
+		<section class="step reveal" bind:this={revealSectionEl} tabindex="-1" aria-live="polite" aria-label="The real answer">
 			<div class="progress" aria-hidden="true">
 				<div class="progress-track">
 					<div
@@ -272,6 +297,12 @@
 				</div>
 			</div>
 			<p class="progress-label">Question {qIndex + 1} of {totalQuestions}</p>
+
+			<h2 class="reveal-headline">{current.revealHeadline}</h2>
+			<p class="reveal-body">{current.revealBody}</p>
+			{#if current.revealNote}
+				<p class="reveal-note">{current.revealNote}</p>
+			{/if}
 
 			<div class="compare">
 				<div class="compare-row">
@@ -285,9 +316,6 @@
 					<span class="compare-value compare-real">{formatRealAnswer(current)}</span>
 				</div>
 			</div>
-
-			<h2 class="reveal-headline">{current.revealHeadline}</h2>
-			<p class="reveal-body">{current.revealBody}</p>
 
 			<div class="why-box" role="note">
 				<p class="box-label">Why the gap exists</p>
@@ -326,7 +354,7 @@
 	{/key}
 
 {:else if phase === 'synthesis'}
-	<section class="step" aria-label="Reflection">
+	<section class="step" bind:this={synthesisSectionEl} tabindex="-1" aria-label="Reflection">
 		<p class="tool-description">
 			One more thing (optional, no right answers).
 		</p>
@@ -367,17 +395,12 @@
 	</section>
 
 {:else if phase === 'score'}
-	<section class="step" aria-live="polite" aria-label="Your results">
-		<div class="score-card">
-			<p class="score-number">{revealsSeen} of {totalQuestions}</p>
-			<p class="score-label">reveals seen</p>
-		</div>
-
-		<h2 class="reveal-headline">The real numbers behind five things most people believe.</h2>
+	<section class="step" bind:this={scoreSectionEl} tabindex="-1" aria-live="polite" aria-label="Your results">
+		<h2 class="reveal-headline">Most of these gaps aren't about what any one person did.</h2>
 		<p class="reveal-body">
-			Most of these gaps aren't about what any one person did. They're about how the systems are
-			built, and how rarely anyone explains them. Knowing that changes how you move.
+			They're about how the systems are built, and how rarely anyone explains them. Knowing that changes how you move.
 		</p>
+		<p class="score-tally">{revealsSeen} of {totalQuestions} reveals seen.</p>
 
 		<p class="estimate-note">
 			These figures come from public research, linked on each reveal. Programs change. The official sources are the place to confirm what applies to you.
@@ -603,6 +626,28 @@
 		margin-bottom: var(--space-md);
 	}
 
+	.reveal-note {
+		font-size: 0.875rem;
+		color: var(--muted);
+		line-height: 1.6;
+		margin-bottom: var(--space-md);
+		padding: var(--space-sm) var(--space-md);
+		background: var(--surface);
+		border-radius: var(--radius);
+	}
+
+	.score-tally {
+		font-size: 0.875rem;
+		color: var(--muted);
+		margin-bottom: var(--space-md);
+	}
+
+	section:focus-visible {
+		outline: 3px solid var(--terracotta);
+		outline-offset: 3px;
+		border-radius: 2px;
+	}
+
 	.why-box {
 		background: var(--cream);
 		border-left: 3px solid var(--olive);
@@ -752,30 +797,6 @@
 	textarea:focus-visible {
 		outline: 3px solid var(--terracotta);
 		outline-offset: 2px;
-	}
-
-	/* Score */
-	.score-card {
-		background: var(--surface);
-		border-radius: var(--radius);
-		padding: var(--space-lg);
-		text-align: center;
-		margin-bottom: var(--space-lg);
-	}
-
-	.score-number {
-		font-size: 2.5rem;
-		font-weight: 800;
-		color: var(--terracotta);
-		line-height: 1.1;
-	}
-
-	.score-label {
-		font-size: 0.875rem;
-		text-transform: uppercase;
-		letter-spacing: 0.06em;
-		color: var(--muted);
-		margin-top: var(--space-xs);
 	}
 
 	@media (max-width: 380px) {

@@ -38,7 +38,7 @@
 		},
 		{
 			id: 'news',
-			label: "I got some financial news — a raise, a job change, or an unexpected bill",
+			label: "I got some financial news — an unexpected bill, a job change, or a raise",
 			tools: ['cliff-calculator', 'emergency-fund', 'work-hours']
 		},
 		{
@@ -75,7 +75,7 @@
 		},
 		recertification: {
 			question: 'When does your renewal come up?',
-			desc: "Get a calendar reminder before your SNAP or Medicaid recertification deadline.",
+			desc: "Calculate your renewal date and add a reminder to your own phone calendar — nothing is stored.",
 			href: '/tools/recertification',
 			icon: 'CalendarClock',
 		},
@@ -87,7 +87,7 @@
 		},
 		'cliff-calculator': {
 			question: 'Got a raise — do you actually come out ahead?',
-			desc: "See what a higher income does to your benefits before you decide.",
+			desc: "See what a higher income does to your benefits.",
 			href: '/tools/cliff-calculator',
 			icon: 'TrendingUp',
 		},
@@ -123,7 +123,7 @@
 		},
 		'savings-commitment': {
 			question: 'Want to save more — what would actually make it happen?',
-			desc: "Write one specific savings commitment in your own words and get a calendar reminder.",
+			desc: "Set one savings goal in your own words — the tool generates a calendar reminder.",
 			href: '/tools/savings-commitment',
 			icon: 'PiggyBank',
 		},
@@ -151,8 +151,7 @@
 
 	$effect(() => {
 		if (selected && resultsEl) {
-			resultsEl.setAttribute('tabindex', '-1');
-			resultsEl.focus();
+			resultsEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 		}
 	});
 
@@ -190,7 +189,8 @@
 </nav>
 
 <h1 id="guide-q">What's going on?</h1>
-<p class="subhead">Pick the situation that fits — we'll show you the right tools.</p>
+<p class="subhead">Pick the situation that fits — we'll show you the tools that match.</p>
+<p class="trust-line">Free. No account. Nothing stored.</p>
 
 <div class="cards" role="radiogroup" aria-labelledby="guide-q">
 	{#each situations as s, i (s.id)}
@@ -211,8 +211,7 @@
 </div>
 
 {#if selected}
-	<section class="results" aria-live="polite" bind:this={resultsEl}>
-		<h2>Here's where to start</h2>
+	<section class="results" aria-live="polite" aria-label="Matched tools" bind:this={resultsEl}>
 		{#each matched as toolId (toolId)}
 			{@const tool = toolMeta[toolId]}
 			{@const Icon = iconMap[tool.icon]}
@@ -252,8 +251,14 @@
 		color: var(--ink-soft);
 		font-size: 0.9375rem;
 		line-height: 1.55;
-		margin-bottom: var(--space-lg);
+		margin-bottom: var(--space-xs);
 		max-width: 46ch;
+	}
+
+	.trust-line {
+		font-size: 0.8125rem;
+		color: var(--muted);
+		margin-bottom: var(--space-lg);
 	}
 
 	.cards {
@@ -289,7 +294,9 @@
 	.card.selected {
 		border-color: var(--forest);
 		border-left-color: var(--forest);
+		border-left-width: 5px;
 		background: rgba(60, 74, 58, 0.06);
+		font-weight: 600;
 	}
 
 	.card:focus-visible {
@@ -314,12 +321,6 @@
 		to {
 			opacity: 1;
 		}
-	}
-
-	.results h2 {
-		font-size: 1.125rem;
-		font-weight: 600;
-		margin-bottom: var(--space-md);
 	}
 
 	.tool-row {
@@ -382,7 +383,7 @@
 
 	.tool-arrow {
 		font-size: 1.125rem;
-		color: var(--sage);
+		color: var(--muted);
 		flex-shrink: 0;
 		transition: transform 0.12s;
 	}

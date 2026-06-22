@@ -32,6 +32,7 @@
 	let chartData: IncomeSnapshot[] = $state([]);
 	let chartMaxIncome = $state(7000);
 	let resultHeadingEl: HTMLHeadingElement | null = $state(null);
+	let touched = $state(false);
 
 	const MULTIPLIERS: Record<string, number> = {
 		biweekly: 26 / 12,
@@ -150,6 +151,11 @@
 		chartData.length > 0 ? Math.max(...chartData.map((p) => p.calculableResources)) * 1.05 : 7000
 	);
 
+	const cliffBottomPoint = $derived.by(() => {
+		if (chartData.length === 0) return null;
+		return chartData.reduce((min, p) => p.calculableResources < min.calculableResources ? p : min, chartData[0]);
+	});
+
 	const totalResourcesPolyline = $derived.by(() => {
 		if (chartData.length === 0) return '';
 		return chartData
@@ -238,6 +244,7 @@
 			inputmode="decimal"
 			min="0"
 			bind:value={currentIncomeStr}
+			oninput={() => { touched = true; }}
 			placeholder="e.g. 1700"
 			aria-describedby="current-income-hint"
 		/>
@@ -303,6 +310,7 @@
 			inputmode="decimal"
 			min="0"
 			bind:value={proposedIncomeStr}
+			oninput={() => { touched = true; }}
 			placeholder="e.g. 2200"
 			aria-describedby="proposed-income-hint"
 		/>
@@ -372,7 +380,7 @@
 	</div>
 
 	<button class="btn btn-primary" type="submit" disabled={!canSubmit}>Show me what changes</button>
-	{#if !canSubmit}
+	{#if !canSubmit && touched}
 		<p class="field-hint submit-hint" aria-live="polite">
 			Enter your current and proposed income to continue.
 		</p>
@@ -388,6 +396,78 @@
 			California programs only. Estimates based on published income thresholds. Your exact benefit
 			depends on your specific situation and what your county processes.
 		</p>
+
+		<!-- Net verdict (before comparison grid so key number is above the fold at 375px) -->
+		<div class="verdict-box {result.netDelta < 0 ? 'verdict-cliff' : result.netDelta === 0 ? 'verdict-neutral' : 'verdict-gain'}">
+			<div class="verdict-table" aria-label="Financial impact summary">
+				<div class="verdict-row">
+					<span class="verdict-label">Income change</span>
+					<span class="verdict-value">{fmtDelta(result.incomeDelta)}/month</span>
+				</div>
+				{#if result.calFreshDelta !== 0}
+					<div class="verdict-row">
+						<span class="verdict-label">CalFresh change</span>
+						<span class="verdict-value">{fmtDelta(result.calFreshDelta)}/month <span class="estimated-tag">estimated</span></span>
+					</div>
+				{/if}
+				{#if result.lifelineDelta !== 0}
+					<div class="verdict-row">
+						<span class="verdict-label">Lifeline change</span>
+						<span class="verdict-value">{fmtDelta(result.lifelineDelta)}/month</span>
+					</div>
+				{/if}
+				<div class="verdict-row verdict-total">
+					<span class="verdict-label">Net change</span>
+					<span class="verdict-value">{fmtDelta(result.netDelta)}/month</span>
+				</div>
+			</div>
+
+			<p class="verdict-summary">
+				{#if result.netDelta < -50}
+					The raise adds {fmtDollars(result.incomeDelta)}/month to your paycheck, but estimated benefit changes subtract roughly {fmtDollars(Math.abs(result.calFreshDelta + result.lifelineDelta))}/month. You'd have about {fmtDollars(Math.abs(result.netDelta))} less per month in total resources than you do now. This is the benefits cliff.
+				{:else if result.netDelta < 0}
+					After estimated benefit changes, you'd have slightly less per month in total resources. The income gain and the benefit loss are nearly offsetting, with a small net loss.
+				{:else if result.netDelta === 0 || (result.netDelta > 0 && result.netDelta < 10)}
+					The income gain and estimated benefit changes roughly cancel out. Your total monthly resources would stay about the same.
+				{:else if result.calFreshDelta < 0 || result.lifelineDelta < 0}
+					The raise adds {fmtDollars(result.incomeDelta)}/month, and estimated benefit changes reduce that by about {fmtDollars(Math.abs(result.calFreshDelta + result.lifelineDelta))}/month. Net gain: roughly {fmtDollars(result.netDelta)}/month.
+				{:else}
+					Your income would increase and your benefits would stay the same. Total resources: up about {fmtDollars(result.netDelta)}/month.
+				{/if}
+			</p>
+		</div>
+
+		<!-- Medi-Cal separate note -->
+		{#if result.losingMediCal}
+			<div class="medi-cal-note" role="note">
+				<p class="medi-cal-heading">About health coverage</p>
+				<p>
+					At {fmtDollars(proposedIncome)}/month, you would likely no longer qualify for free Medi-Cal
+					coverage. You would become eligible for subsidized plans on Covered California. The
+					premium you'd pay depends on your household income and size. At your income level,
+					subsidies could significantly reduce the cost, but the amount varies.
+				</p>
+				<p class="medi-cal-link">
+					<a href="https://apply.coveredca.com/lw-shopandcompare/" target="_blank" rel="noopener noreferrer">
+						See plans on Covered California
+					</a>
+				</p>
+				<p class="medi-cal-warning">
+					This calculator does not estimate Covered California premium costs. Covered California's
+					shop-and-compare tool lets you see actual plan prices for your income and household size.
+				</p>
+				<p class="medi-cal-warning">
+					For people receiving Medi-Cal for disability-related services like In-Home Supportive Services (IHSS), a coverage change involves more than premiums. <a href="https://www.disabilityrightsca.org/" target="_blank" rel="noopener noreferrer">Disability Rights California</a> and your county social services office can walk through what specifically applies.
+				</p>
+			</div>
+		{/if}
+
+		<!-- Screener bridge: shown on any negative net delta — this tool covers 3 programs; others may offset -->
+		{#if result.netDelta < 0}
+			<div class="cliff-signpost" role="note">
+				<p>This tool covers CalFresh, Medi-Cal, and Lifeline. <a href="/tools/screener">The Benefits Screener</a> covers more programs — there may be offsets this view doesn't show.</p>
+			</div>
+		{/if}
 
 		<div class="comparison-grid" aria-label="Side-by-side comparison">
 			<div class="scenario-card" aria-label="Current income scenario">
@@ -447,10 +527,7 @@
 						{#if result.proposed.mediCalEligible}
 							<span class="program-value eligible">Free coverage</span>
 						{:else}
-							<span class="program-value ineligible">
-								Over the income limit
-								{#if result.losingMediCal}<span class="change-flag">changes</span>{/if}
-							</span>
+							<span class="program-value ineligible">Over the income limit</span>
 						{/if}
 					</div>
 
@@ -465,68 +542,6 @@
 				</div>
 			</div>
 		</div>
-
-		<!-- Net verdict -->
-		<div class="verdict-box {result.netDelta < 0 ? 'verdict-cliff' : result.netDelta === 0 ? 'verdict-neutral' : 'verdict-gain'}">
-			<div class="verdict-table" aria-label="Financial impact summary">
-				<div class="verdict-row">
-					<span class="verdict-label">Income change</span>
-					<span class="verdict-value">{fmtDelta(result.incomeDelta)}/month</span>
-				</div>
-				{#if result.calFreshDelta !== 0}
-					<div class="verdict-row">
-						<span class="verdict-label">CalFresh change</span>
-						<span class="verdict-value">{fmtDelta(result.calFreshDelta)}/month <span class="estimated-tag">estimated</span></span>
-					</div>
-				{/if}
-				{#if result.lifelineDelta !== 0}
-					<div class="verdict-row">
-						<span class="verdict-label">Lifeline change</span>
-						<span class="verdict-value">{fmtDelta(result.lifelineDelta)}/month</span>
-					</div>
-				{/if}
-				<div class="verdict-row verdict-total">
-					<span class="verdict-label">Net change</span>
-					<span class="verdict-value">{fmtDelta(result.netDelta)}/month</span>
-				</div>
-			</div>
-
-			<p class="verdict-summary">
-				{#if result.netDelta < -50}
-					The raise adds {fmtDollars(result.incomeDelta)}/month to your paycheck, but estimated benefit changes subtract roughly {fmtDollars(Math.abs(result.calFreshDelta + result.lifelineDelta))}/month. You'd have about {fmtDollars(Math.abs(result.netDelta))} less per month in total resources than you do now. This is the benefits cliff.
-				{:else if result.netDelta < 0}
-					After estimated benefit changes, you'd have slightly less per month in total resources. The income gain and the benefit loss are nearly offsetting, with a small net loss.
-				{:else if result.netDelta === 0 || (result.netDelta > 0 && result.netDelta < 10)}
-					The income gain and estimated benefit changes roughly cancel out. Your total monthly resources would stay about the same.
-				{:else if result.calFreshDelta < 0 || result.lifelineDelta < 0}
-					The raise adds {fmtDollars(result.incomeDelta)}/month, and estimated benefit changes reduce that by about {fmtDollars(Math.abs(result.calFreshDelta + result.lifelineDelta))}/month. Net gain: roughly {fmtDollars(result.netDelta)}/month.
-				{:else}
-					Your income would increase and your benefits would stay the same. Total resources: up about {fmtDollars(result.netDelta)}/month.
-				{/if}
-			</p>
-		</div>
-
-		<!-- Medi-Cal separate note -->
-		{#if result.losingMediCal}
-			<div class="medi-cal-note" role="note">
-				<p class="medi-cal-heading">About health coverage</p>
-				<p>
-					At {fmtDollars(proposedIncome)}/month, you would likely no longer qualify for free Medi-Cal
-					coverage. You would become eligible for subsidized plans on Covered California. The
-					premium you'd pay depends on your household income and size. At your income level,
-					subsidies could significantly reduce the cost, but the amount varies.
-				</p>
-				<p class="medi-cal-link">
-					<a href="https://apply.coveredca.com/lw-shopandcompare/" target="_blank" rel="noopener noreferrer">
-						See plans on Covered California
-					</a>
-				</p>
-				<p class="medi-cal-warning">
-					This calculator does not estimate the cost of Covered California coverage. Factor health
-					insurance into your decision separately.
-				</p>
-			</div>
-		{/if}
 
 		<!-- Chart -->
 		<div class="chart-section">
@@ -593,10 +608,45 @@
 				This chart shows CalFresh and Lifeline only. Medi-Cal coverage value is not included because
 				it varies widely; see the note above if your Medi-Cal eligibility changes.
 			</p>
+
+			<table class="sr-only" aria-label="Chart data: total monthly resources at each income level">
+				<caption>The chart shows how total monthly resources change across income levels.</caption>
+				<thead>
+					<tr>
+						<th scope="col">Income scenario</th>
+						<th scope="col">Gross monthly income</th>
+						<th scope="col">Total estimated monthly resources</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>Current</td>
+						<td>{fmtDollars(currentIncome)}/month</td>
+						<td>{fmtDollars(result.current.calculableResources)}/month</td>
+					</tr>
+					<tr>
+						<td>Proposed</td>
+						<td>{fmtDollars(proposedIncome)}/month</td>
+						<td>{fmtDollars(result.proposed.calculableResources)}/month</td>
+					</tr>
+					{#if cliffBottomPoint && cliffBottomPoint.grossMonthly !== currentIncome && cliffBottomPoint.grossMonthly !== proposedIncome}
+						<tr>
+							<td>Approximate lowest point in the chart</td>
+							<td>{fmtDollars(cliffBottomPoint.grossMonthly)}/month</td>
+							<td>{fmtDollars(cliffBottomPoint.calculableResources)}/month</td>
+						</tr>
+					{/if}
+				</tbody>
+			</table>
 		</div>
 
-		<!-- Employer questions (shown when net delta is negative or close) -->
-		{#if result.netDelta < 100 && (result.calFreshDelta < 0 || result.losingMediCal)}
+		<!-- SSI/SSDI scope note (unconditional — disability benefit rules not modeled here) -->
+		<div class="scope-note" role="note">
+			<p>This calculator covers CalFresh, Medi-Cal, and Lifeline only. SSI and SSDI have separate income rules — including a roughly $2,000 asset limit for SSI — that are not modeled here. <a href="https://www.calable.ca.gov/" target="_blank" rel="noopener noreferrer">ABLE accounts</a> let eligible people save above that limit without it affecting SSI eligibility.</p>
+		</div>
+
+		<!-- Employer questions (shown when net delta is near zero or negative) -->
+		{#if result.netDelta < 100}
 			<div class="employer-questions" role="note">
 				<p class="eq-heading">Questions some people ask their employer in this situation</p>
 				<ul class="eq-list">
@@ -871,14 +921,6 @@
 		color: var(--muted);
 	}
 
-	.change-flag {
-		font-size: 0.75rem;
-		font-weight: 700;
-		color: var(--terracotta);
-		text-transform: uppercase;
-		letter-spacing: 0.05em;
-		margin-left: var(--space-xs);
-	}
 
 	/* Verdict box */
 	.verdict-box {
@@ -1141,6 +1183,32 @@
 		font-size: 0.9375rem;
 		line-height: 1.6;
 		color: var(--muted);
+	}
+
+	/* Cliff screener bridge (negative result) */
+	.cliff-signpost {
+		margin-top: var(--space-md);
+		padding: var(--space-sm) var(--space-md);
+		background: var(--surface);
+		border-left: 3px solid var(--pine);
+		border-radius: var(--radius);
+		font-size: 0.9375rem;
+		line-height: 1.6;
+	}
+
+	/* SSI/SSDI scope disclosure */
+	.scope-note {
+		margin-top: var(--space-md);
+		padding: var(--space-sm) var(--space-md);
+		background: var(--surface);
+		border-radius: var(--radius);
+		font-size: 0.875rem;
+		line-height: 1.6;
+		color: var(--muted);
+	}
+
+	.scope-note a {
+		color: var(--pine);
 	}
 
 	/* Print */

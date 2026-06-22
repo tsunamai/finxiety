@@ -197,7 +197,7 @@
 		return (
 			`${r.programLabel} recertification is estimated for ${formatLong(r.nextCertDate)} ` +
 			`(about ${lead} days from this reminder). ` +
-			`Recertifying means confirming you still qualify so your benefits keep going. ` +
+			`Recertifying is how you confirm you still qualify and keep your enrollment current. ` +
 			`This is an estimate — your real deadline is on your approval notice from the agency. ` +
 			`Prepare your documents: ${docChecklistUrl()}`
 		);
@@ -315,9 +315,9 @@
 		{/if}
 
 		<button class="btn btn-primary" type="submit" disabled={!canLeaveStep1}>Next</button>
-		{#if !canLeaveStep1}
+		{#if !canLeaveStep1 && stateSupported}
 			<p class="field-hint submit-hint" aria-live="polite">
-				Pick at least one benefit and a state we have data for to continue.
+				Pick at least one benefit to continue.
 			</p>
 		{/if}
 	</form>
@@ -353,9 +353,11 @@
 						<input
 							id="cert-{program}"
 							type="date"
+							min="2010-01-01"
 							max={todayIso}
 							bind:value={lastCertInput[program]}
 						/>
+						<p class="field-hint">Enter the date on your most recent approval or renewal notice.</p>
 					</div>
 				{/if}
 
@@ -403,24 +405,19 @@
 				<div class="result-card">
 					<h3 class="result-card-title">{r.programLabel}</h3>
 					<p class="result-date">
-						Estimated next recertification: <strong>{formatLong(r.nextCertDate)}</strong>
+						Around <strong>{formatLong(r.nextCertDate)}</strong> — check your approval notice for your actual deadline.
 					</p>
 					{#if r.daysUntilDue < 0}
-						<p class="result-due">The estimated date has already passed.</p>
+						<p class="result-due result-due--past">The estimated date has already passed — a passed estimate doesn't necessarily mean your benefits have lapsed.</p>
 						<div class="signpost-box" role="note">
 							<p>
-								Your approval notice from the agency shows the actual deadline. If you're not
-								sure where things stand, calling <strong>211</strong> connects you to a navigator
-								who can check with the agency on your behalf.
+								Your approval notice from the agency shows your actual deadline. Calling <strong>211</strong> connects you to a navigator who can check with the agency on your behalf.
 							</p>
 						</div>
 					{:else}
 						<p class="result-due">{describeDue(r)}</p>
 						<p class="result-detail">
-							Based on a {r.months}-month certification period, starting from {formatLong(
-								r.lastCertDate
-							)}. The estimated renewal window is based on typical periods in {resultState}. Your
-							actual deadline appears on your approval notice.
+							Based on a {r.months}-month certification period for {resultState}.
 						</p>
 					{/if}
 
@@ -459,7 +456,7 @@
 		{#if hasDateableResults}
 			<div class="download-block">
 				<button class="btn btn-primary" type="button" onclick={handleDownload}>
-					Download reminders
+					Add reminders to my calendar
 				</button>
 				<p class="field-hint download-hint">
 					Opens in Apple Calendar, Google Calendar, or any calendar app. You'll get a reminder about
@@ -742,6 +739,11 @@
 		margin-top: var(--space-xs);
 	}
 
+	.result-due--past {
+		font-weight: 400;
+		color: var(--muted);
+	}
+
 	.result-detail {
 		font-size: 0.9375rem;
 		color: var(--text);
@@ -775,8 +777,8 @@
 	}
 
 	.copy-status {
-		font-size: 0.8125rem;
-		color: var(--muted);
+		font-size: 0.9375rem;
+		color: var(--text);
 		margin-top: var(--space-xs);
 		min-height: 1.2rem;
 	}

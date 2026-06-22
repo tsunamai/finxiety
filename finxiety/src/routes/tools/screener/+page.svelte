@@ -62,6 +62,7 @@
 	async function calculate(e: Event) {
 		e.preventDefault();
 		error = '';
+		await tick(); // clear the alert before re-setting so screen readers re-announce on repeat submits
 
 		const income = Number(grossMonthlyIncome);
 		if (grossMonthlyIncome === '' || isNaN(income) || income < 0) {
@@ -177,7 +178,7 @@
 					/>
 				</div>
 				<div class="income-field-footer">
-					<span class="field-hint" id="income-hint">Enter $0 if you have no income right now.</span>
+					<span class="field-hint" id="income-hint">Enter $0 if you have no income right now. If your income varies, use a recent typical month.</span>
 					<button
 						class="paycheck-calc-trigger"
 						type="button"
@@ -284,6 +285,10 @@
 				<p class="results-note">
 					These are estimates based on income only. Actual eligibility is determined by the
 					administering agency.
+				</p>
+				<p class="results-note">
+					If your income includes SSI or SSDI, some programs also consider savings and assets.
+					Call 211 to reach a navigator who knows the full rules.
 				</p>
 			</div>
 
@@ -510,6 +515,7 @@
 		color: var(--dark);
 		width: 100%;
 		cursor: pointer;
+		min-height: 44px;
 	}
 
 	.calc-field select:focus-visible {

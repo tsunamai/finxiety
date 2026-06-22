@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { tick } from 'svelte';
 	import { calcRunway, type RunwayResult } from '$lib/calculators/emergency-fund';
 
 	interface Rec {
@@ -102,6 +103,10 @@
 		}
 	};
 
+	// Focus management
+	let branchHeadingEl: HTMLHeadingElement | null = $state(null);
+	let recSectionEl: HTMLElement | null = $state(null);
+
 	// Inputs — persisted across steps so back navigation restores the form
 	let designated = $state('');
 	let checking = $state('');
@@ -130,9 +135,10 @@
 		branch && toggleAnswer ? (recommendations[branch]?.[toggleAnswer] ?? null) : null
 	);
 
-	function calculate(e: Event) {
+	async function calculate(e: Event) {
 		e.preventDefault();
 		error = '';
+		await tick(); // clear alert before re-setting so screen readers re-announce on repeat submits
 
 		const m = parseFloat(monthlyExpenses);
 		if (!monthlyExpenses || isNaN(m) || m <= 0) {
@@ -144,11 +150,15 @@
 		const c = Math.max(parseFloat(checking) || 0, 0);
 		result = calcRunway(d, c, m);
 		step = 2;
+		await tick();
+		branchHeadingEl?.focus();
 	}
 
-	function selectToggle(answer: string) {
+	async function selectToggle(answer: string) {
 		toggleAnswer = answer;
 		step = 3;
+		await tick();
+		recSectionEl?.focus();
 	}
 
 	function goBack() {
@@ -280,7 +290,7 @@
 				</div>
 			</div>
 
-			<h2 class="branch-headline">{config.headline}</h2>
+			<h2 class="branch-headline" bind:this={branchHeadingEl} tabindex="-1">{config.headline}</h2>
 
 			{#if branch === 'zero'}
 				<div class="bridge-box" role="note">
@@ -308,7 +318,7 @@
 		</section>
 
 	{:else if step === 3 && result && rec}
-		<section class="step" aria-live="polite" aria-label="Next steps">
+		<section class="step" aria-live="polite" aria-label="Next steps" bind:this={recSectionEl} tabindex="-1">
 			<div class="result-summary">
 				<div class="result-summary-row">
 					<span class="summary-label">Designated savings only</span>
@@ -336,6 +346,17 @@
 				<p class="box-label">Worth knowing</p>
 				<p>{rec.watchOut}</p>
 			</div>
+
+			{#if branch === 'solid' || branch === 'excess'}
+				<p class="able-note">
+					If your income includes SSI or SSDI, savings above certain limits can affect your
+					benefits. ABLE accounts (CalABLE in California) let eligible people save without it
+					counting toward SSI's asset limit.
+					<a href="https://www.calable.ca.gov" target="_blank" rel="noopener noreferrer"
+						>Learn about CalABLE →</a
+					>
+				</p>
+			{/if}
 
 			<div class="step-actions">
 				<button class="btn btn-ghost" onclick={goBack} type="button">← Back</button>
@@ -546,5 +567,23 @@
 		align-items: center;
 		padding-top: var(--space-md);
 		border-top: 1px solid var(--border);
+	}
+
+	.branch-headline:focus-visible,
+	section:focus-visible {
+		outline: 3px solid var(--terracotta);
+		outline-offset: 3px;
+		border-radius: 2px;
+	}
+
+	.able-note {
+		font-size: 0.8125rem;
+		color: var(--muted);
+		line-height: 1.6;
+		margin-bottom: var(--space-md);
+	}
+
+	.able-note a {
+		color: var(--terracotta);
 	}
 </style>

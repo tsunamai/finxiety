@@ -126,3 +126,63 @@ No Disclosure Safety Test Critical was found; the tool is safe on the shame/disc
 Re-run this gate after D-1 is addressed. Recommend the disability lens also be applied to BEN-1's own validation, since D-3's resolution likely lives downstream in the screener rather than in EMG-1's bridge box.
 
 ⟦DISABILITY-REVIEW-WITHHELD⟧ tool="emergency-fund-checker" ticket="EMG-1" date="2026-06-19" reason="D-1 (HIGH, Do No Harm: ABLE/asset-limit awareness) open; D-2, D-3 (MEDIUM) open"
+
+---
+
+## Re-Review Outcome — 2026-06-21
+
+**Reviewer:** disability-accessibility agent
+**Trigger:** Fixes applied for D-1, D-2, D-3. Re-running the gate.
+**Files re-read:** `finxiety/src/routes/tools/emergency-fund/+page.svelte`; `finxiety/src/routes/tools/screener/+page.svelte` (downstream dependency for D-3); `finxiety/status-updates/ben-1-validation-disability-2026-06-21.md` (BEN-1 disability sign-off).
+
+This section verifies the three open findings. The original review above is unchanged.
+
+### D-1 — HIGH — ABLE / asset-limit awareness — RESOLVED
+
+The `.able-note` paragraph renders at lines 350-359, conditional on `branch === 'solid' || branch === 'excess'` — exactly the two branches where the tool gives asset-accumulation guidance (build/hold cash, HYSAs, redirect surplus to higher-return assets). This is the correct surface: the asset-limit risk is only live once a balance exists, and these are the branches that counsel growing or holding one.
+
+Copy verified against the persona and the Do No Harm constraint:
+
+- **No urgency, no fear, no scarcity.** "savings above certain limits *can* affect your benefits" — conditional, no deadline, no alarm, no "act now." Matches the persona's request for accurate information delivered the same way it would be to anyone else, not performed sympathy or warning.
+- **No recommendation.** "ABLE accounts (CalABLE in California) *let* eligible people save without it counting toward SSI's asset limit." States what exists; never says open one, consider one, or you should. Compliant with the Non-Advice Rule.
+- **No forced disclosure.** The note is gated on the *result branch*, not on a disability question. "If your income includes SSI or SSDI…" lets the user self-select silently. Renee sees it without ever having to label herself, answer a binary, or produce a determination. This satisfies the original solution-space requirement that the note not be gated behind a disability question. The Disclosure Safety Test is not triggered — there is no question here, only an informational note the user reads or ignores.
+- **Official source URL.** Links to `https://www.calable.ca.gov` (the official California ABLE program) with `target="_blank" rel="noopener noreferrer"`. Satisfies the official-source-URL rule.
+- **Estimate honesty.** "certain limits" rather than a hard dollar figure correctly avoids asserting a threshold that could go stale, and routes the user to the authoritative source for the actual rules.
+
+**Accepted scope note (not a finding):** the note does not render on the `starting` branch (<3 months coverage), which also encourages auto-transfers and habit-building. This is deliberate and sound: at under three months of essential expenses, a balance sits far below any SSI countable-resource line, so the asset-limit caution is not yet relevant, and omitting it keeps the lowest-coverage user's path uncluttered. Accepted as designed.
+
+The Do No Harm exposure that blocked the original sign-off is closed. The one tool in the suite best positioned to introduce ABLE now does so, in compliant framing, for the population that needs it.
+
+### D-2 — MEDIUM — Focus not moved on step transitions — RESOLVED
+
+Focus is now programmatically moved after each step transition:
+
+- `calculate()` is `async`. After `error = ''` it runs `await tick()` so a repeat-submit re-announces the alert (line 141). After setting `step = 2` it runs `await tick()` then `branchHeadingEl?.focus()` (lines 152-154).
+- `selectToggle()` is `async`. After setting `step = 3` it runs `await tick()` then `recSectionEl?.focus()` (lines 157-162).
+- The step-2 `<h2 class="branch-headline">` carries `bind:this={branchHeadingEl} tabindex="-1"` (line 293); the step-3 `<section>` carries `bind:this={recSectionEl} tabindex="-1"` (line 321). A visible focus indicator is defined for both (`.branch-headline:focus-visible, section:focus-visible`, lines 572-577).
+
+The `aria-live="polite"` regions are retained for announcement, with focus movement added for navigation — the correct pairing. After submit, a keyboard or screen-reader user lands on the result heading rather than an orphaned position at the removed submit button; after a toggle, they land on the recommendation section. The avoidable per-step navigation cost on a depleted spoon budget is eliminated. The `tick()` before focus ensures the target is in the DOM when `.focus()` fires.
+
+**Resolved.** (Live screen-reader verification of the announce-and-move sequence on device is a reasonable QA confirmation but is not required to clear this disability finding; the implementation is structurally correct.)
+
+### D-3 — MEDIUM — Near-zero bridge served the ALICE axis only — RESOLVED downstream
+
+The original finding left this as an open question for downstream: confirm whether `/tools/screener` (BEN-1) covers or signposts disability programs, in which case the bridge is substantially handled one hop downstream.
+
+Confirmed it now is. BEN-1 passed its own disability gate on 2026-06-21 (`ben-1-validation-disability-2026-06-21.md`, signed `⟦DISABILITY-REVIEWED⟧`). The screener's results render an SSI/SSDI signpost on **both** result paths — match and no-match (`screener/+page.svelte` line 289-292): "If your income includes SSI or SSDI, some programs also consider savings and assets. Call 211 to reach a navigator who knows the full rules."
+
+So a disabled near-zero user who taps the EMG-1 bridge box (line 297) lands on a screener that names the asset/savings reality and routes to a human navigator, regardless of whether any program matches. The disability axis is no longer absent at the near-zero end — it is carried one hop downstream, which is the right place for it (it keeps EMG-1's bridge box short for the fatigued user while ensuring the content exists). This matches the original recommendation to resolve D-3 in BEN-1 rather than overloading EMG-1's bridge.
+
+**Resolved downstream.** D-3 softens to resolved, as the original review anticipated it would if BEN-1 signposted disability programs.
+
+### Double-vulnerability re-check
+
+With all three fixes in place, the EMG-1 → screener path now serves both axes across the full result range: the near-zero end routes to disability-aware screener content (D-3); the solid/excess end surfaces ABLE for the asset-tested user (D-1); and the flow itself moves focus sensibly for a motor/low-vision user on a fatigue budget (D-2). The content gap the original review identified ("serves the ALICE axis well and the disability axis incompletely") is closed at both ends. Flow load budget continues to hold.
+
+### Outcome
+
+D-1 (HIGH), D-2 (MEDIUM), and D-3 (MEDIUM) are all resolved. D-4 (LOW, full-reload loses in-progress numbers) remains open as accepted-with-rationale: the no-PII / stateless constraint correctly takes precedence and no action was recommended. No Critical or High findings remain. No Disclosure Safety Test Critical exists (the ABLE note is an informational statement, not a question, and forces no disclosure).
+
+Gate cleared.
+
+⟦DISABILITY-REVIEWED⟧ tool="emergency-fund-checker" ticket="EMG-1" date="2026-06-21"

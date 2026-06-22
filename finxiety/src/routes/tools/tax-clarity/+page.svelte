@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { tick } from 'svelte';
 	import {
 		calcDeduction,
 		calcCredit,
@@ -48,6 +49,10 @@
 
 	let step = $state<1 | 2>(1);
 	let mode = $state<Mode | null>(null);
+	let stepHeadingEl: HTMLElement | null = $state(null);
+	let deductionResultEl: HTMLElement | null = $state(null);
+	let creditResultEl: HTMLElement | null = $state(null);
+	let refundResultEl: HTMLElement | null = $state(null);
 
 	// Deduction inputs
 	let deductionAmount = $state('');
@@ -66,10 +71,12 @@
 	let creditResult = $state<CreditResult | null>(null);
 	let refundResult = $state<RefundResult | null>(null);
 
-	function chooseMode(m: Mode) {
+	async function chooseMode(m: Mode) {
 		mode = m;
 		error = '';
 		step = 2;
+		await tick();
+		stepHeadingEl?.focus();
 	}
 
 	function parseAmount(raw: string): number | null {
@@ -79,7 +86,7 @@
 		return n;
 	}
 
-	function calculateDeduction(e: Event) {
+	async function calculateDeduction(e: Event) {
 		e.preventDefault();
 		error = '';
 		const amount = parseAmount(deductionAmount);
@@ -97,9 +104,12 @@
 			return;
 		}
 		deductionResult = calcDeduction(amount, income, filingStatus, data);
+		await tick();
+		deductionResultEl?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+		deductionResultEl?.focus();
 	}
 
-	function calculateCredit(e: Event) {
+	async function calculateCredit(e: Event) {
 		e.preventDefault();
 		error = '';
 		const amount = parseAmount(creditAmount);
@@ -108,9 +118,12 @@
 			return;
 		}
 		creditResult = calcCredit(amount, data);
+		await tick();
+		creditResultEl?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+		creditResultEl?.focus();
 	}
 
-	function calculateRefund(e: Event) {
+	async function calculateRefund(e: Event) {
 		e.preventDefault();
 		error = '';
 		const amount = parseAmount(refundAmount);
@@ -119,20 +132,23 @@
 			return;
 		}
 		refundResult = calcRefund(amount);
+		await tick();
+		refundResultEl?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+		refundResultEl?.focus();
 	}
 
-	function goBack() {
-		// Return to the mode picker, clearing the active result but keeping inputs
-		// so a re-entry doesn't wipe what the user typed.
+	async function goBack() {
 		error = '';
 		deductionResult = null;
 		creditResult = null;
 		refundResult = null;
 		mode = null;
 		step = 1;
+		await tick();
+		stepHeadingEl?.focus();
 	}
 
-	function startOver() {
+	async function startOver() {
 		step = 1;
 		mode = null;
 		error = '';
@@ -144,6 +160,8 @@
 		deductionResult = null;
 		creditResult = null;
 		refundResult = null;
+		await tick();
+		stepHeadingEl?.focus();
 	}
 </script>
 
@@ -170,7 +188,7 @@
 {#key step}
 	{#if step === 1}
 		<section class="step">
-			<h2 class="picker-heading">Which one do you want to understand?</h2>
+			<h2 class="picker-heading" tabindex="-1" bind:this={stepHeadingEl}>Which one do you want to understand?</h2>
 			<div class="mode-list" role="group" aria-label="Choose what to understand">
 				{#each modeOptions as opt}
 					<button class="mode-card" type="button" onclick={() => chooseMode(opt.key)}>
@@ -187,7 +205,7 @@
 		<!-- ============================ DEDUCTION ============================ -->
 	{:else if step === 2 && mode === 'deduction'}
 		<section class="step">
-			<h2 class="picker-heading">A tax deduction</h2>
+			<h2 class="picker-heading" tabindex="-1" bind:this={stepHeadingEl}>A tax deduction</h2>
 			<p class="mode-intro">
 				A deduction lowers the income you’re taxed on. So what it saves you depends on your tax
 				bracket, not the full deduction amount.
@@ -256,32 +274,41 @@
 			</form>
 
 			{#if deductionResult}
-				<div class="result" aria-live="polite">
-					<p class="result-lead">
-						A <strong>{formatDollars(deductionResult.deductionAmount)}</strong> deduction at your
-						<strong>{formatPercent(deductionResult.marginalRate)}</strong> bracket lowers your tax by about
-					</p>
-					<p class="result-figure">{formatDollars(deductionResult.taxSavings)}</p>
-					<p class="result-sub">
-						— not {formatDollars(deductionResult.deductionAmount)}. A deduction comes off your income,
-						so it saves you your bracket’s share of it.
-					</p>
-
-					<div class="compare-box" role="note">
-						<p class="box-label">If this were a credit instead</p>
-						<p>
-							The same {formatDollars(deductionResult.deductionAmount)} as a <em>credit</em> would lower
-							your tax by the full {formatDollars(deductionResult.asCreditValue)}, dollar-for-dollar —
-							about {formatDollars(deductionResult.difference)} more than the deduction. That’s the difference
-							between the two.
+				<div class="result" aria-live="polite" tabindex="-1" bind:this={deductionResultEl}>
+					{#if deductionResult.taxSavings === 0}
+						<p class="result-lead">
+							At your income level, this deduction doesn’t reduce your federal tax right now — the deduction amount exceeds or equals your taxable income.
 						</p>
-					</div>
+						<p class="result-sub">
+							Some credits — like the Earned Income Tax Credit — are refundable and can pay you even when you owe $0 in tax. Free filing help is available at <a href="https://www.irs.gov/individuals/free-tax-return-preparation-for-qualifying-taxpayers" target="_blank" rel="noopener noreferrer">VITA sites</a> near you. The Credit tab shows how a credit works differently.
+						</p>
+					{:else}
+						<p class="result-lead">
+							A <strong>{formatDollars(deductionResult.deductionAmount)}</strong> deduction at your
+							<strong>{formatPercent(deductionResult.marginalRate)}</strong> bracket lowers your tax by about
+						</p>
+						<p class="result-figure">{formatDollars(deductionResult.taxSavings)}</p>
+						<p class="result-sub">
+							— not {formatDollars(deductionResult.deductionAmount)}. A deduction comes off your income,
+							so it saves you your bracket’s share of it.
+						</p>
 
-					<p class="illustrative-note">
-						These are illustrative estimates based on 2026 federal brackets and your marginal rate.
-						They don’t account for other income, phaseouts, or state taxes. They’re here to show the
-						idea, not to file your return.
-					</p>
+						<p class="illustrative-note">
+							These are illustrative estimates based on 2026 federal brackets and your marginal rate.
+							They don’t account for other income, phaseouts, or state taxes. They’re here to show the
+							idea, not to file your return.
+						</p>
+
+						<div class="compare-box" role="note">
+							<p class="box-label">If this were a credit instead</p>
+							<p>
+								The same {formatDollars(deductionResult.deductionAmount)} as a <em>credit</em> would lower
+								your tax by the full {formatDollars(deductionResult.asCreditValue)}, dollar-for-dollar —
+								about {formatDollars(deductionResult.difference)} more than the deduction. That’s the difference
+								between the two.
+							</p>
+						</div>
+					{/if}
 				</div>
 			{/if}
 		</section>
@@ -289,7 +316,7 @@
 		<!-- ============================= CREDIT ============================= -->
 	{:else if step === 2 && mode === 'credit'}
 		<section class="step">
-			<h2 class="picker-heading">A tax credit</h2>
+			<h2 class="picker-heading" tabindex="-1" bind:this={stepHeadingEl}>A tax credit</h2>
 			<p class="mode-intro">
 				A credit comes straight off the tax you owe, dollar-for-dollar. That makes it worth more
 				than a deduction of the same size.
@@ -326,12 +353,18 @@
 			</form>
 
 			{#if creditResult}
-				<div class="result" aria-live="polite">
+				<div class="result" aria-live="polite" tabindex="-1" bind:this={creditResultEl}>
 					<p class="result-lead">
 						A <strong>{formatDollars(creditResult.creditAmount)}</strong> credit reduces what you owe by
 					</p>
 					<p class="result-figure">{formatDollars(creditResult.reduction)}</p>
 					<p class="result-sub">— the full amount, dollar-for-dollar.</p>
+
+					<p class="illustrative-note">
+						This is an illustrative comparison using 2026 federal brackets. Some credits are
+						refundable and some aren’t, which changes what you actually receive. This shows the basic
+						idea, not your full return.
+					</p>
 
 					<div class="compare-box" role="note">
 						<p class="box-label">Why that beats a deduction</p>
@@ -342,12 +375,6 @@
 							of the same size unless your bracket were 100%.
 						</p>
 					</div>
-
-					<p class="illustrative-note">
-						This is an illustrative comparison using 2026 federal brackets. Some credits are
-						refundable and some aren’t, which changes what you actually receive. This shows the basic
-						idea, not your full return.
-					</p>
 				</div>
 			{/if}
 		</section>
@@ -355,7 +382,7 @@
 		<!-- ============================= REFUND ============================= -->
 	{:else if step === 2 && mode === 'refund'}
 		<section class="step">
-			<h2 class="picker-heading">A tax refund</h2>
+			<h2 class="picker-heading" tabindex="-1" bind:this={stepHeadingEl}>A tax refund</h2>
 			<p class="mode-intro">
 				A refund is money that was already yours — withheld from your pay during the year and
 				returned after you filed. Here’s another way to look at it.
@@ -392,7 +419,7 @@
 			</form>
 
 			{#if refundResult}
-				<div class="result" aria-live="polite">
+				<div class="result" aria-live="polite" tabindex="-1" bind:this={refundResultEl}>
 					<p class="result-lead">
 						<strong>{formatDollars(refundResult.refundAmount)}</strong> ÷ 12 is about
 					</p>
@@ -400,6 +427,11 @@
 					<p class="result-sub">
 						that you sent to the government across the year and got back, interest-free, after you
 						filed.
+					</p>
+
+					<p class="illustrative-note">
+						The earnings figure is illustrative and uses a sample rate; actual savings rates change
+						over time. This isn’t advice about your withholding.
 					</p>
 
 					<div class="compare-box" role="note">
@@ -419,11 +451,6 @@
 							it’s about what fits your life.
 						</p>
 					</div>
-
-					<p class="illustrative-note">
-						The earnings figure is illustrative and uses a sample rate; actual savings rates change
-						over time. This isn’t advice about your withholding.
-					</p>
 				</div>
 			{/if}
 		</section>

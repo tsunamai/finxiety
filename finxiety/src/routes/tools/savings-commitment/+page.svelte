@@ -19,9 +19,11 @@
 	let whenInput = $state('');
 	let targetInput = $state('');
 	let habitInput = $state('');
-	// Tracks whether the user tried to advance without a "when", so we can show an
-	// inline prompt without treating an untouched field as an error.
+	// Tracks whether the user tried to advance without completing required fields,
+	// so we can show inline prompts without treating untouched fields as errors.
 	let whenPrompted = $state(false);
+	let amountPrompted = $state(false);
+	let freqPrompted = $state(false);
 
 	// Step 3
 	let result = $state<CommitmentResult | null>(null);
@@ -31,6 +33,7 @@
 	let downloadStatus = $state('');
 	let copyTimer: ReturnType<typeof setTimeout> | null = null;
 
+	let goalInputEl: HTMLInputElement | null = $state(null);
 	let step2HeadingEl: HTMLHeadingElement | null = $state(null);
 	let step3HeadingEl: HTMLHeadingElement | null = $state(null);
 
@@ -46,11 +49,17 @@
 	// --- Derived --------------------------------------------------------------
 	const amount = $derived(parseFloat(amountInput));
 	const amountValid = $derived(Number.isFinite(amount) && amount > 0);
+	const amountIsZero = $derived(amountInput !== '' && Number.isFinite(amount) && amount === 0);
 	const whenFilled = $derived(whenInput.trim() !== '');
 	const target = $derived(parseFloat(targetInput));
 	const targetValid = $derived(Number.isFinite(target) && target > 0);
 
 	const canStartCommitment = $derived(amountValid && frequencyKey !== '' && whenFilled);
+
+	// Character counts — shown when approaching the limit (past ~half)
+	const goalCharsLeft = $derived(120 - goal.length);
+	const whenCharsLeft = $derived(120 - whenInput.length);
+	const habitCharsLeft = $derived(80 - habitInput.length);
 
 	// --- Step 1 ---------------------------------------------------------------
 	async function goToStep2(e: Event) {
@@ -90,11 +99,14 @@
 	async function backToStep1() {
 		step = 1;
 		await tick();
+		goalInputEl?.focus();
 	}
 
 	function buildStatement(e: Event) {
 		e.preventDefault();
 		whenPrompted = true;
+		amountPrompted = true;
+		freqPrompted = true;
 		if (!canStartCommitment || frequencyKey === '') return;
 
 		const built = buildCommitment({
@@ -172,7 +184,10 @@
 
 	async function handleCopy() {
 		const text = editedStatement.trim();
-		if (text === '') return;
+		if (text === '') {
+			copyStatus = 'Add some text to your commitment first, then copy it.';
+			return;
+		}
 		try {
 			await navigator.clipboard.writeText(text);
 			copyStatus = 'Copied!';
@@ -221,7 +236,7 @@
 	<title>Savings Commitment Maker | Finxiety</title>
 	<meta
 		name="description"
-		content="Write one specific savings commitment in your own words — and get a calendar reminder to make it happen."
+		content="Write one specific savings commitment in your own words — and download a calendar reminder to take with you."
 	/>
 </svelte:head>
 
@@ -258,8 +273,12 @@
 				type="text"
 				maxlength="120"
 				bind:value={goal}
+				bind:this={goalInputEl}
 				autocomplete="off"
 			/>
+			{#if goalCharsLeft <= 30}
+				<p class="char-count" aria-live="polite">{goalCharsLeft} characters left</p>
+			{/if}
 		</div>
 
 		<button class="btn btn-primary" type="submit" disabled={goal.trim() === ''}>Next →</button>
@@ -284,6 +303,13 @@
 					bind:value={amountInput}
 				/>
 			</div>
+			{#if amountPrompted && amountIsZero}
+				<div class="signpost-box" role="note">
+					<p>Nothing to commit right now? <a href="/tools/screener">The Benefits Screener →</a> or <a href="/tools/emergency-fund">Emergency Fund →</a> may open up some room first.</p>
+				</div>
+			{:else if amountPrompted && !amountValid}
+				<p class="field-prompt" role="status" aria-live="polite">Enter an amount to continue.</p>
+			{/if}
 		</div>
 
 		<!-- Frequency (roving radiogroup) -->
@@ -310,6 +336,9 @@
 					</button>
 				{/each}
 			</div>
+			{#if freqPrompted && frequencyKey === ''}
+				<p class="field-prompt" role="status" aria-live="polite">Pick a frequency to continue.</p>
+			{/if}
 		</div>
 
 		<!-- When -->
@@ -326,10 +355,11 @@
 				aria-describedby="when-hint"
 				autocomplete="off"
 			/>
+			{#if whenCharsLeft <= 30}
+				<p class="char-count" aria-live="polite">{whenCharsLeft} characters left</p>
+			{/if}
 			{#if whenPrompted && !whenFilled}
-				<p class="field-prompt" role="status" aria-live="polite">
-					Add a when — a specific day or trigger makes commitments more likely to stick.
-				</p>
+				<p class="field-prompt" role="status" aria-live="polite">This field is required to continue.</p>
 			{/if}
 		</div>
 
@@ -359,12 +389,15 @@
 				bind:value={habitInput}
 				autocomplete="off"
 			/>
+			{#if habitCharsLeft <= 20}
+				<p class="char-count" aria-live="polite">{habitCharsLeft} characters left</p>
+			{/if}
 		</div>
 
 		<div class="step-actions">
 			<button class="btn btn-secondary" type="button" onclick={backToStep1}>Back</button>
 			<button class="btn btn-primary" type="submit" disabled={!canStartCommitment}>
-				Build my commitment
+				Write my commitment
 			</button>
 		</div>
 	</form>
@@ -378,6 +411,17 @@
 
 		{#if result.roughTimeline}
 			<p class="timeline-note">One rough estimate: {result.roughTimeline}</p>
+		{/if}
+
+		{#if targetValid}
+			<p class="able-note">
+				If your income includes SSI or SSDI, savings above certain limits can affect your
+				benefits. ABLE accounts (CalABLE in California) let eligible people save without it
+				counting toward SSI's asset limit.
+				<a href="https://www.calable.ca.gov" target="_blank" rel="noopener noreferrer"
+					>Learn about CalABLE →</a
+				>
+			</p>
 		{/if}
 
 		<p class="not-a-lock">
@@ -399,8 +443,7 @@
 			</button>
 			<button class="btn btn-secondary" type="button" onclick={handleCopy}>Copy this</button>
 		</div>
-		<p class="copy-status" role="status" aria-live="polite">{copyStatus}</p>
-		<p class="copy-status" role="status" aria-live="polite">{downloadStatus}</p>
+		<p class="copy-status" role="status" aria-live="polite">{copyStatus || downloadStatus}</p>
 
 		<p class="result-note privacy-note">
 			Nothing here is saved or sent anywhere. Your commitment stays on your device, and the calendar
@@ -537,11 +580,40 @@
 		padding-left: 1.875rem;
 	}
 
+	.signpost-box {
+		background: var(--cream);
+		border-left: 3px solid var(--olive);
+		border-radius: 0 var(--radius) var(--radius) 0;
+		padding: var(--space-md);
+		font-size: 0.9375rem;
+		line-height: 1.6;
+		color: var(--text);
+		margin-top: var(--space-xs);
+	}
+
+	.able-note {
+		font-size: 0.8125rem;
+		color: var(--muted);
+		line-height: 1.6;
+		margin-bottom: var(--space-md);
+	}
+
+	.able-note a {
+		color: var(--terracotta);
+	}
+
 	.field-prompt {
 		font-size: 0.8125rem;
 		color: var(--muted);
 		margin-top: var(--space-xs);
 		line-height: 1.5;
+	}
+
+	.char-count {
+		font-size: 0.75rem;
+		color: var(--muted);
+		margin-top: var(--space-xs);
+		text-align: right;
 	}
 
 	.btn-primary:disabled {

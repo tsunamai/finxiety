@@ -54,6 +54,8 @@ export interface Question {
 	revealHeadline: string;
 	/** Reveal body paragraph. */
 	revealBody: string;
+	/** Optional caveat note rendered below revealBody — for scope limits or disability-specific exceptions. */
+	revealNote?: string;
 	/** Structural explanation paragraph: locates the gap in system design. */
 	structuralExplanation: string;
 	/** Warm, informational cross-tool signpost. Never imperative. */
@@ -92,6 +94,8 @@ export const questions: Question[] = [
 			"Fewer than 10. In 41 states, that savings doesn't affect eligibility at all.",
 		revealBody:
 			'41 states have eliminated the SNAP asset test. Only 9 still cap it. The fear that saving costs you benefits is based on a rule most states quietly retired, without telling anyone.',
+		revealNote:
+			'One exception: SSI and some disability-linked Medi-Cal programs are still asset-tested separately from SNAP. People receiving SSI face a roughly $2,000 resource limit. ABLE accounts (calable.ca.gov in California) let eligible people save above that limit without it counting.',
 		structuralExplanation:
 			"It happened through a policy option called Broad-Based Categorical Eligibility (BBCE), which states can adopt without any public announcement. Most applicants have never heard of it. The fear was rational given the rule's history. The map just changed without anyone updating the signs.",
 		signpost:

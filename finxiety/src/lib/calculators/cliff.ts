@@ -52,6 +52,14 @@ export function estimateCalFreshBenefit(grossMonthly: number, size: number): num
 	return Math.max(0, Math.round(getMaxBenefit(size) - 0.3 * net));
 }
 
+// Eligibility check decoupled from benefit amount — the simplified formula omits shelter
+// deductions and can produce $0 benefit even when gross income is under the gross limit.
+// A $0 estimated benefit does not mean ineligible.
+function isCalFreshEligible(gross: number, size: number): boolean {
+	const limit = getLim(CALFRESH.grossMonthlyLimits, CALFRESH.grossMonthlyAdditional, size);
+	return gross <= limit;
+}
+
 function isMediCalEligible(gross: number, size: number, hasYoungChild: boolean): boolean {
 	const adultLim = getLim(MEDI_CAL.grossMonthlyLimits, MEDI_CAL.grossMonthlyAdditional, size);
 	if (gross <= adultLim) return true;
@@ -75,7 +83,7 @@ export function snapshotAt(gross: number, inputs: CliffInputs): IncomeSnapshot {
 	return {
 		grossMonthly: gross,
 		calFreshBenefit,
-		calFreshEligible: calFreshBenefit > 0,
+		calFreshEligible: isCalFreshEligible(gross, inputs.householdSize),
 		mediCalEligible: isMediCalEligible(gross, inputs.householdSize, inputs.hasChildUnder5OrPregnant),
 		lifelineEligible: lifelineVal > 0,
 		calculableResources: gross + calFreshBenefit + lifelineVal
