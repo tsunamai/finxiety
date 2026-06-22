@@ -1,8 +1,14 @@
 # Tsunam.ai — Workspace Root
 
-Tsunam.ai is a portfolio of civic and financial tools. Two products are in active development:
-- **Finxiety** — free financial clarity tools for underserved communities
-- **Mortalia** — retirement scenario tools for single pre-retirees with $1M-$6M, California-first
+Tsunam.ai is a brand umbrella. Products are standalone with their own identities and repos.
+This workspace (`tsunam/`) is the shared home for Finxiety and Mortalia Method, plus the
+experiments spaces (tsunam-labs, naomi-os).
+
+**Products in this portfolio:**
+- **Finxiety** (`finxiety/`) — standalone civic brand; free financial clarity tools for underserved communities
+- **Mortalia Method** (`mortalia/`) — standalone retirement planning product for pre-retirees with $1M-$6M, California-first
+- **MyMortalia** (`../../naomi_app/`) — Naomi's personal retirement instrument; separate repo, not built here
+- **refriedlabs** (`../../refriedlabs/`) — personal tools built from frustration; separate repo, not built here
 
 `nsum-harnesses/` is a reference harness borrowed from nsum.ai. Read it; do not modify it.
 
