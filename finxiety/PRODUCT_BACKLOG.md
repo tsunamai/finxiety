@@ -731,7 +731,11 @@ _Address before high-volume distribution. Behavioral analysis: `research-finding
 
 ---
 
-### TIP-1 — Tip Calculator with Hidden History [P1]
+### TIP-1 — Tip Calculator with Hidden History [MOVED to refriedlabs]
+
+> **Note (2026-06-22):** This tool was moved to `/Users/naomipinto/Documents/refriedlabs/` and is now live at refriedlabs.com. It was built from personal frustration, not a civic mandate — a better fit for the refriedlabs brand. The wage data files (`states.ts`, `tip-one-fair-wage-2026.json`) remain in Finxiety for use by recertification and document-checklist tools.
+
+### TIP-1 — Tip Calculator with Hidden History [archived]
 
 **What it is:**
 A functional tip calculator that surfaces the hidden labor-economics context at the point of decision. The arithmetic (tip, total, per-person split) is the front door. The clarity engine is a state-aware contextual note that tells the user whether the server they are tipping works under a subminimum federal tipped wage or under a One Fair Wage standard. Calculator first, context second — the math is never blocked or gated by the note.

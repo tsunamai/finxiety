@@ -1,6 +1,6 @@
 # Finxiety — Product Context
 
-Finxiety is the civic arm of Tsunam.ai: free financial clarity tools for communities the market doesn't build for. This file governs all work in `finxiety/`. Rules here override root `CLAUDE.md` where they conflict.
+Finxiety is a standalone civic brand: free financial clarity tools for communities the market doesn't build for. It is part of the Tsunam.ai portfolio but operates independently with its own identity. This file governs all work in `finxiety/`. Rules here override root `CLAUDE.md` where they conflict.
 
 ---
 

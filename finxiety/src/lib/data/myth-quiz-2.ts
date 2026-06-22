@@ -99,7 +99,7 @@ export const questions: Question[] = [
 			'The incentive mechanism most people assume tipping creates — pay more for better service — doesn’t have strong empirical support. The system persists not because it works as designed, but because it transferred the cost of server wages from employers to customers in a way employers found preferable.',
 		signpost:
 			'TIP-1 shows what tipped workers in your state actually earn before tips — the picture behind the tip screen.',
-		signpostUrl: '/tools/tip-calculator',
+		signpostUrl: 'https://www.dol.gov/agencies/whd/fact-sheets/15-tipped-employees-flsa',
 		sources: [
 			{
 				label: 'Lynn & McCall (2000), Journal of Applied Social Psychology',
@@ -129,7 +129,7 @@ export const questions: Question[] = [
 		structuralExplanation:
 			'This is a policy choice, not an oversight. The 1996 FLSA amendment that froze it was heavily lobbied by the National Restaurant Association. Tipped workers in states that follow the federal floor earn $2.13 before tips regardless of how much the cost of living has changed since Reagan was president.',
 		signpost: 'The Tip Calculator shows what the tip-credit minimum is in your state.',
-		signpostUrl: '/tools/tip-calculator',
+		signpostUrl: 'https://www.dol.gov/agencies/whd/fact-sheets/15-tipped-employees-flsa',
 		signpostNote: 'Workers earning at or near the tipped minimum often qualify for programs like SNAP and Medi-Cal that aren\'t widely advertised. The Benefits Screener can check what\'s available based on income and household size.',
 		sources: [
 			{
@@ -163,7 +163,7 @@ export const questions: Question[] = [
 			'App designers know that tip prompts before delivery trigger anticipated guilt; prompts after delivery are easier to dismiss. This is documented behavioral design used against workers. The intervention here wasn’t the user’s psychology — it was the company’s product decision.',
 		signpost:
 			'The Tip Calculator shows what’s behind the tip screen — state minimums, wage credits, and who actually depends on tips.',
-		signpostUrl: '/tools/tip-calculator',
+		signpostUrl: 'https://www.dol.gov/agencies/whd/fact-sheets/15-tipped-employees-flsa',
 		signpostNote: 'Workers earning at or near the tipped minimum often qualify for programs like SNAP and Medi-Cal that aren\’t widely advertised. The Benefits Screener can check what\’s available based on income and household size.',
 		sources: [
 			{

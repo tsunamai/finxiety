@@ -49,7 +49,6 @@
 		'compound-interest',
 		'debt-growth',
 		'work-hours',
-		'tip-calculator',
 		'savings-commitment',
 		'myth-quiz-2',
 	].map((id) => byId[id]);

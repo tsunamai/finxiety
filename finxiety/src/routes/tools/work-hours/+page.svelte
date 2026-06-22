@@ -464,7 +464,7 @@
 
 <div class="signpost-footer" role="note">
 	<p>
-		Wondering what a deduction is actually worth, or how a refund works? <a href="/tools/tax-clarity">Tax Clarity</a> breaks both down in plain language. Or see the same kind of math on a restaurant bill: <a href="/tools/tip-calculator">the Tip Calculator</a> does who-pays-what.
+		Wondering what a deduction is actually worth, or how a refund works? <a href="/tools/tax-clarity">Tax Clarity</a> breaks both down in plain language.
 	</p>
 </div>
 

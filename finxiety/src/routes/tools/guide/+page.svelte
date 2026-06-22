@@ -54,7 +54,7 @@
 		{
 			id: 'learning',
 			label: "I just want to understand how money or benefits actually work",
-			tools: ['myth-quiz', 'myth-quiz-2', 'tip-calculator', 'tax-clarity']
+			tools: ['myth-quiz', 'myth-quiz-2', 'tax-clarity']
 		}
 	] as const;
 
@@ -133,12 +133,6 @@
 			href: '/tools/myth-quiz-2',
 			icon: 'HelpCircle',
 		},
-		'tip-calculator': {
-			question: 'What do servers in your state actually earn?',
-			desc: "Split the check and see the wage context behind the tip screen.",
-			href: '/tools/tip-calculator',
-			icon: 'Receipt',
-		}
 	};
 
 	let selected = $state<SituationId | null>(null);
