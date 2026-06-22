@@ -55,15 +55,15 @@
 	let refundResultEl: HTMLElement | null = $state(null);
 
 	// Deduction inputs
-	let deductionAmount = $state('');
+	let deductionAmount = $state<number | ''>('');
 	let filingStatus = $state<FilingStatus>('single');
-	let taxableIncome = $state('');
+	let taxableIncome = $state<number | ''>('');
 
 	// Credit input
-	let creditAmount = $state('');
+	let creditAmount = $state<number | ''>('');
 
 	// Refund input
-	let refundAmount = $state('');
+	let refundAmount = $state<number | ''>('');
 
 	let error = $state('');
 
@@ -79,11 +79,10 @@
 		stepHeadingEl?.focus();
 	}
 
-	function parseAmount(raw: string): number | null {
-		if (raw.trim() === '') return null;
-		const n = parseFloat(raw);
-		if (isNaN(n) || n < 0) return null;
-		return n;
+	function parseAmount(raw: number | ''): number | null {
+		if (raw === '' || typeof raw !== 'number') return null;
+		if (isNaN(raw) || raw < 0) return null;
+		return raw;
 	}
 
 	async function calculateDeduction(e: Event) {

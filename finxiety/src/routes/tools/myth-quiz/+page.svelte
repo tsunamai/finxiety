@@ -586,8 +586,8 @@
 	}
 
 	.compare-row {
-		display: flex;
-		justify-content: space-between;
+		display: grid;
+		grid-template-columns: max-content 1fr;
 		align-items: baseline;
 		gap: var(--space-sm);
 	}
@@ -600,7 +600,6 @@
 	.compare-value {
 		font-size: 1.0625rem;
 		font-weight: 700;
-		white-space: nowrap;
 	}
 
 	.compare-guess {
