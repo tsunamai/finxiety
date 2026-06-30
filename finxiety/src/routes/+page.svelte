@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { dev } from '$app/environment';
+	import ComingSoon from '$lib/components/ComingSoon.svelte';
 	import SearchBox from '$lib/components/SearchBox.svelte';
 	import PromptChips from '$lib/components/PromptChips.svelte';
 	import SearchResults from '$lib/components/SearchResults.svelte';
@@ -40,37 +42,45 @@
 </script>
 
 <svelte:head>
-	<title>Finxiety — Free financial tools, one step at a time</title>
-	<meta
-		name="description"
-		content="Type your situation and find the right free financial tool. No account. No sign-up. Nothing saved."
-	/>
+	{#if dev}
+		<title>Finxiety — Free financial tools, one step at a time</title>
+		<meta
+			name="description"
+			content="Type your situation and find the right free financial tool. No account. No sign-up. Nothing saved."
+		/>
+	{:else}
+		<title>Finxiety — Coming soon</title>
+	{/if}
 </svelte:head>
 
-<section class="hero">
-	<h1>What&rsquo;s going on with your money?</h1>
+{#if !dev}
+	<ComingSoon />
+{:else}
+	<section class="hero">
+		<h1>What&rsquo;s going on with your money?</h1>
 
-</section>
-
-<section class="search-surface" aria-label="Search tools">
-	<SearchBox bind:query onSearch={handleSearch} />
-	<PromptChips onChip={handleChip} />
-
-</section>
-
-{#if hasSearched}
-	<section
-		class="results-surface"
-		aria-live="polite"
-		aria-label="Search results"
-		tabindex="-1"
-		bind:this={resultsEl}
-	>
-		<SearchResults {results} score0={topScore} />
 	</section>
-{/if}
 
-<AllTools />
+	<section class="search-surface" aria-label="Search tools">
+		<SearchBox bind:query onSearch={handleSearch} />
+		<PromptChips onChip={handleChip} />
+
+	</section>
+
+	{#if hasSearched}
+		<section
+			class="results-surface"
+			aria-live="polite"
+			aria-label="Search results"
+			tabindex="-1"
+			bind:this={resultsEl}
+		>
+			<SearchResults {results} score0={topScore} />
+		</section>
+	{/if}
+
+	<AllTools />
+{/if}
 
 <style>
 	.hero {
